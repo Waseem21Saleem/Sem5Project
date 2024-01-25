@@ -5,6 +5,7 @@ public class ThreadCheckArray implements Runnable
 	SharedData sd;
 	int[] array;
 	int b;
+	int c;
 	
 	public ThreadCheckArray(SharedData sd) 
 	{
