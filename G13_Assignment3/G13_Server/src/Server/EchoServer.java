@@ -47,12 +47,27 @@ public class EchoServer extends AbstractServer
 
 	public mysqlConnection mysql;
 	private ServerInfoController serv;
+	private String dbPath,dbUsername,dbPassword;
 
-  public EchoServer(int port,ServerInfoController serv) 
+  public EchoServer(int port,ServerInfoController serv,String dbPath,String dbUsername,String dbPassword) 
   {
     super(port);
     this.serv=serv;
+    this.dbPath=dbPath;
+    this.dbUsername=dbUsername;
+    this.dbPassword=dbPassword;
   }
+  
+	private String getDbPath() {
+		return dbPath;			
+	}
+	private String getDbUsername() {
+		return dbUsername;			
+	}
+	private String getDbPassword() {
+		return dbPassword;			
+	}
+
 
   //Instance methods ************************************************
   
@@ -130,8 +145,7 @@ public class EchoServer extends AbstractServer
   protected void serverStarted()
   {	
     System.out.println ("Server listening for connections on port " + getPort());
-    mysql= new mysqlConnection();
-    mysql.main(null);
+    mysql= new mysqlConnection(getDbPath(),getDbUsername(),getDbPassword());
     
 
   }

@@ -18,7 +18,12 @@ public class mysqlConnection {
 	
 	private static Connection conn;
 
-	public void main(String[] args) 
+	/**
+	   * This Constructor connects to DataBase with Connection conn
+	   *
+	   
+	   */
+	public mysqlConnection(String dbPath,String dbUsername, String dbPassword)
 	{
 		try 
 		{
@@ -29,30 +34,18 @@ public class mysqlConnection {
         	 System.out.println("Driver definition failed");
         }
         
-        ConnectToDB();
-        System.out.println("SQL connection succeed");
-        //getParkNames(StudentFormController.parkNames);
-            //createTableCourses(conn);
-            //updateArrivalTimeForFlights(conn);
-     	
-   	}
-	
-	/**
-	   * This method connects us to the database.
-	   *
-	   
-	   */
-	private static void ConnectToDB() {
-    	try {
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/g13?serverTimezone=IST","group13","13Group13");
+		try {
+			conn = DriverManager.getConnection(dbPath,dbUsername,dbPassword);
 		} catch (SQLException ex) {
 			 System.out.println("SQLException: " + ex.getMessage());
 	         System.out.println("SQLState: " + ex.getSQLState());
 	         System.out.println("VendorError: " + ex.getErrorCode());
 		}
+        System.out.println("SQL connection succeed");
+     	
+   	}
+	
 
-		
-	}
 	
 	/**
 	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.

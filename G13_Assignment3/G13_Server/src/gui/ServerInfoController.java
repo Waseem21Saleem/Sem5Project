@@ -3,6 +3,7 @@ package gui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
@@ -23,6 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -41,7 +43,7 @@ public class ServerInfoController implements Initializable {
 	@FXML
 	private Label lblHost;
 	@FXML
-	private Label lblServer;
+	private Label lblServer,lblError,labelServerIP;
 	@FXML
 	private Button btnclose=null;
 	@FXML
@@ -55,10 +57,21 @@ public class ServerInfoController implements Initializable {
 	
 	ObservableList<String> list;
 	@FXML
-	private TextField portxt;
+	private TextField txtPort,txtDbPath,txtDbUser;
+	@FXML
+	private PasswordField txtDbPass;
 	
 	private String getport() {
-		return portxt.getText();			
+		return txtPort.getText();			
+	}
+	private String getDbPath() {
+		return txtDbPath.getText();			
+	}
+	private String getDbUsername() {
+		return txtDbUser.getText();			
+	}
+	private String getDbPassword() {
+		return txtDbPass.getText();			
 	}
 	
 	/**
@@ -162,7 +175,7 @@ public class ServerInfoController implements Initializable {
 		primaryStage.setTitle("Server page");
 		primaryStage.setScene(scene);
 		primaryStage.show();
-
+	
 	}
 	
 	/**
@@ -171,26 +184,50 @@ public class ServerInfoController implements Initializable {
 	   * @param event, when the user presses Connect
 	   */
 	public void connectServer(ActionEvent event) throws Exception {
-		String p;
-		
+		String p,dbPath,dbUsername,dbPassword;
+		InetAddress localHost = InetAddress.getLocalHost();
+        String ServerIP = localHost.getHostAddress();
+		labelServerIP.setText(ServerIP);
 		p=getport();
+		dbPath=getDbPath();
+		dbUsername=getDbUsername();
+		dbPassword=getDbPassword();
+	
 		if(p.trim().isEmpty()) {
-			System.out.println("You must enter a port number");
+			lblError.setText("You must enter a port number");
 					
 		}
 		else
+			if(dbPath.trim().isEmpty()) {
+				lblError.setText("You must enter database path");
+						
+			}
+			else
+				if(dbUsername.trim().isEmpty()) {
+					lblError.setText("You must enter database username");
+							
+				}
+				else
+					if(dbPassword.trim().isEmpty()) {
+						lblError.setText("You must enter database password");
+								
+					}
+			else
 		{
 			if (ev == null || !ev.isListening()) {
 				String tempport = p;
-				ev = new EchoServer(Integer.parseInt(tempport), this);
+				ev = new EchoServer(Integer.parseInt(tempport), this,dbPath,dbUsername,dbPassword);
 				ev.listen();
 				lblServer.setText("Online");
 				btnConnect.setText("Disconnect");
+				lblError.setText("");
 
 			} else {
 				ev.close();
 				lblServer.setText("Offline");
 				btnConnect.setText("Connect");
+				labelServerIP.setText("");
+
 			}
 
 			
