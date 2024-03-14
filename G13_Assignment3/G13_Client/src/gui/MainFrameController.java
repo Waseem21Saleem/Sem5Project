@@ -18,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -32,22 +33,34 @@ public  class MainFrameController   {
 	private Button btnExit = null;
 	
 	@FXML
-	private Button btnSend = null;
+	private Button btnConnect = null;
+	@FXML
+	private Label lblError;
 	
 	@FXML
-	private TextField idtxt;
+	private TextField txtIP,txtPort;
 	
-	private String getID() {
-		return idtxt.getText();
+	private String getIP() {
+		return txtIP.getText();
 	}
-	
+	private String getPort() {
+		return txtPort.getText();
+	}
 	/**
 	   * This method runs the order form fx 
 	   * and adds the client info into the database when "open order manager" button pressed
 	   *@param event , the "open order manager" button
 	   
 	   */
-	public void Send(ActionEvent event) throws Exception {
+	public void Connect(ActionEvent event) throws Exception {
+		try {
+		
+			ClientUI.chat = new ClientController(getIP(), Integer.parseInt(getPort()));
+}
+		catch (Exception exception){
+			lblError.setText("There is no running server on the entered parameters");
+		}
+		
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
@@ -79,7 +92,7 @@ public  class MainFrameController   {
         String clientIP = localHost.getHostAddress();
         String clientHostName = localHost.getHostName();
 
-        ClientUI.chat.accept("ClientConnected "+clientIP+" "+clientHostName);	
+        //ClientUI.chat.accept("ClientConnected "+clientIP+" "+clientHostName);	
 		Parent root = FXMLLoader.load(getClass().getResource("/gui/MainFrame.fxml"));
 				
 		Scene scene = new Scene(root);

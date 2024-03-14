@@ -17,13 +17,14 @@ public class ClientUI extends Application {
 	   { 
 		    launch(args);  
 	   } // end main
+	
+
 	@Override
 	public void stop() {
 		System.exit(0);
 	}
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		chat = new ClientController("localhost", 5555);
 		MainFrameController aFrame = new MainFrameController();
 		aFrame.start(primaryStage);
 			  		
