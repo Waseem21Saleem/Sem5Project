@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label id="labelReportType" layoutX="59.0" layoutY="146.0" text="Report Type:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label id="labelReportMonth" layoutX="59.0" layoutY="220.0" text="Report Month: ">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label id="labelReportYear" layoutX="330.0" layoutY="220.0" text="Report Year: ">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ComboBox id="cmbReportType" fx:id="cmbReportType" layoutX="167.0" layoutY="148.0" prefWidth="150.0" />
+      <ComboBox id="cmbReportMonth" fx:id="cmbReportMonth" layoutX="181.0" layoutY="221.0" prefHeight="25.0" prefWidth="121.0" />
+      <ComboBox id="cmbReportYear" fx:id="cmbReportYear" layoutX="433.0" layoutY="221.0" prefHeight="25.0" prefWidth="121.0" />
+      <Button id="btnCreateReport" fx:id="btnCreateReport" layoutX="225.0" layoutY="310.0" mnemonicParsing="false" text="Create Report">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Label id="labelSelectPark" layoutX="59.0" layoutY="69.0" text="Select Park:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ComboBox id="cmbSelectPark" fx:id="cmbSelectPark" layoutX="167.0" layoutY="70.0" prefWidth="150.0" />
+   </children>
+</AnchorPane>
