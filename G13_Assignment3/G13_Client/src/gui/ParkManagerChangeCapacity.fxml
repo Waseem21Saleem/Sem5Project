@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label id="labelSelectPark" layoutX="76.0" layoutY="73.0" text="Select Park: " />
+      <Label id="labelMaxAmmount" layoutX="76.0" layoutY="154.0" text="Max Amount:" />
+      <ComboBox id="cmbChooseParkName" fx:id="cmbChooseParkName" layoutX="160.0" layoutY="69.0" prefWidth="150.0" />
+      <TextField id="txtMaxAmount" fx:id="txtMaxAmount" layoutX="173.0" layoutY="150.0" />
+      <Button id="btnConfirm" fx:id="btnConfirm" layoutX="258.0" layoutY="251.0" mnemonicParsing="false" text="Confirm" />
+   </children>
+</AnchorPane>

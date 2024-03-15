@@ -2,11 +2,12 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: OLDLACE;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="600.0" style="-fx-background-color: OLDLACE;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label id="labelReportType" layoutX="59.0" layoutY="146.0" text="Report Type:">
          <font>
@@ -26,7 +27,7 @@
       <ComboBox id="cmbReportType" fx:id="cmbReportType" layoutX="167.0" layoutY="148.0" prefWidth="150.0" />
       <ComboBox id="cmbReportMonth" fx:id="cmbReportMonth" layoutX="181.0" layoutY="221.0" prefHeight="25.0" prefWidth="121.0" />
       <ComboBox id="cmbReportYear" fx:id="cmbReportYear" layoutX="433.0" layoutY="221.0" prefHeight="25.0" prefWidth="121.0" />
-      <Button id="btnCreateReport" fx:id="btnCreateReport" layoutX="225.0" layoutY="310.0" mnemonicParsing="false" text="Create Report">
+      <Button id="btnViewReport" fx:id="btnViewReport" layoutX="232.0" layoutY="282.0" mnemonicParsing="false" text="View Report">
          <font>
             <Font size="18.0" />
          </font>
@@ -37,5 +38,10 @@
          </font>
       </Label>
       <ComboBox id="cmbSelectPark" fx:id="cmbSelectPark" layoutX="167.0" layoutY="70.0" prefWidth="150.0" />
+      <Hyperlink id="hyperMakeReport" fx:id="hyperMakeReport" layoutX="366.0" layoutY="365.0" text="Click Here" />
+      <Hyperlink id="hyperApproveCapacity" fx:id="hyperApproveCapacity" layoutX="366.0" layoutY="406.0" text="Click Here" />
+      <Label id="labelMakeReport" layoutX="218.0" layoutY="368.0" text="Make Report ?" />
+      <Label id="labelApprove" layoutX="155.0" layoutY="409.0" text="Check If There Somthing To Approve ?" />
+      <Button id="btnLogout" fx:id="btnLogout" layoutX="46.0" layoutY="452.0" mnemonicParsing="false" text="Logout" />
    </children>
 </AnchorPane>
