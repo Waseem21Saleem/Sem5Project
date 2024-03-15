@@ -16,9 +16,9 @@ public class PaymentController {
 	@FXML
 	private Button btnPay;
 	@FXML
-	private ComboBox cmbMonth;
+	private ComboBox<String> cmbMonth;
 	@FXML
-	private ComboBox cmbYear;
+	private ComboBox<String> cmbYear;
 	@FXML
 	private Label lblCardNumber;
 	@FXML
@@ -42,7 +42,8 @@ public class PaymentController {
 	@FXML
 	private TextField txtCVC;
 	
-	/*
+	
+	//add months to the ComboBox
 	public void setMonthComboBox(ActionEvent event) throws Exception {
 		// Load the FXML file
 		 Parent root = FXMLLoader.load(getClass().getResource("Payment.fxml"));
@@ -56,10 +57,20 @@ public class PaymentController {
        	cmbMonth.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
 	}
 	
+	//add years to the ComboBox
 	public void setYearComboBox(ActionEvent event) throws Exception {
-		
+		// Load the FXML file
+		 Parent root = FXMLLoader.load(getClass().getResource("Payment.fxml"));
+	       
+		// Set up the scene
+		Stage primaryStage = new Stage();
+	    Scene scene = new Scene(root);
+	    primaryStage.setScene(scene);
+	    primaryStage.show();
+	        
+	    cmbYear.getItems().addAll("2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034");
 	}
-	*/
+	
 	public void confirmAndPayBtn(ActionEvent event) throws Exception {
 		if(event.getSource() == btnPay) { 
 			lblSuccess.setText("Confirmed And Paid Successfully!");
