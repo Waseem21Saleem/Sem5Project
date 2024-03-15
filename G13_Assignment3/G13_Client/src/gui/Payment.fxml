@@ -4,6 +4,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -15,8 +17,8 @@
       <Label id="lblExpDate" layoutX="70.0" layoutY="241.0" style="-fx-font-weight: BOLD;" text="Expiration Date" />
       <TextField id="txtCardNum" layoutX="169.0" layoutY="74.0" />
       <TextField id="txtCVC" layoutX="169.0" layoutY="159.0" prefHeight="26.0" prefWidth="93.0" />
-      <ComboBox id="cmbMonth" fx:id="cmbMonth" editable="true" layoutX="180.0" layoutY="237.0" prefHeight="7.0" prefWidth="62.0" visibleRowCount="12" />
-      <ComboBox id="cmbYear" fx:id="cmbYear" editable="true" layoutX="241.0" layoutY="237.0" prefHeight="18.0" prefWidth="62.0" />
+      <ComboBox id="cmbMonth" fx:id="cmbMonth" editable="true" layoutX="180.0" layoutY="237.0" onAction="#setMonthComboBox" prefHeight="7.0" prefWidth="62.0" visibleRowCount="12" />
+      <ComboBox id="cmbYear" fx:id="cmbYear" editable="true" layoutX="241.0" layoutY="237.0" onAction="#setYearComboBox" prefHeight="18.0" prefWidth="62.0" visibleRowCount="11" />
       <Button id="btnPay" fx:id="btnPay" layoutX="179.0" layoutY="292.0" mnemonicParsing="false" onAction="#confirmAndPayBtn" text="Confirm And Pay" />
       <Label id="lblsuccess" layoutX="231.0" layoutY="338.0" prefHeight="18.0" prefWidth="0.0" style="-fx-text-fill: RED;" />
       <Label id="lblVisaDetails" alignment="CENTER" layoutX="174.0" layoutY="14.0" prefHeight="38.0" prefWidth="116.0" style="-fx-font-weight: BOLD;" text="VISA Details">
@@ -27,5 +29,10 @@
       <Label id="lblErrorCVC" fx:id="lblErrorCVC" layoutX="133.0" layoutY="201.0" onAction="#errorCVCMessage" text="CVC must be 3-digits!" textFill="RED" visible="false" />
       <Label id="lblErrorNotANumInCard" fx:id="lblErrorNotANumInCard" layoutX="131.0" layoutY="116.0" onAction="#errorCardNumberMessage" text="Card number must contain only numbers!" textFill="RED" visible="false" />
       <Label id="lblErrorNotANumInCVC" fx:id="lblErrorNotANumInCVC" layoutX="133.0" layoutY="201.0" onAction="#errorCVCMessage" text="CVC must contain only numbers!" textFill="RED" visible="false" />
+      <ImageView id="imgVisa" fitHeight="70.0" fitWidth="106.0" layoutX="363.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../Downloads/visa.jpg" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
