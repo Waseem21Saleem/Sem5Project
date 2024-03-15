@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Vector;
 import gui.MainFrameController;
-import gui.OrderFormController;
+import gui.EditOrderController;
 import client.ClientController;
 
 public class ClientUI extends Application {

@@ -26,7 +26,7 @@ import ocsf.server.ConnectionToClient;
 
 
 
-public  class LoginController   {
+public  class LoginWithoutPasswordController   {
 	public static ClientController chat;
 	private static int itemIndex = 3;
 	
@@ -39,14 +39,12 @@ public  class LoginController   {
 	private Label lblError;
 	
 	@FXML
-	private TextField txtId,txtPassword;
+	private TextField txtId;
 	
 	private String getId() {
 		return txtId.getText();
 	}
-	private String getPassword() {
-		return txtPassword.getText();
-	}
+
 	
 	/**
 	   * This method runs the order form fx 
@@ -55,60 +53,30 @@ public  class LoginController   {
 	   
 	   */
 	public void Login(ActionEvent event) throws Exception {
-		/* Send a message to server to check username and password then check Role and open next window 
-		 * according to the role
+		/* Check if this id has editable order then open this window
 		 */
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/OrderForm.fxml").openStream());		
+		Pane root = loader.load(getClass().getResource("/gui/EditOrder.fxml").openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/OrderForm.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/gui/EditOrder.css").toExternalForm());
 		primaryStage.setTitle("Orders Managment Tool");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();
 
-		ClientUI.chat.accept("refresh");
+		//ClientUI.chat.accept("refresh");
 
         
 
 		
 	}
 	
-	public void goSignUp(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/SignUp.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/SignUp.css").toExternalForm());
-		primaryStage.setTitle("Signup page");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();
-	}
 	
 
-	public void goLoginNoPassword(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/LoginWithoutPassword.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/LoginWithoutPassword.css").toExternalForm());
-		primaryStage.setTitle("Login without password");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();
-		
-	}
 	
 	/**
 	   * This method exits the client when exit button pressed
@@ -120,12 +88,12 @@ public  class LoginController   {
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/MainFrame.fxml").openStream());		
+		Pane root = loader.load(getClass().getResource("/gui/Login.fxml").openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/MainFrame.css").toExternalForm());
-		primaryStage.setTitle("Home page");
+		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
+		primaryStage.setTitle("Login page");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();
