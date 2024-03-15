@@ -1,3 +1,4 @@
+
 package gui;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -26,27 +28,23 @@ import ocsf.server.ConnectionToClient;
 
 
 
-public  class LoginController   {
+public  class DepartmentManagerHomePageController   {
 	public static ClientController chat;
 	private static int itemIndex = 3;
 	
-	@FXML
-	private Button btnBack = null;
-	
-	@FXML
-	private Button btnLogin = null;
+
 	@FXML
 	private Label lblError;
 	
-	@FXML
-	private TextField txtId,txtPassword;
+	/*@FXML
+	private TextField txtInputAmountVisitors;*/
 	
-	private String getId() {
-		return txtId.getText();
-	}
-	private String getPassword() {
-		return txtPassword.getText();
-	}
+	@FXML
+	private ComboBox cmbSelectPark,cmbReportType,cmbReportMonth,cmbReportYear;
+	
+	/*private String getAmountOfVisitors() {
+		return txtInputAmountVisitors.getText();
+	}*/
 	
 	/**
 	   * This method runs the order form fx 
@@ -54,53 +52,31 @@ public  class LoginController   {
 	   *@param event , the "open order manager" button
 	   
 	   */
-	public void Login(ActionEvent event) throws Exception {
+	public void goApproveCapacity(ActionEvent event) throws Exception {
 		/* Send a message to server to check username and password then check Role and open next window 
 		 * according to the role
 		 */
-		String id = getId();
-		String openPage="",pageTitle="";
-		if (id.equals("1")) {
-			openPage="/gui/VisitorHomePage.fxml";
-			pageTitle="Visitor home page"; }
-		else if (id.equals("2")) {
-			openPage="/gui/ParkManagerHomePage.fxml";
-			pageTitle="Park Manager home page";
-			
-		}
-		else if (id.equals("3")) {
-			openPage="/gui/DepartmentManagerHomePage.fxml";
-			pageTitle="Department Manager home page";
-			
-		}
-		else if (id.equals("4")) {
-			openPage="/gui/ServicesHomePage.fxml";
-			pageTitle="Services home page";
-			
-		}
-		
-		FXMLLoader loader = new FXMLLoader();
+		/*FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource(openPage).openStream());		
+		Pane root = loader.load(getClass().getResource("/gui/EditOrder.fxml").openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		//scene.getStylesheets().add(getClass().getResource("/gui/VisitorHomePage.css").toExternalForm());
-		primaryStage.setTitle(pageTitle);
+		scene.getStylesheets().add(getClass().getResource("/gui/EditOrder.css").toExternalForm());
+		primaryStage.setTitle("Orders Managment Tool");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();
-
-		//ClientUI.chat.accept("refresh");
+*/
 
         
 
 		
 	}
 	
-	public void goSignUp(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
+	public void goCreateReport(ActionEvent event) throws Exception {
+		/*FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
 		Pane root = loader.load(getClass().getResource("/gui/SignUp.fxml").openStream());		
@@ -111,47 +87,42 @@ public  class LoginController   {
 		primaryStage.setTitle("Signup page");
 
 		primaryStage.setScene(scene);		
-		primaryStage.show();
+		primaryStage.show();*/
 	}
 	
-
-	public void goLoginNoPassword(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
+	public void goViewReport(ActionEvent event) throws Exception {
+		/*FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/LoginWithoutPassword.fxml").openStream());		
+		Pane root = loader.load(getClass().getResource("/gui/SignUp.fxml").openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/LoginWithoutPassword.css").toExternalForm());
-		primaryStage.setTitle("Login without password");
+		scene.getStylesheets().add(getClass().getResource("/gui/SignUp.css").toExternalForm());
+		primaryStage.setTitle("Signup page");
+
+		primaryStage.setScene(scene);		
+		primaryStage.show();*/
+	}
+	
+
+	public void Logout(ActionEvent event) throws Exception {
+		FXMLLoader loader = new FXMLLoader();
+		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+		Stage primaryStage = new Stage();
+		Pane root = loader.load(getClass().getResource("/gui/Login.fxml").openStream());		
+		
+	
+		Scene scene = new Scene(root);			
+		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
+		primaryStage.setTitle("Login page");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();
 		
 	}
 	
-	/**
-	   * This method exits the client when exit button pressed
-	   *
-	   *@param event
-	   
-	   */	
-	public void goBackBtn(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/MainFrame.fxml").openStream());		
-		
 	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/MainFrame.css").toExternalForm());
-		primaryStage.setTitle("Home page");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();
-		
-	}
 	
 
 	

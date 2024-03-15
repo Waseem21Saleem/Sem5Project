@@ -131,7 +131,7 @@ public class EditOrderController implements Initializable {
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/VisitorHomePage.css").toExternalForm());
+		//scene.getStylesheets().add(getClass().getResource("/gui/VisitorHomePage.css").toExternalForm());
 		primaryStage.setTitle("Visitor HomePage");
 
 		primaryStage.setScene(scene);		
