@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import client.*;
 import common.ChatIF;
-import gui.OrderFormController;
+import gui.EditOrderController;
 
 
 /**

@@ -26,34 +26,21 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import logic.Order;
 
-public class OrderFormController implements Initializable {
+public class EditOrderController implements Initializable {
 
 	private Order order;	
-	@FXML
-	private Label lblName;
-	@FXML
-	private Label lblSave;
-	@FXML
-	private Label lblSurname;
-	@FXML
-	private Label lblFaculty,lblTime,lblVisitors,lblEmail,lblOrderNum;
 	
 	@FXML
-	private TextField txtName;
-	@FXML
-	private TextField txtSurname;
+	private Label lblOrderNum,lblSave,lblError;
 	
 	@FXML
-	private TextField txtTel;
+	private TextField txtVisitors;
+		
+	@FXML
+	private Button btnSave,btnBack;
 	
 	@FXML
-	private Button btnclose=null;
-	
-	@FXML
-	private Button btnsave;
-	
-	@FXML
-	private ComboBox cmbPark;
+	private ComboBox cmbPark,cmbOrder,cmbMonth,cmbDay,cmbTime;
 	
 	public ChatClient chatc;
 	
@@ -70,7 +57,7 @@ public class OrderFormController implements Initializable {
   
 	   */	
 	public void loadOrder(ArrayList<String> orderInfo) {
-		
+		/*
 		this.txtName.setText(orderInfo.get(0));
 		
 		this.lblOrderNum.setText(orderInfo.get(1));
@@ -81,7 +68,7 @@ public class OrderFormController implements Initializable {
 		
 		this.txtTel.setText(orderInfo.get(4));
 	
-		this.lblEmail.setText(orderInfo.get(5));
+		this.lblEmail.setText(orderInfo.get(5));*/
 		
 	}
 
@@ -91,7 +78,7 @@ public class OrderFormController implements Initializable {
  
 	   */	
 	public void setParkComboBox() {
-		  this.cmbPark.setValue("Order number");
+		  /*this.cmbPark.setValue("Order number");
 			ordersList = new ArrayList<String>();
 			ordersList.add("getOrders");
 
@@ -115,15 +102,15 @@ public class OrderFormController implements Initializable {
 	            
 	            lblSave.setText("");
 	            
-	        });
+	        });*/
     }
     
     
 	public void refreshComboBox(String selectedValue) {
-		  ordersList = new ArrayList<String>();
+		/*  ordersList = new ArrayList<String>();
 		  ordersList.add(selectedValue);
 		  ClientUI.chat.accept(ordersList);
-		  loadOrder(ChatClient.OrderInfo);
+		  loadOrder(ChatClient.OrderInfo);*/
 	}
 	
 
@@ -135,10 +122,20 @@ public class OrderFormController implements Initializable {
 	   *@param event, the Close button
 	   
 	   */	
-	public void getCloseBtn(ActionEvent event) throws Exception {
+	public void goBackBtn(ActionEvent event) throws Exception {
 
-        ClientUI.chat.accept("ClientDisconnected");
-		System.exit(0);
+		FXMLLoader loader = new FXMLLoader();
+		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+		Stage primaryStage = new Stage();
+		Pane root = loader.load(getClass().getResource("/gui/VisitorHomePage.fxml").openStream());		
+		
+	
+		Scene scene = new Scene(root);			
+		scene.getStylesheets().add(getClass().getResource("/gui/VisitorHomePage.css").toExternalForm());
+		primaryStage.setTitle("Visitor HomePage");
+
+		primaryStage.setScene(scene);		
+		primaryStage.show();
 		
 	}
 	
@@ -151,7 +148,7 @@ public class OrderFormController implements Initializable {
 	   */	
 	public void getSaveBtn(ActionEvent event) throws Exception {
 		
-		if (event.getSource() ==btnsave) { 
+		/*if (event.getSource() ==btnsave) { 
 			String[] text = {"updateOrder",lblOrderNum.getText(),txtName.getText(),txtTel.getText()};
 			ClientUI.chat.accept(text);
 			//order.setParkName(txtName.getText());
@@ -161,7 +158,7 @@ public class OrderFormController implements Initializable {
 			
 			
 			
-		}
+		}*/
 		
 	}
 	

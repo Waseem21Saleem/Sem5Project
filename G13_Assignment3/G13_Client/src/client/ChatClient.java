@@ -7,7 +7,7 @@ package client;
 import ocsf.client.*;
 import client.*;
 import common.ChatIF;
-import gui.OrderFormController;
+import gui.EditOrderController;
 import javafx.stage.Stage;
 import logic.Order;
 
