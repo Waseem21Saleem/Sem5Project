@@ -78,6 +78,7 @@ public  class LoginController   {
 			pageTitle="Services home page";
 			
 		}
+
 		
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
@@ -86,7 +87,7 @@ public  class LoginController   {
 		
 	
 		Scene scene = new Scene(root);			
-		//scene.getStylesheets().add(getClass().getResource("/gui/VisitorHomePage.css").toExternalForm());
+		//scene.getStylesheets().add(getClass().getResource(openPage).toExternalForm());
 		primaryStage.setTitle(pageTitle);
 
 		primaryStage.setScene(scene);		

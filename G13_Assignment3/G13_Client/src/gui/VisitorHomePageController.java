@@ -75,19 +75,20 @@ public  class VisitorHomePageController   {
 	}
 	
 	public void makeReservation(ActionEvent event) throws Exception {
-		/*FXMLLoader loader = new FXMLLoader();
+		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/SignUp.fxml").openStream());		
+		Pane root = loader.load(getClass().getResource("/gui/ConfirmOrder.fxml").openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/SignUp.css").toExternalForm());
-		primaryStage.setTitle("Signup page");
+		//scene.getStylesheets().add(getClass().getResource("/gui/SignUp.css").toExternalForm());
+		primaryStage.setTitle("Confirm order page");
 
 		primaryStage.setScene(scene);		
-		primaryStage.show();*/
+		primaryStage.show();
 	}
+	
 	
 
 	public void Logout(ActionEvent event) throws Exception {

@@ -20,3 +20,4 @@
       <Button id="btnLogOut" layoutX="62.0" layoutY="336.0" mnemonicParsing="false" onAction="#Logout" text="Logout" />
    </children>
 </AnchorPane>
+

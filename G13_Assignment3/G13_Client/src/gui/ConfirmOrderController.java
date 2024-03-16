@@ -26,7 +26,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ocsf.server.ConnectionToClient;
 
-public class ConfirmOrder {
+public class ConfirmOrderController {
 	public static ClientController chat;
 	private static int itemIndex = 3;
 	
@@ -39,7 +39,7 @@ public class ConfirmOrder {
     
 	
 	public void PayNow(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
+		/*FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
 		Pane root = loader.load(getClass().getResource("/gui/Payment.fxml").openStream());		
@@ -47,15 +47,15 @@ public class ConfirmOrder {
 	
 		Scene scene = new Scene(root);			
 		//scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
-		primaryStage.setTitle("Login page");
+		primaryStage.setTitle("Payment page");
 
 		primaryStage.setScene(scene);		
-		primaryStage.show();
+		primaryStage.show();*/
 		
 	}
 	
 	
-	public void Logout(ActionEvent event) throws Exception {
+	public void goBack(ActionEvent event) throws Exception {
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
@@ -64,7 +64,7 @@ public class ConfirmOrder {
 	
 		Scene scene = new Scene(root);			
 		//scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
-		primaryStage.setTitle("Login page");
+		primaryStage.setTitle("Visitor home page");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();

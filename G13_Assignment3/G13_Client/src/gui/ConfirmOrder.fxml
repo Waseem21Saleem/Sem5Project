@@ -6,7 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ConfirmOrderController">
    <children>
       <Label id="labelSelectPark" layoutX="49.0" layoutY="46.0" style="-fx-font-size: 18;" text="Select Park:" />
       <Label id="labelAmountVisitors" layoutX="49.0" layoutY="110.0" style="-fx-font-size: 18;" text="Amount Visitors:" />
@@ -16,12 +18,12 @@
       <Label id="labelMonth" layoutX="214.0" layoutY="161.0" style="-fx-font-size: 18;" text="Month:" />
       <Label id="labelPriceShowPayNow" fx:id="labelPriceShowPayNow" layoutX="66.0" layoutY="273.0" text="PriceShowPayNow" />
       <Label id="labelPriceShowPayLater" fx:id="labelPriceShowPayLater" layoutX="364.0" layoutY="273.0" text="PriceShowPayLater" />
-      <Button id="btnPayNow" layoutX="83.0" layoutY="305.0" mnemonicParsing="false" text="Pay Now" />
-      <Button id="btnPayInPark" layoutX="376.0" layoutY="305.0" mnemonicParsing="false" text="Pay In Park" />
+      <Button id="btnPayNow" layoutX="83.0" layoutY="305.0" mnemonicParsing="false" onAction="#PayNow" text="Pay Now" />
+      <Button id="btnPayInPark" layoutX="376.0" layoutY="305.0" mnemonicParsing="false" onAction="#goBack" text="Pay In Park" />
       <Label id="labelGetDayDB" fx:id="labelGetDayDB" layoutX="101.0" layoutY="166.0" text="DayDB" />
       <Label id="labelGetMonthDB" fx:id="labelGetMonthDB" layoutX="286.0" layoutY="166.0" text="MonthDB" />
       <Label id="labelTime" layoutX="49.0" layoutY="213.0" style="-fx-font-size: 18;" text="Time: " />
       <Label id="labelGetTimeDB" fx:id="labelGetTimeDB" layoutX="115.0" layoutY="218.0" text="TimeDB" />
-      <Button id="btnBack" layoutX="508.0" layoutY="350.0" mnemonicParsing="false" text="Back" />
+      <Button id="btnBack" layoutX="508.0" layoutY="350.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
    </children>
 </AnchorPane>
