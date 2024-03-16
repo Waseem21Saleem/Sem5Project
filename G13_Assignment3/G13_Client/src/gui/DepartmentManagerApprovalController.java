@@ -28,7 +28,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import logic.Order;
 
-public class DepartmentManagerApprovalCC   {
+public class DepartmentManagerApprovalController   {
 	public static ClientController chat;
 	@FXML
 	private Button btnReject,btnAccept,btnBack;
@@ -41,7 +41,7 @@ public class DepartmentManagerApprovalCC   {
 	   *@param order
   
 	   */	
-	public void Accept(ActionEvent event) throws Exception {
+	public void accept(ActionEvent event) throws Exception {
 		/*FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
@@ -56,7 +56,7 @@ public class DepartmentManagerApprovalCC   {
 		primaryStage.show();*/
 		
 	}
-	public void Rejected (ActionEvent event) throws Exception {
+	public void reject (ActionEvent event) throws Exception {
 		/*FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
@@ -72,15 +72,31 @@ public class DepartmentManagerApprovalCC   {
 	}
 	
 public void goBackBtn(ActionEvent event) throws Exception {
-	
+		String fxml="",css="",title="";
+		if (event.getSource()==btnBack) {
+			fxml="/gui/DepartmentManagerHomePage.fxml";
+			css="/gui/DepartmentManagerHomePage.fxml";
+			title="Department Manager home page";
+			
+		}
+		else if (event.getSource()==btnAccept) {
+			fxml="/gui/DepartmentManagerHomePage.fxml";
+			css="/gui/DepartmentManagerHomePage.fxml";
+			title="Department Manager home page";
+
+		}
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/DepartmentManagerApproval.fxml").openStream());		
+		Pane root = loader.load(getClass().getResource(fxml).openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/DepartmentManagerApproval.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource(css).toExternalForm());
+		primaryStage.setTitle(title);
+
+		primaryStage.setScene(scene);		
+		primaryStage.show();
 }
 }
 

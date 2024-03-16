@@ -117,7 +117,7 @@ public  class MainFrameController   {
 	public void getExitBtn(ActionEvent event) throws Exception {
 		InetAddress localHost = InetAddress.getLocalHost();
         String clientIP = localHost.getHostAddress();
-        ClientUI.chat.accept("ClientDisonnected "+clientIP);
+        //ClientUI.chat.accept("ClientDisonnected "+clientIP);
 		System.exit(0);
 		
 	}

@@ -57,19 +57,19 @@ public  class DepartmentManagerHomePageController   {
 		/* Send a message to server to check username and password then check Role and open next window 
 		 * according to the role
 		 */
-		/*FXMLLoader loader = new FXMLLoader();
+		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/EditOrder.fxml").openStream());		
+		Pane root = loader.load(getClass().getResource("/gui/DepartmentManagerApproval.fxml").openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/EditOrder.css").toExternalForm());
-		primaryStage.setTitle("Orders Managment Tool");
+		scene.getStylesheets().add(getClass().getResource("/gui/DepartmentManagerApproval.css").toExternalForm());
+		primaryStage.setTitle("Department Managment Tool");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();
-*/
+
 
         
 
