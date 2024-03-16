@@ -2,19 +2,15 @@ package gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 public class PaymentController {
 	
 	@FXML
-	private Button btnPay;
+	private Button btnPay = null;
 	@FXML
 	private ComboBox<String> cmbMonth;
 	@FXML
@@ -45,93 +41,81 @@ public class PaymentController {
 	
 	//add months to the ComboBox
 	public void setMonthComboBox(ActionEvent event) throws Exception {
-		// Load the FXML file
-		 Parent root = FXMLLoader.load(getClass().getResource("Payment.fxml"));
-        
-        // Set up the scene
-		Stage primaryStage = new Stage();
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        
        	cmbMonth.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
 	}
 	
 	//add years to the ComboBox
 	public void setYearComboBox(ActionEvent event) throws Exception {
-		// Load the FXML file
-		 Parent root = FXMLLoader.load(getClass().getResource("Payment.fxml"));
-	       
-		// Set up the scene
-		Stage primaryStage = new Stage();
-	    Scene scene = new Scene(root);
-	    primaryStage.setScene(scene);
-	    primaryStage.show();
-	        
 	    cmbYear.getItems().addAll("2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034");
 	}
 	
 	public void confirmAndPayBtn(ActionEvent event) throws Exception {
-		if(event.getSource() == btnPay) { 
-			lblSuccess.setText("Confirmed And Paid Successfully!");
-		}
+		lengthErrorCardNumberMessage();
+		notNumberErrorCardNumberMessage();
+		lengthErrorCVCMessage();
+		notNumberErroCVCMessage();
+		lblSuccess.setText("Confirmed And Paid Successfully!");
 	}
 	
-	//An error message will appear if the CVC's length is incorrect or if it contains a character thats not a number
-	public void errorCVCMessage(ActionEvent event) throws Exception {
-		// Initialize lblErrorCVC to be invisible
+	//An error message will appear if the CVC's length is incorrect
+	public void lengthErrorCVCMessage() {
+		// Initialize the lblErrorCVC message to be invisible
 		lblErrorCVC.setVisible(false);
 
-        // Initialize lblErrorNotANumInCVC to be invisible
-		lblErrorNotANumInCVC.setVisible(false);
-
-        // Add a listener to the txtCVC to check for non-numeric characters and enforce 3-digit length
+		// Add a listener to txtCVC to check the length of the entered text
 		txtCVC.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d{0,3}")) {
-                // If the new value contains non-numeric characters or not 3 digits, prevent it from being entered
-            	txtCVC.setText(oldValue);
+			if (newValue.length() != 3) {
+				// If the length is not 3, display the error message
+				lblErrorCVC.setText("CVC must be 3-digits!");
+				lblErrorCVC.setVisible(true);
+			} else {
+				// If the length is 3, hide the error message
+				lblErrorCVC.setVisible(false);
+			}
+		});
+    }
+	
+	//An error message will appear if the CardNumber's length is incorrect
+	public void lengthErrorCardNumberMessage() {
+		// Initialize the lblErrorCardNum message to be invisible
+		lblErrorCardNum.setVisible(false);
+
+        // Add a listener to txtCardNum to check the length of the entered text
+		txtCardNum.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() != 12) {
+                // If the length is not 12, display the error message
+            	lblErrorCardNum.setText("Card number must be 12-digits!");
+            	lblErrorCardNum.setVisible(true);
             } else {
-                // If the length is not exactly 3, display the error message
-                if (newValue.length() != 3) {
-                	lblErrorCVC.setText("CVC must be 3-digits!");
-                	lblErrorCVC.setVisible(true);
-                	lblErrorNotANumInCVC.setVisible(false); // Hide lblErrorNotANumInCVC message
-                } else {
-                    // If the length is 3, hide lblErrorCVC message and display lblErrorNotANumInCVC message
-                	lblErrorCVC.setVisible(false);
-                	lblErrorNotANumInCVC.setText("CVC must contain only numbers!");
-                	lblErrorNotANumInCVC.setVisible(true);
-                }
+                // If the length is 12, hide the error message
+            	lblErrorCardNum.setVisible(false);
             }
         });
     }
 	
-	//An error message will appear if the CardNumber's length is incorrect or if it contains a character thats not a number
-		public void errorCardNumberMessage(ActionEvent event) throws Exception {
-			// Initialize lblErrorCardNum to be invisible
-			lblErrorCardNum.setVisible(false);
-
-	        // Initialize lblErrorNotANumInCard to be invisible
-			lblErrorNotANumInCard.setVisible(false);
-
-	        // Add a listener to the txtCardNum to check for non-numeric characters and enforce 12-digit length
-			txtCardNum.textProperty().addListener((observable, oldValue, newValue) -> {
-	            if (!newValue.matches("\\d{0,12}")) {
-	                // If the new value contains non-numeric characters or exceeds 12 digits, prevent it from being entered
-	            	txtCardNum.setText(oldValue);
-	            } else {
-	                // If the length is not exactly 12, display the error message
-	                if (newValue.length() != 12) {
-	                	lblErrorCardNum.setText("Card number must be 12-digits!");
-	                	lblErrorCardNum.setVisible(true);
-	                	lblErrorNotANumInCard.setVisible(false); // Hide lblErrorNotANumInCard message
-	                } else {
-	                    // If the length is 12, hide lblErrorCardNum message and display lblErrorNotANumInCard message
-	                	lblErrorCardNum.setVisible(false);
-	                	lblErrorNotANumInCard.setText("Card number must contain only numbers!");
-	                	lblErrorNotANumInCard.setVisible(true);
-	                }
-	            }
-	        });
-	    }
+	public void notNumberErrorCardNumberMessage() {
+		// Add listener to textProperty of the TextField
+		txtCardNum.textProperty().addListener((observable, oldValue, newValue) -> {
+			// Checks if the new value contains non-numeric characters
+			if (!newValue.matches("\\d*")) { 
+            	lblErrorNotANumInCard.setText("Card number must contain only numbers!");
+            	lblErrorNotANumInCard.setVisible(true);
+            } else {
+            	lblErrorNotANumInCard.setVisible(false);
+            }
+        });
+	}
+	
+	public void notNumberErroCVCMessage() {
+		// Add listener to textProperty of the TextField
+		txtCVC.textProperty().addListener((observable, oldValue, newValue) -> {
+			// Checks if the new value contains non-numeric characters
+			if (!newValue.matches("\\d*")) { 
+				lblErrorNotANumInCVC.setText("CVC must contain only numbers!");
+				lblErrorNotANumInCVC.setVisible(true);
+            } else {
+            	lblErrorNotANumInCVC.setVisible(false);
+            }
+        });
+	}
 }
