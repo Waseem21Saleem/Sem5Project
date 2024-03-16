@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="207.0" prefWidth="246.0" style="-fx-background-color: SILVER;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainFrameController">
+<AnchorPane id="lblError" prefHeight="207.0" prefWidth="369.0" style="-fx-background-color: SILVER;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainFrameController">
    <children>
-      <Button id="btnExit" fx:id="btnExit" layoutX="181.0" layoutY="162.0" mnemonicParsing="false" onAction="#getExitBtn" style="-fx-background-color: SKYBLUE; -fx-font-weight: BOLD;" text="Exit" />
-      <Button id="btnOrderInfo" fx:id="btnSend" layoutX="33.0" layoutY="88.0" mnemonicParsing="false" onAction="#Send" prefHeight="31.0" prefWidth="181.0" style="-fx-background-color: SKYBLUE; -fx-text-fill: BLACK; -fx-font-weight: BOLD;" text="Open order manager" />
+      <Button id="btnExit"  fx:id="btnExit" layoutX="270.0" layoutY="162.0" mnemonicParsing="false" onAction="#getExitBtn" style="-fx-background-color: SKYBLUE; -fx-font-weight: BOLD;" text="Exit" />
+      <Button id="btnConnect" fx:id="btnConnect" layoutX="113.0" layoutY="147.0" mnemonicParsing="false" onAction="#Connect" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: SKYBLUE; -fx-text-fill: BLACK; -fx-font-weight: BOLD;" text="Connect" />
+      <Label id="lblIp" layoutX="46.0" layoutY="42.0" style="-fx-font-weight: bold;" text="IP:" />
+      <Label id="lblPort" layoutX="39.0" layoutY="83.0" style="-fx-font-weight: bold;" text="Port:" />
+      <TextField id="txtIP" fx:id="txtIP" layoutX="88.0" layoutY="37.0" />
+      <TextField id="txtPort" fx:id="txtPort" layoutX="88.0" layoutY="78.0" />
+      <Label id="lblError" fx:id="lblError" layoutX="20.0" layoutY="116.0" style="-fx-font-weight: bold;" textFill="RED" />
    </children>
 </AnchorPane>
+
