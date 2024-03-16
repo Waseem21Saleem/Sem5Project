@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="487.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PaymentController">
    <children>
-      <Label id="lblErrorCardNum" fx:id="lblErrorCardNum" layoutX="128.0" layoutY="116.0" text="Card number must be 12-digits!" textAlignment="CENTER" textFill="#fa0000" visible="false" onAction="#confirmAndPayBtn" />
+      <Label id="lblErrorCardNum" fx:id="lblErrorCardNum" layoutX="128.0" layoutY="116.0" text="Card number must be 12-digits!" textAlignment="CENTER" textFill="#fa0000" visible="false" />
       <Label id="lblCardNumber" layoutX="74.0" layoutY="78.0" style="-fx-font-weight: BOLD;" text="Card Number" />
       <Label id="lblCVC" layoutX="74.0" layoutY="163.0" style="-fx-font-weight: BOLD;" text="CVC" />
       <Label id="lblExpDate" layoutX="70.0" layoutY="241.0" style="-fx-font-weight: BOLD;" text="Expiration Date" />
@@ -26,9 +26,9 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Label id="lblErrorCVC" fx:id="lblErrorCVC" layoutX="133.0" layoutY="201.0" text="CVC must be 3-digits!" textFill="RED" visible="false" onAction="#confirmAndPayBtn" />
-      <Label id="lblErrorNotANumInCard" fx:id="lblErrorNotANumInCard" layoutX="131.0" layoutY="116.0" text="Card number must contain only numbers!" textFill="RED" visible="false" onAction="#confirmAndPayBtn" />
-      <Label id="lblErrorNotANumInCVC" fx:id="lblErrorNotANumInCVC" layoutX="133.0" layoutY="201.0" text="CVC must contain only numbers!" textFill="RED" visible="false" onAction="#confirmAndPayBtn" />
+      <Label id="lblErrorCVC" fx:id="lblErrorCVC" layoutX="133.0" layoutY="201.0" text="CVC must be 3-digits!" textFill="RED" visible="false" />
+      <Label id="lblErrorNotANumInCard" fx:id="lblErrorNotANumInCard" layoutX="131.0" layoutY="116.0" text="Card number must contain only numbers!" textFill="RED" visible="false" />
+      <Label id="lblErrorNotANumInCVC" fx:id="lblErrorNotANumInCVC" layoutX="133.0" layoutY="201.0" text="CVC must contain only numbers!" textFill="RED" visible="false" />
       <ImageView id="imgVisa" fitHeight="70.0" fitWidth="106.0" layoutX="363.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="file:///C:/Users/ahmad/git/Sem5Project/G13_Assignment3/G13_Client/src/Visa_image/visa.jpg" />

@@ -59,63 +59,39 @@ public class PaymentController {
 	
 	//An error message will appear if the CVC's length is incorrect
 	public void lengthErrorCVCMessage() {
-		// Initialize the lblErrorCVC message to be invisible
-		lblErrorCVC.setVisible(false);
-
-		// Add a listener to txtCVC to check the length of the entered text
-		txtCVC.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue.length() != 3) {
-				// If the length is not 3, display the error message
-				lblErrorCVC.setText("CVC must be 3-digits!");
-				lblErrorCVC.setVisible(true);
-			} else {
-				// If the length is 3, hide the error message
-				lblErrorCVC.setVisible(false);
-			}
-		});
+		if (txtCVC.getText().length() != 3) {
+            lblErrorCVC.setText("CVC must be 3-digits!");
+            lblErrorCVC.setVisible(true);
+        } else {
+            lblErrorCVC.setVisible(false);
+        }
     }
 	
 	//An error message will appear if the CardNumber's length is incorrect
 	public void lengthErrorCardNumberMessage() {
-		// Initialize the lblErrorCardNum message to be invisible
-		lblErrorCardNum.setVisible(false);
-
-        // Add a listener to txtCardNum to check the length of the entered text
-		txtCardNum.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() != 12) {
-                // If the length is not 12, display the error message
-            	lblErrorCardNum.setText("Card number must be 12-digits!");
-            	lblErrorCardNum.setVisible(true);
-            } else {
-                // If the length is 12, hide the error message
-            	lblErrorCardNum.setVisible(false);
-            }
-        });
+		if (txtCardNum.getText().length() != 12) {
+            lblErrorCardNum.setText("Card number must be 12-digits!");
+            lblErrorCardNum.setVisible(true);
+        } else {
+            lblErrorCardNum.setVisible(false);
+        }
     }
 	
 	public void notNumberErrorCardNumberMessage() {
-		// Add listener to textProperty of the TextField
-		txtCardNum.textProperty().addListener((observable, oldValue, newValue) -> {
-			// Checks if the new value contains non-numeric characters
-			if (!newValue.matches("\\d*")) { 
-            	lblErrorNotANumInCard.setText("Card number must contain only numbers!");
-            	lblErrorNotANumInCard.setVisible(true);
-            } else {
-            	lblErrorNotANumInCard.setVisible(false);
-            }
-        });
+		if (!txtCardNum.getText().matches("\\d*")) {
+            lblErrorNotANumInCard.setText("Card number must contain only numbers!");
+            lblErrorNotANumInCard.setVisible(true);
+        } else {
+            lblErrorNotANumInCard.setVisible(false);
+        }
 	}
 	
 	public void notNumberErroCVCMessage() {
-		// Add listener to textProperty of the TextField
-		txtCVC.textProperty().addListener((observable, oldValue, newValue) -> {
-			// Checks if the new value contains non-numeric characters
-			if (!newValue.matches("\\d*")) { 
-				lblErrorNotANumInCVC.setText("CVC must contain only numbers!");
-				lblErrorNotANumInCVC.setVisible(true);
-            } else {
-            	lblErrorNotANumInCVC.setVisible(false);
-            }
-        });
+		if (!txtCVC.getText().matches("\\d*")) {
+            lblErrorNotANumInCVC.setText("CVC must contain only numbers!");
+            lblErrorNotANumInCVC.setVisible(true);
+        } else {
+            lblErrorNotANumInCVC.setVisible(false);
+        }
 	}
 }
