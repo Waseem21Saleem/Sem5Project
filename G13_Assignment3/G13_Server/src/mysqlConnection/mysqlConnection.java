@@ -11,6 +11,7 @@ import java.util.*;
 
 import logic.CurClient;
 import logic.Order;
+import logic.User;
 
 
 public class mysqlConnection {
@@ -36,15 +37,88 @@ public class mysqlConnection {
         
 		try {
 			conn = DriverManager.getConnection(dbPath,dbUsername,dbPassword);
+	        System.out.println("SQL connection succeed");
+
 		} catch (SQLException ex) {
 			 System.out.println("SQLException: " + ex.getMessage());
 	         System.out.println("SQLState: " + ex.getSQLState());
 	         System.out.println("VendorError: " + ex.getErrorCode());
+	         System.out.println("SQL connection failed");
+
 		}
-        System.out.println("SQL connection succeed");
-     	
+
    	}
 	
+	/**
+	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
+	   *
+	   * @param ordersList, an empty ArrayList
+	   */
+	public User verifyLogin(User user)
+	{
+		try 
+		{	
+			// Prepare a statement with a placeholder
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.users WHERE UserId=? AND Password=?");
+			preparedStatement.setString(1, user.getId()); // 1-indexed parameter position
+			preparedStatement.setString(2, user.getPassword()); // 1-indexed parameter position
+
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+			 // Process the result set
+            rs.next();
+	        //order = new Order(rs.getString("ParkName"),rs.getString("OrderNumber"),rs.getString("TimeOfVisit"),rs.getString("NumberOfVisitors"),rs.getString("TelephoneNumber"),rs.getString("Email"))  ; 
+            user.setFullName(rs.getString("FullName"));
+            user.setEmail(rs.getString("Email"));
+            user.setPhoneNumber(rs.getString("PhoneNumber"));
+            user.setLogged(true);
+            user.setUserPermission(rs.getString("UserPermission"));
+            
+
+	            
+            
+			rs.close();
+			preparedStatement.close();
+			
+			
+		} catch (SQLException e) {return user;}
+		return user;
+	}
+	
+	/**
+	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
+	   *
+	   * @param ordersList, an empty ArrayList
+	   */
+	public String signUp(User user)
+	{
+		String message="";
+
+		// SQL INSERT statement
+        String sql = "INSERT INTO g13.users (UserId, Password, FullName, Email, PhoneNumber, IsLogged, UserPermission) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
+        try {
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+
+            // Set values for placeholders (?, ?, ?)
+            pstmt.setString(1, user.getId());
+            pstmt.setString(2, user.getPassword());
+            pstmt.setString(3, user.getFullName());
+            pstmt.setString(4, user.getEmail());
+            pstmt.setString(5, user.getPhoneNumber());
+            pstmt.setBoolean(6, user.isLogged());
+            pstmt.setString(7, user.getUserPermission());
+            
+
+            // Execute the INSERT statement
+            pstmt.executeUpdate();
+            message="success";
+           
+        } catch (SQLException e) {
+            message="error";
+        }
+        return message;
+	}
 
 	
 	/**
