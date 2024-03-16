@@ -50,48 +50,32 @@ public class PaymentController {
 	}
 	
 	public void confirmAndPayBtn(ActionEvent event) throws Exception {
-		lengthErrorCardNumberMessage();
-		notNumberErrorCardNumberMessage();
-		lengthErrorCVCMessage();
-		notNumberErroCVCMessage();
+		checkCardNumberMessage();
+		checkCVCMessage();
 		lblSuccess.setText("Confirmed And Paid Successfully!");
 	}
 	
 	//An error message will appear if the CVC's length is incorrect
-	public void lengthErrorCVCMessage() {
+	public void checkCVCMessage() {
 		if (txtCVC.getText().length() != 3) {
             lblErrorCVC.setText("CVC must be 3-digits!");
             lblErrorCVC.setVisible(true);
-        } else {
-            lblErrorCVC.setVisible(false);
+        } else if (!txtCVC.getText().matches("\\d*")) {
+            lblErrorNotANumInCVC.setText("CVC must contain only numbers!");
+            lblErrorNotANumInCVC.setVisible(true);
         }
     }
 	
 	//An error message will appear if the CardNumber's length is incorrect
-	public void lengthErrorCardNumberMessage() {
+	public void checkCardNumberMessage() {
 		if (txtCardNum.getText().length() != 12) {
             lblErrorCardNum.setText("Card number must be 12-digits!");
             lblErrorCardNum.setVisible(true);
-        } else {
-            lblErrorCardNum.setVisible(false);
+        } else if (!txtCardNum.getText().matches("\\d*")) {
+            lblErrorNotANumInCard.setText("Card number must contain only numbers!");
+            lblErrorNotANumInCard.setVisible(true);
         }
     }
 	
-	public void notNumberErrorCardNumberMessage() {
-		if (!txtCardNum.getText().matches("\\d*")) {
-            lblErrorNotANumInCard.setText("Card number must contain only numbers!");
-            lblErrorNotANumInCard.setVisible(true);
-        } else {
-            lblErrorNotANumInCard.setVisible(false);
-        }
-	}
 	
-	public void notNumberErroCVCMessage() {
-		if (!txtCVC.getText().matches("\\d*")) {
-            lblErrorNotANumInCVC.setText("CVC must contain only numbers!");
-            lblErrorNotANumInCVC.setVisible(true);
-        } else {
-            lblErrorNotANumInCVC.setVisible(false);
-        }
-	}
 }
