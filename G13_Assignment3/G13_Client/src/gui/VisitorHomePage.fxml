@@ -7,8 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VisitorHomePageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VisitorHomePageController">
    <children>
       <Label id="labelSelectPark" layoutX="50.0" layoutY="43.0" text="Select Park:" />
       <Label id="labelAmountVisitors" layoutX="37.0" layoutY="101.0" text="Amount Visitors:" />
@@ -18,11 +17,15 @@
       <ComboBox id="cmbSelectDay" fx:id="cmbSelectDay" layoutX="69.0" layoutY="152.0" prefWidth="150.0" />
       <ComboBox id="cmbSelectMonth" fx:id="cmbSelectMonth" layoutX="315.0" layoutY="161.0" prefWidth="150.0" />
       <TextField id="txtInputAmountVisitors" fx:id="txtInputAmountVisitors" layoutX="145.0" layoutY="97.0" />
-      <Button id="btnMakeReseravation" layoutX="219.0" layoutY="275.0" mnemonicParsing="false" onAction="#makeReservation" text="Make Reserevation" />
+      <Button id="btnMakeReseravation" layoutX="198.0" layoutY="353.0" mnemonicParsing="false" onAction="#makeReservation" text="Make Reserevation" />
       <Label id="labelHour" layoutX="35.0" layoutY="218.0" text="Time:" />
       <ComboBox id="cmbTime" fx:id="cmbTime" layoutX="78.0" layoutY="213.0" prefHeight="31.0" prefWidth="228.0" />
-      <Button id="btnLogOut" layoutX="35.0" layoutY="336.0" mnemonicParsing="false" onAction="#Logout" style="-fx-font-weight: bold;" text="Logout" />
-      <Label layoutX="107.0" layoutY="316.0" text="Have Alredy Order And Want To Edit?..." />
-      <Hyperlink id="hyperClickHere" layoutX="367.0" layoutY="312.0" onAction="#goEditOrder" text="Click Here" />
+      <Button id="btnLogOut" layoutX="41.0" layoutY="437.0" mnemonicParsing="false" onAction="#Logout" style="-fx-font-weight: bold;" text="Logout" />
+      <Label layoutX="116.0" layoutY="387.0" text="Have Alredy Order And Want To Edit?..." />
+      <Hyperlink id="hyperClickHere" layoutX="336.0" layoutY="384.0" onAction="#goEditOrder" text="Click Here" />
+      <Label id="labelEamil" layoutX="37.0" layoutY="272.0" text="Email: " />
+      <Label id="labelPhoneNumber" layoutX="36.0" layoutY="316.0" text="Phone Number: " />
+      <TextField id="txtEmail" fx:id="txtEmail" layoutX="89.0" layoutY="268.0" />
+      <TextField id="txtPhone" fx:id="txtPhone" layoutX="145.0" layoutY="312.0" />
    </children>
 </AnchorPane>

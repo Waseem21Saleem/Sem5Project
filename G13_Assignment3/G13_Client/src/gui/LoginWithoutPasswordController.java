@@ -75,6 +75,28 @@ public  class LoginWithoutPasswordController   {
 
 		
 	}
+	public void GoToLoginPage(ActionEvent event) throws Exception {
+		/* Check if this id has editable order then open this window
+		 */
+		FXMLLoader loader = new FXMLLoader();
+		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+		Stage primaryStage = new Stage();
+		Pane root = loader.load(getClass().getResource("/gui/Login.fxml").openStream());		
+		
+	
+		Scene scene = new Scene(root);			
+		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
+		primaryStage.setTitle("Login");
+
+		primaryStage.setScene(scene);		
+		primaryStage.show();
+
+		//ClientUI.chat.accept("refresh");
+
+        
+
+		
+	}
 	
 	
 
@@ -104,3 +126,4 @@ public  class LoginWithoutPasswordController   {
 
 	
 }
+

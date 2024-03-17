@@ -35,7 +35,7 @@ public class EditOrderController implements Initializable {
 	private Label lblOrderNum,lblSave,lblError;
 	
 	@FXML
-	private TextField txtVisitors;
+	private TextField txtVisitors,txtEmail,txtPhone;
 		
 	@FXML
 	private Button btnSave,btnBack;

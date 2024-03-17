@@ -6,8 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="461.0" prefWidth="331.0" style="-fx-background-color: SILVER;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.EditOrderController">
+<AnchorPane prefHeight="461.0" prefWidth="331.0" style="-fx-background-color: SILVER;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.EditOrderController">
    <children>
       <Label id="labelOrder" layoutX="24.0" layoutY="129.0" style="-fx-font-weight: BOLD;" text="Order Number:" />
       <Label id="lblDate" layoutX="49.0" layoutY="188.0" style="-fx-font-weight: BOLD;" text="Date:" />
@@ -26,6 +25,10 @@
       <ComboBox id="cmbTime" fx:id="cmbTime" layoutX="110.0" layoutY="225.0" prefHeight="31.0" prefWidth="197.0" promptText="Pick time" style="-fx-background-color: SKYBLUE; -fx-font-weight: BOLD;" />
       <TextField id="txtVisitors" fx:id="txtVisitors" layoutX="115.0" layoutY="280.0" />
       <Label id="lblError" fx:id="lblError" layoutX="42.0" layoutY="332.0" prefHeight="21.0" prefWidth="53.0" style="-fx-font-weight: BOLD;" textFill="RED" />
+      <Label id="labelEamil" layoutX="42.0" layoutY="315.0" text="Email: " />
+      <Label id="labelPhoneNumber" layoutX="42.0" layoutY="345.0" text="Phone Number: " />
+      <TextField id="txtEmail" fx:id="txtEmail" layoutX="115.0" layoutY="311.0" />
+      <TextField id="txtPhone" fx:id="txtPhone" layoutX="135.0" layoutY="341.0" />
       
    </children>
 </AnchorPane>

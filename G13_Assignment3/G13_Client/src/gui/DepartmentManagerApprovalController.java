@@ -45,7 +45,7 @@ public class DepartmentManagerApprovalController   {
 	public void accept(ActionEvent event) throws Exception {
 		  Order selectedOrder = (Order) listApprove.getSelectionModel().getSelectedItem();
 	        if (selectedOrder != null) {
-	            selectedOrde("Accepted"); // Update status to "Accepted"
+	            //selectedOrde("Accepted"); // Update status to "Accepted"
 	            // Call a method to update the order status in your data source/database
 	            // For example: OrderDAO.updateOrderStatus(selectedOrder.getId(), "Accepted");
 	            listApprove.refresh(); // Refresh the table view
@@ -54,10 +54,10 @@ public class DepartmentManagerApprovalController   {
 	public void reject (ActionEvent event) throws Exception {
 		Order selectedOrder = (Order) listApprove.getSelectionModel().getSelectedItem();
 	        if (selectedOrder != null) {
-	            selectedOrder.// Update status to "Rejected"
+	            //selectedOrder.// Update status to "Rejected"
 	            // Call a method to update the order status in your data source/database
 	            // For example: OrderDAO.updateOrderStatus(selectedOrder.getId(), "Rejected");
-	            listApprove.refresh(); // Refresh the table view
+	            //listApprove.refresh(); // Refresh the table view
 	        }
 	}
 	

@@ -66,11 +66,11 @@ public  class MainFrameController   {
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/Login.fxml").openStream());		
+		Pane root = loader.load(getClass().getResource("/gui/LoginWithoutPassword.fxml").openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/gui/LoginWithoutPassword.css").toExternalForm());
 		primaryStage.setTitle("Login page");
 
 		primaryStage.setScene(scene);		
@@ -117,7 +117,7 @@ public  class MainFrameController   {
 	public void getExitBtn(ActionEvent event) throws Exception {
 		InetAddress localHost = InetAddress.getLocalHost();
         String clientIP = localHost.getHostAddress();
-        //ClientUI.chat.accept("ClientDisonnected "+clientIP);
+        ClientUI.chat.accept("ClientDisonnected "+clientIP);
 		System.exit(0);
 		
 	}

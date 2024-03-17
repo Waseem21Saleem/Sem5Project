@@ -142,12 +142,12 @@ public  class LoginController   {
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/MainFrame.fxml").openStream());		
+		Pane root = loader.load(getClass().getResource("/gui/Login.fxml").openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/MainFrame.css").toExternalForm());
-		primaryStage.setTitle("Home page");
+		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
+		primaryStage.setTitle("Login page");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();

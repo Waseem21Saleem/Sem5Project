@@ -36,7 +36,7 @@ public  class VisitorHomePageController   {
 	private Label lblError;
 	
 	@FXML
-	private TextField txtInputAmountVisitors;
+	private TextField txtInputAmountVisitors,txtEmail,txtPhone;
 	
 	@FXML
 	private ComboBox cmbSelectPark,cmbSelectDay,cmbSelectMonth,cmbTime;
