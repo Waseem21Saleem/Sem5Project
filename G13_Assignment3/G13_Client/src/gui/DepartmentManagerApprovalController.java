@@ -29,6 +29,7 @@ import javafx.stage.Stage;
 import logic.Order;
 
 public class DepartmentManagerApprovalController   {
+
 	public static ClientController chat;
 	@FXML
 	private Button btnReject,btnAccept,btnBack;
@@ -42,33 +43,22 @@ public class DepartmentManagerApprovalController   {
   
 	   */	
 	public void accept(ActionEvent event) throws Exception {
-		/*FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/Login.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
-		primaryStage.setTitle("Login page");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();*/
-		
+		  Order selectedOrder = (Order) listApprove.getSelectionModel().getSelectedItem();
+	        if (selectedOrder != null) {
+	            selectedOrde("Accepted"); // Update status to "Accepted"
+	            // Call a method to update the order status in your data source/database
+	            // For example: OrderDAO.updateOrderStatus(selectedOrder.getId(), "Accepted");
+	            listApprove.refresh(); // Refresh the table view
+	        }
 	}
 	public void reject (ActionEvent event) throws Exception {
-		/*FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/Login.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
-		primaryStage.setTitle("Login page");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();*/
+		Order selectedOrder = (Order) listApprove.getSelectionModel().getSelectedItem();
+	        if (selectedOrder != null) {
+	            selectedOrder.// Update status to "Rejected"
+	            // Call a method to update the order status in your data source/database
+	            // For example: OrderDAO.updateOrderStatus(selectedOrder.getId(), "Rejected");
+	            listApprove.refresh(); // Refresh the table view
+	        }
 	}
 	
 public void goBackBtn(ActionEvent event) throws Exception {
