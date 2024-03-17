@@ -11,10 +11,10 @@ public class User {
 	private boolean isLogged;
 	private String userPermission;
 	
-	public User(String id,String password)
+	public User(String id)
 	{
 		this.id=id;
-		this.password=password;
+		this.password="";
 		this.fullName="";
 		this.email="";
 		this.phoneNumber="";

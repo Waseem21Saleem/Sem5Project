@@ -4,104 +4,134 @@ public class Order {
 
 	private String parkName;
 	private String orderNum;
+	private String visitorId;
+	private String visitorType;
+	private String date;
 	private String time;
 	private String visitors;
 	private String telephone;
 	private String email;
 	
-	public Order()
+	
+	//constructor to edit order
+	public Order(String parkName, String orderNum, String date, String time, String visitors, String telephone, String email) {
+	    this.parkName = parkName;
+	    this.orderNum = orderNum;
+	    this.date = date;
+	    this.time = time;
+	    this.visitors = visitors;
+	    this.telephone=telephone;
+	    this.email=email;
+	 }
+	//constructor to make new order
+	public Order(String parkName, String date, String time, String visitors, String telephone, String email) {
+	    this.parkName = parkName;
+	    this.date = date;
+	    this.time = time;
+	    this.visitors = visitors;
+	    this.telephone=telephone;
+	    this.email=email;
+	}
+
+	//constructor to get orders numbers	 
+	public Order(String orderNum)
 	{
 		this.parkName="";
-		this.orderNum="";
+		this.orderNum=orderNum;
+		this.visitorId="";
+		this.visitorType="";
+		this.date="";
 		this.time="";
 		this.visitors="";
 		this.telephone="";
 		this.email="";
 	}
-	public Order(String parkName,String orderNum,String time,String visitors,String telephone,String email) {
-		this.parkName=parkName;
-		this.orderNum=orderNum;
-		this.time=time;
-		this.visitors=visitors;
-		this.telephone=telephone;
-		this.email=email;
-	}
-	
-	/**
-	 * @return the parkName
-	 */
-	public String getParkName() {
-		return parkName;
-	}
-	/**
-	 * @param name the parkName to set
-	 */
-	public void setParkName(String name) {
-		parkName = name;
-	}
-	/**
-	 * @return the order number
-	 */
-	public String getOrderNum() {
-		return orderNum;
-	}
-	/**
-	 * @param name the order number to set
-	 */
-	public void setOrderNum(String name) {
-		orderNum = name;
-	}
-	/**
-	 * @return the time
-	 */
-	public String getTime() {
-		return time;
-	}
-	/**
-	 * @param name the time to set
-	 */
-	public void setTime(String name) {
-		time = name;
-	}
-	/**
-	 * @return the visitors
-	 */
-	public String getVisitors() {
-		return visitors;
-	}
-	/**
-	 * @param name the Visitors to set
-	 */
-	public void setVisitors(String name) {
-		visitors = name;
-	}
-	/**
-	 * @return the telephone
-	 */
-	public String getTelephone() {
-		return telephone;
-	}
-	/**
-	 * @param name the parkName to set
-	 */
-	public void setTelephone(String name) {
-		telephone = name;
-	}
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
-	/**
-	 * @param name the parkName to set
-	 */
-	public void setEmail(String name) {
-		email = name;
-	}
-	
-	public String toString(){
-		return String.format("%s %s %s %s %s %s\n",parkName,orderNum,time,visitors,telephone,email);
-	}
+	// Constructor
+    public Order(String parkName, String orderNum, String visitorId, String visitorType,
+                 String date, String time, String visitors, String telephone, String email) {
+        this.parkName = parkName;
+        this.orderNum = orderNum;
+        this.visitorId = visitorId;
+        this.visitorType = visitorType;
+        this.date = date;
+        this.time = time;
+        this.visitors = visitors;
+        this.telephone = telephone;
+        this.email = email;
+    }
+
+    // Getter methods
+    public String getParkName() {
+        return parkName;
+    }
+
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public String getVisitorId() {
+        return visitorId;
+    }
+
+    public String getVisitorType() {
+        return visitorType;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getVisitors() {
+        return visitors;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    // Setter methods
+    public void setParkName(String parkName) {
+        this.parkName = parkName;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public void setVisitorId(String visitorId) {
+        this.visitorId = visitorId;
+    }
+
+    public void setVisitorType(String visitorType) {
+        this.visitorType = visitorType;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setVisitors(String visitors) {
+        this.visitors = visitors;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
 }
