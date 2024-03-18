@@ -23,6 +23,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import logic.Message;
+import logic.User;
 import ocsf.server.ConnectionToClient;
 
 
@@ -30,6 +32,8 @@ import ocsf.server.ConnectionToClient;
 public  class VisitorHomePageController   {
 	public static ClientController chat;
 	private static int itemIndex = 3;
+	public static User user=ChatClient.user;
+
 	
 
 	@FXML
@@ -74,6 +78,7 @@ public  class VisitorHomePageController   {
 		
 	}
 	
+	
 	public void makeReservation(ActionEvent event) throws Exception {
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
@@ -92,6 +97,8 @@ public  class VisitorHomePageController   {
 	
 
 	public void Logout(ActionEvent event) throws Exception {
+		Message msg = new Message (Message.ActionType.LOGOUT,user);
+		ClientUI.chat.accept(msg);
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();

@@ -8,6 +8,7 @@ import ocsf.client.*;
 import client.*;
 import common.ChatIF;
 import gui.EditOrderController;
+import gui.VisitorHomePageController;
 import javafx.stage.Stage;
 import logic.Message;
 import logic.Order;
@@ -88,7 +89,7 @@ public class ChatClient extends AbstractClient
 	  }
 	  else if (msg instanceof Message) {
 		  switch (((Message) msg).getActionType()) {
-	  	    case USERLOGIN:
+	  	    case LOGINSUCCESS:
 	  	    	  user = (User) ((Message) msg).getContent();
 	              break;
 	          case WORKERLOGIN:

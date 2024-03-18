@@ -84,6 +84,7 @@ public class EchoServer extends AbstractServer
   {
 	 
 	 int flag=0;
+	 User user;
 	    System.out.println("Message received: " + msg + " from " + client);
 	    if (msg instanceof String ) {
 		    if (msg.toString().contains("updateOrder")) {
@@ -136,11 +137,8 @@ public class EchoServer extends AbstractServer
 	    else if (msg instanceof Message) {
     	    switch (((Message) msg).getActionType()) {
     	    case USERLOGIN:
-    	    	User user = (User) ((Message) msg).getContent();
-    	    	System.out.println(user.getId());
-    	    	((Message) msg).setContent(mysql.verifyVisitorLogin(user));
-    	    	System.out.println(((User) ((Message) msg).getContent()).getUserPermission());
-
+    	    	user = (User) ((Message) msg).getContent();
+    	    	msg=mysql.verifyVisitorLogin(user);
                 try {
 					client.sendToClient(msg);
 				} catch (IOException e) {
@@ -148,8 +146,10 @@ public class EchoServer extends AbstractServer
 					e.printStackTrace();
 				}
                 break;
-            case WORKERLOGIN:
-                System.out.println("Performing delete action");
+            case LOGOUT:
+            	user = (User) ((Message) msg).getContent();
+            	System.out.println(user.isLogged());
+    	    	mysql.flipIsLogged(user);
                 break;
             default:
                 System.out.println("Unknown action");

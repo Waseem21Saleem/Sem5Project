@@ -10,6 +10,7 @@ import java.lang.*;
 import java.util.*;
 
 import logic.CurClient;
+import logic.Message;
 import logic.Order;
 import logic.Park;
 import logic.User;
@@ -90,29 +91,43 @@ public class mysqlConnection {
 	   *
 	   * @param ordersList, an empty ArrayList
 	   */
-	public User verifyVisitorLogin(User user)
+	public Message verifyVisitorLogin(User user)
 	{
+		Message msg;
+		String error;
 		try 
 		{	
+			
 			// Prepare a statement with a placeholder
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT COUNT(*) AS user_count FROM g13.users WHERE UserId=?");
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.users WHERE UserId=?");
 			preparedStatement.setString(1, user.getId()); // 1-indexed parameter position
-
-			// Execute the query
-			ResultSet rs = preparedStatement.executeQuery();
-			 // Process the result set
-			// Process result set
-
-            if (rs.next()) {
-
-                int userCount = rs.getInt("user_count");
-                if (userCount > 0) {
-                	user.setPassword(rs.getString("Password"));
-                	user.setFullName(rs.getString("FullName"));
-                    user.setEmail(rs.getString("Email"));
-                    user.setPhoneNumber(rs.getString("PhoneNumber"));
-                    user.setLogged(true);
-                    user.setUserPermission(rs.getString("UserPermission"));
+			
+			try {
+				// Execute the query
+				ResultSet rs = preparedStatement.executeQuery();
+				 // Process the result set
+				// Process result set
+	
+	            if (rs.next()) {
+	                	
+	                	if (rs.getBoolean("IsLogged"))
+	                	{	error = "This user is already logged in.";
+	                		msg = new Message (Message.ActionType.VISITORALREADYLOGGED,error);
+	                		return msg;
+	                	}
+	                	else {
+	                	
+	                	flipIsLogged(user);  //Update isLogged to true
+	                	user.setPassword(rs.getString("Password"));
+	                	user.setFullName(rs.getString("FullName"));
+	                    user.setEmail(rs.getString("Email"));
+	                    user.setPhoneNumber(rs.getString("PhoneNumber"));
+	                    user.setUserPermission(rs.getString("UserPermission"));
+	                    user.setLogged(true);
+	                    
+	        			
+	                    
+	                	}
                 } else {
                 	try {
 
@@ -131,23 +146,51 @@ public class mysqlConnection {
 
                       
                    } catch (SQLException e) {
-                       return user;
+                       error = "Error: can't Execute the given prepared statement";
+                       msg = new Message (Message.ActionType.EXECUTEERROR,error);
+                       return msg;
                    }
                 }
-                return user;
+	            rs.close();    
             }
-          
-
-	            
-          
-			rs.close();
+			catch (SQLException e) {
+                error = "Error: can't Execute the given prepared statement";
+                msg = new Message (Message.ActionType.EXECUTEERROR,error);
+                return msg;
+            }
+			
 			preparedStatement.close();
 			
+		} catch (SQLException e) {
+			error = "Error: can't Execute the given prepared statement";
+            msg = new Message (Message.ActionType.EXECUTEERROR,error);
+            return msg;}
 			
-		} catch (SQLException e) {return user;}
-		return user;
+		
+		msg = new Message (Message.ActionType.LOGINSUCCESS,user);
+        return msg;
 	}
 	
+	/**
+	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
+	   *
+	   * @param ordersList, an empty ArrayList
+	   */
+	public void flipIsLogged(User user)
+	{
+		PreparedStatement ps;
+		try {
+			 	ps = conn.prepareStatement("UPDATE g13.users SET IsLogged=? WHERE UserId = ?");
+			 	if (user.isLogged())
+			 		ps.setBoolean(1,false);
+			 	else
+			 		ps.setBoolean(1,true);
+	            ps.setString(2,user.getId());
+	            ps.executeUpdate();
+	            ps.close();
+	            
+		} catch (SQLException e) {	}
+	}
 	/**
 	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
 	   *
@@ -384,6 +427,7 @@ public class mysqlConnection {
 		
 		
 	}
+
 	
 	/**
 	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
