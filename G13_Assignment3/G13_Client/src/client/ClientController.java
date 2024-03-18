@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import client.*;
 import common.ChatIF;
 import gui.EditOrderController;
+import logic.Message;
 
 
 /**
@@ -76,7 +77,14 @@ public class ClientController implements ChatIF
   {
 	  client.handleMessageFromClientUI(str);
   }
-  
+  /**
+   * This method waits for input from the console.  Once it is 
+   * received, it sends it to the client's message handler.
+   */
+  public void accept(Message str) 
+  {
+	  client.handleMessageFromClientUI(str);
+  }
   /**
    * This method overrides the method in the ChatIF interface.  It
    * displays a message onto the screen.

@@ -22,6 +22,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import logic.Message;
+import logic.User;
 import ocsf.server.ConnectionToClient;
 
 
@@ -56,15 +58,18 @@ public  class LoginWithoutPasswordController   {
 	public void Login(ActionEvent event) throws Exception {
 		/* Check if this id has editable order then open this window
 		 */
+		User user = new User(getId());
+		Message msg = new Message (Message.ActionType.USERLOGIN,user);
+		ClientUI.chat.accept(msg);
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/EditOrder.fxml").openStream());		
+		Pane root = loader.load(getClass().getResource("/gui/VisitorHomePage.fxml").openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/EditOrder.css").toExternalForm());
-		primaryStage.setTitle("Orders Managment Tool");
+		//scene.getStylesheets().add(getClass().getResource("/gui/EditOrder.css").toExternalForm());
+		primaryStage.setTitle("Visitor home page");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();
@@ -86,7 +91,7 @@ public  class LoginWithoutPasswordController   {
 	
 		Scene scene = new Scene(root);			
 		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
-		primaryStage.setTitle("Login");
+		primaryStage.setTitle("Worker login page");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();
@@ -111,12 +116,12 @@ public  class LoginWithoutPasswordController   {
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/Login.fxml").openStream());		
+		Pane root = loader.load(getClass().getResource("/gui/MainFrame.fxml").openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
-		primaryStage.setTitle("Login page");
+		scene.getStylesheets().add(getClass().getResource("/gui/MainFrame.css").toExternalForm());
+		primaryStage.setTitle("Home page");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();

@@ -102,7 +102,9 @@ public class mysqlConnection {
 			ResultSet rs = preparedStatement.executeQuery();
 			 // Process the result set
 			// Process result set
+
             if (rs.next()) {
+
                 int userCount = rs.getInt("user_count");
                 if (userCount > 0) {
                 	user.setPassword(rs.getString("Password"));
@@ -113,20 +115,20 @@ public class mysqlConnection {
                     user.setUserPermission(rs.getString("UserPermission"));
                 } else {
                 	try {
+
                 		// SQL INSERT statement
                         String sql = "INSERT INTO g13.users (UserId, IsLogged, UserPermission) VALUES (?, ?, ?)";
-                      
+
                         PreparedStatement pstmt = conn.prepareStatement(sql);
 
                        // Set values for placeholders (?, ?, ?)
                        pstmt.setString(1, user.getId());
-                       pstmt.setBoolean(6, true);
-                       pstmt.setString(7, "visitor");
-                       
+                       pstmt.setBoolean(2, true);
+                       pstmt.setString(3, "VISITOR");
 
                        // Execute the INSERT statement
                        pstmt.executeUpdate();
-                 
+
                       
                    } catch (SQLException e) {
                        return user;

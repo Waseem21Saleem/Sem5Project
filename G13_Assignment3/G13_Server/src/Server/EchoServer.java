@@ -12,6 +12,8 @@ import java.util.Vector;
 
 import gui.ServerInfoController;
 import logic.CurClient;
+import logic.Message;
+import logic.User;
 import mysqlConnection.mysqlConnection;
 import ocsf.server.*;
 
@@ -110,6 +112,7 @@ public class EchoServer extends AbstractServer
 				}
 	    		
 	    	}
+	    	
 	    	else
 	    	{
 	    		ArrayList<String> orderInfo = mysql.getOrderInfo(((ArrayList) msg).get(0).toString());
@@ -121,8 +124,8 @@ public class EchoServer extends AbstractServer
 				}
 	    	}
 	    }
-	    else {
-	    	if (msg instanceof Object[]) {
+	    
+	    else if (msg instanceof Object[]) {
 	    	    Object[] arr = (Object[]) msg;
 	    	    if (arr.length > 0 && arr[0] instanceof String && ((String) arr[0]).equals("updateOrder")) {
 	    	        
@@ -130,7 +133,36 @@ public class EchoServer extends AbstractServer
 	    	        
 	    	    }
 	    	}
-	    }
+	    else if (msg instanceof Message) {
+    	    switch (((Message) msg).getActionType()) {
+    	    case USERLOGIN:
+    	    	User user = (User) ((Message) msg).getContent();
+    	    	System.out.println(user.getId());
+    	    	((Message) msg).setContent(mysql.verifyVisitorLogin(user));
+    	    	System.out.println(((User) ((Message) msg).getContent()).getUserPermission());
+
+                try {
+					client.sendToClient(msg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                break;
+            case WORKERLOGIN:
+                System.out.println("Performing delete action");
+                break;
+            default:
+                System.out.println("Unknown action");
+                break;
+    	    
+    	    
+    	    
+    	    
+    	    }
+    	    
+    	}
+	    
+	    
 
 	    if (flag!=1) {
 			System.out.println("");

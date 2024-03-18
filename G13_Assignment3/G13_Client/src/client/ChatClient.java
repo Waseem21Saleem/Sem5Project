@@ -9,7 +9,9 @@ import client.*;
 import common.ChatIF;
 import gui.EditOrderController;
 import javafx.stage.Stage;
+import logic.Message;
 import logic.Order;
+import logic.User;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class ChatClient extends AbstractClient
   public static boolean awaitResponse = false;
   public static ArrayList<String> Orderslist;
   public static ArrayList<String> OrderInfo;
+  public static User user;
 
 
   //Constructors ****************************************************
@@ -54,6 +57,7 @@ public class ChatClient extends AbstractClient
     this.clientUI = clientUI;
 	Orderslist = new ArrayList<String>();
 	OrderInfo = new ArrayList<String>();
+	user=new User();
     this.openConnection();
   }
 
@@ -80,12 +84,22 @@ public class ChatClient extends AbstractClient
 		  else {
 			  Orderslist=orders;
 		  }
-
-
-
 		  
 	  }
-	 
+	  else if (msg instanceof Message) {
+		  switch (((Message) msg).getActionType()) {
+	  	    case USERLOGIN:
+	  	    	  user = (User) ((Message) msg).getContent();
+	              break;
+	          case WORKERLOGIN:
+	              System.out.println("Performing delete action");
+	              break;
+	          default:
+	              System.out.println("Unknown action");
+	              break;
+			  
+			  }
+	  }
   }
   
 
@@ -96,6 +110,36 @@ public class ChatClient extends AbstractClient
    */
   
   public void handleMessageFromClientUI(String message)  
+  {
+    try
+    {
+    	openConnection();//in order to send more than one message
+       	awaitResponse = true;
+    	sendToServer(message);
+		// wait for response
+		while (awaitResponse) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+    }
+    catch(IOException e)
+    {
+    	e.printStackTrace();
+      clientUI.display("Could not send message to server: Terminating client."+ e);
+      quit();
+    }
+  }
+  
+  /**
+   * This method handles all data coming from the UI            
+   *
+   * @param message The message from the UI.    
+   */
+  
+  public void handleMessageFromClientUI(Message message)  
   {
     try
     {

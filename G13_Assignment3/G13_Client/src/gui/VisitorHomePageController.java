@@ -95,12 +95,12 @@ public  class VisitorHomePageController   {
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/Login.fxml").openStream());		
+		Pane root = loader.load(getClass().getResource("/gui/LoginWithoutPassword.fxml").openStream());		
 		
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
-		primaryStage.setTitle("Login page");
+		scene.getStylesheets().add(getClass().getResource("/gui/LoginWithoutPassword.css").toExternalForm());
+		primaryStage.setTitle("Visitor login page");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();

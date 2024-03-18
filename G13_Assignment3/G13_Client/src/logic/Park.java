@@ -1,6 +1,8 @@
 package logic;
 
-public class Park {
+import java.io.Serializable;
+
+public class Park implements Serializable{
 
 	private String parkName;
 	private String capacity;
