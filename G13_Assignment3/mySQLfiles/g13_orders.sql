@@ -25,14 +25,13 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `OrderNumber` varchar(45) NOT NULL,
   `ParkName` varchar(45) NOT NULL,
-  `Id` varchar(45) NOT NULL,
-  `Day` varchar(45) NOT NULL,
-  `Month` varchar(45) NOT NULL,
+  `VisitorId` varchar(45) NOT NULL,
+  `Date` varchar(45) NOT NULL,
   `Time` varchar(45) NOT NULL,
   `NumberOfVisitors` varchar(45) NOT NULL,
   `PhoneNumber` varchar(45) NOT NULL,
   `Email` varchar(100) NOT NULL,
-  `OrderType` varchar(45) NOT NULL,
+  `VisitorType` varchar(45) NOT NULL,
   PRIMARY KEY (`OrderNumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -43,7 +42,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES ('10587492','Yosemite National111','','22-02-24 13:45','','','3','04-321586711','visitor3@example.com',''),('25618943','Everglades National','','22-02-24 11:10','','','1','04-1987432','visitor5@example.com',''),('38296517','Glacier National222','','22-02-24 14:30','','','6','04-1987222111','visitor7@example.com',''),('48257934','Yellowstone National','','22-02-24 9:00','','','2','04-7564839','visitor1@example.com',''),('51482763','Banff National','','22-02-24 16:00','','','10','04-8756913','visitor8@example.com',''),('62974581','Great Smoky Mountains','','22-02-24 10:00','','','7','04-6372518','visitor9@example.com',''),('68932475','Grand Villa','','22-02-24 15:20','','','8','04-6372222','visitor4@example.com',''),('74321856','Zion National','','22-02-24 12:00','','','4','04-5689374','visitor6@example.com',''),('87354219','Acadia National','','22-02-24 13:00','','','9','04-0978613','visitor10@example.com',''),('93721658','Central Park','','22-02-24 10:30','','','5','04-4362951','visitor2@example.com','');
+INSERT INTO `orders` VALUES ('10587492','Yosemite National111','','22-02-24 13:45','','3','04-321586711','visitor3@example.com',''),('25618943','Everglades National','','22-02-24 11:10','','1','04-1987432','visitor5@example.com',''),('38296517','Glacier National222','','22-02-24 14:30','','6','04-1987222111','visitor7@example.com',''),('48257934','Yellowstone National','','22-02-24 9:00','','2','04-7564839','visitor1@example.com',''),('51482763','Banff National','','22-02-24 16:00','','10','04-8756913','visitor8@example.com',''),('62974581','Great Smoky Mountains','','22-02-24 10:00','','7','04-6372518','visitor9@example.com',''),('68932475','Grand Villa','','22-02-24 15:20','','8','04-6372222','visitor4@example.com',''),('74321856','Zion National','','22-02-24 12:00','','4','04-5689374','visitor6@example.com',''),('87354219','Acadia National','','22-02-24 13:00','','9','04-0978613','visitor10@example.com',''),('93721658','Central Park','','22-02-24 10:30','','5','04-4362951','visitor2@example.com','');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-16 21:30:34
+-- Dump completed on 2024-03-18 14:51:28

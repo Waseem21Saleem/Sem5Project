@@ -16,30 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `totalvisitorsreport`
+-- Table structure for table `parks`
 --
 
-DROP TABLE IF EXISTS `totalvisitorsreport`;
+DROP TABLE IF EXISTS `parks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `totalvisitorsreport` (
-  `ReportId` varchar(45) NOT NULL,
+CREATE TABLE `parks` (
   `ParkName` varchar(45) NOT NULL,
-  `Month` varchar(45) NOT NULL,
-  `Year` varchar(45) NOT NULL,
-  `TotalIndividuals` varchar(45) NOT NULL,
-  `TotalGroups` varchar(45) NOT NULL,
-  PRIMARY KEY (`ReportId`)
+  `Capacity` varchar(45) NOT NULL,
+  `MaxStay` varchar(45) NOT NULL,
+  PRIMARY KEY (`ParkName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `totalvisitorsreport`
+-- Dumping data for table `parks`
 --
 
-LOCK TABLES `totalvisitorsreport` WRITE;
-/*!40000 ALTER TABLE `totalvisitorsreport` DISABLE KEYS */;
-/*!40000 ALTER TABLE `totalvisitorsreport` ENABLE KEYS */;
+LOCK TABLES `parks` WRITE;
+/*!40000 ALTER TABLE `parks` DISABLE KEYS */;
+/*!40000 ALTER TABLE `parks` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-16 23:12:06
+-- Dump completed on 2024-03-18 14:51:27

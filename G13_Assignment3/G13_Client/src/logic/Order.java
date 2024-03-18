@@ -33,7 +33,7 @@ public class Order {
 	    this.email=email;
 	}
 
-	//constructor to get orders numbers	 
+	//constructor to get order info
 	public Order(String orderNum)
 	{
 		this.parkName="";

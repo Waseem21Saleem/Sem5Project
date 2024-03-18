@@ -339,6 +339,50 @@ public class mysqlConnection {
        }
 	}
 	
+	
+	/**
+	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
+	   *
+	   * @param ordersList, an empty ArrayList
+	   */
+	public void updateRoleToGuide(User user)
+	{
+		PreparedStatement ps;
+		try {
+			 	ps = conn.prepareStatement("UPDATE g13.users SET UserPermission=? WHERE UserId = ?");
+			 	ps.setString(1,"Guide");
+	            ps.setString(2,user.getId());
+	            ps.executeUpdate();
+	            ps.close();
+	            
+		} catch (SQLException e) {	}
+	}
+	
+	/**
+	   * This method deletes the client details from the database according to the ip
+	   *
+	   * @param ip, the client's ip
+	   */
+	public void deleteRequest(Park park) {
+		 // SQL DELETE statement
+    String sql = "DELETE FROM g13.requests WHERE ParkName = ?,Capacity = ?,MaxStay = ?";
+    
+    try {
+            PreparedStatement pstmt = conn.prepareStatement(sql) ;
+            pstmt.setString(1, park.getParkName());
+            pstmt.setString(2, park.getCapacity());
+            pstmt.setString(3, park.getMaxStay());
+
+           // Execute the DELETE statement
+           pstmt.executeUpdate();
+           
+       } catch (SQLException e) {
+           e.printStackTrace();
+       }
+		
+		
+	}
+	
 	/**
 	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
 	   *
