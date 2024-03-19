@@ -7,6 +7,7 @@ package client;
 import ocsf.client.*;
 import client.*;
 import common.ChatIF;
+import common.OpenGUI;
 import gui.EditOrderController;
 import gui.VisitorHomePageController;
 import javafx.stage.Stage;
@@ -39,7 +40,8 @@ public class ChatClient extends AbstractClient
   public static ArrayList<String> Orderslist;
   public static ArrayList<String> OrderInfo;
   public static User user;
-
+  public static String error;
+  public static OpenGUI openGUI;
 
   //Constructors ****************************************************
   
@@ -59,6 +61,9 @@ public class ChatClient extends AbstractClient
 	Orderslist = new ArrayList<String>();
 	OrderInfo = new ArrayList<String>();
 	user=new User();
+	error="";
+	openGUI = new OpenGUI();
+
     this.openConnection();
   }
 
@@ -91,9 +96,10 @@ public class ChatClient extends AbstractClient
 		  switch (((Message) msg).getActionType()) {
 	  	    case LOGINSUCCESS:
 	  	    	  user = (User) ((Message) msg).getContent();
+	  	    	  error="";
 	              break;
-	          case WORKERLOGIN:
-	              System.out.println("Performing delete action");
+	          case ERROR:
+	              error= (String)((Message) msg).getContent();
 	              break;
 	          default:
 	              System.out.println("Unknown action");

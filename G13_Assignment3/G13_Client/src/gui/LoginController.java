@@ -22,6 +22,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import logic.Message;
+import logic.User;
 import ocsf.server.ConnectionToClient;
 
 
@@ -59,78 +61,56 @@ public  class LoginController   {
 		 * according to the role
 		 */
 		String id = getId();
-		String openPage="",pageTitle="";
-		if (id.equals("1")) {
-			openPage="/gui/VisitorHomePage.fxml";
-			pageTitle="Visitor home page"; }
-		else if (id.equals("2")) {
-			openPage="/gui/ParkManagerHomePage.fxml";
-			pageTitle="Park Manager home page";
+		String password = getPassword();
+		if (!id.matches("[0-9]+") || id.length()!=9)
+			lblError.setText("ID must contain only 9 digits");
+		else if (password!="" && password!=null )
+			lblError.setText("Password can not be empty");
+		else {
+			User user = new User(id,password);
+			Message msg = new Message (Message.ActionType.WORKERLOGIN,user);
+			ClientUI.chat.accept(msg);
+			String openPage="",pageTitle="";
+			if (id.equals("1")) {
+				openPage="/gui/VisitorHomePage.fxml";
+				pageTitle="Visitor home page"; }
+			else if (id.equals("2")) {
+				openPage="/gui/ParkManagerHomePage.fxml";
+				pageTitle="Park Manager home page";
+				
+			}
+			else if (id.equals("3")) {
+				openPage="/gui/DepartmentManagerHomePage.fxml";
+				pageTitle="Department Manager home page";
+				
+			}
+			else if (id.equals("4")) {
+				openPage="/gui/ServicesHomePage.fxml";
+				pageTitle="Services home page";
+				
+			}
+	
 			
-		}
-		else if (id.equals("3")) {
-			openPage="/gui/DepartmentManagerHomePage.fxml";
-			pageTitle="Department Manager home page";
+			FXMLLoader loader = new FXMLLoader();
+			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+			Stage primaryStage = new Stage();
+			Pane root = loader.load(getClass().getResource(openPage).openStream());		
 			
-		}
-		else if (id.equals("4")) {
-			openPage="/gui/ServicesHomePage.fxml";
-			pageTitle="Services home page";
-			
-		}
-
 		
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource(openPage).openStream());		
-		
+			Scene scene = new Scene(root);			
+			//scene.getStylesheets().add(getClass().getResource(openPage).toExternalForm());
+			primaryStage.setTitle(pageTitle);
 	
-		Scene scene = new Scene(root);			
-		//scene.getStylesheets().add(getClass().getResource(openPage).toExternalForm());
-		primaryStage.setTitle(pageTitle);
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();
-
-		//ClientUI.chat.accept("refresh");
-
-        
-
-		
+			primaryStage.setScene(scene);		
+			primaryStage.show();
+	
+			//ClientUI.chat.accept("refresh");
+	
+	        
+	
+			}
 	}
-	
-	public void goSignUp(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/SignUp.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/SignUp.css").toExternalForm());
-		primaryStage.setTitle("Signup page");
 
-		primaryStage.setScene(scene);		
-		primaryStage.show();
-	}
-	
-
-	public void goLoginNoPassword(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/LoginWithoutPassword.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/LoginWithoutPassword.css").toExternalForm());
-		primaryStage.setTitle("Login without password");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();
-		
-	}
 	
 	/**
 	   * This method exits the client when exit button pressed

@@ -146,6 +146,17 @@ public class EchoServer extends AbstractServer
 					e.printStackTrace();
 				}
                 break;
+    	    case WORKERLOGIN:
+    	    	user = (User) ((Message) msg).getContent();
+    	    	msg=mysql.verifyWorkerLogin(user);
+                try {
+					client.sendToClient(msg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                break;
+    	    	
             case LOGOUT:
             	user = (User) ((Message) msg).getContent();
             	System.out.println(user.isLogged());
