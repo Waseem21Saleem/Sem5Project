@@ -21,6 +21,6 @@
         </columns>
       </TableView>
       <Button id="btnEnterWaitingList" layoutX="260.0" layoutY="341.0" mnemonicParsing="false" text="Enter Waiting List" />
-      <Button id="btnBack" layoutX="500.0" layoutY="382.0" mnemonicParsing="false" text="Back" />
+      <Button id="btnBack" layoutX="500.0" layoutY="382.0" mnemonicParsing="false" onAction="#goBackBtn" text="Back" />
    </children>
 </AnchorPane>
