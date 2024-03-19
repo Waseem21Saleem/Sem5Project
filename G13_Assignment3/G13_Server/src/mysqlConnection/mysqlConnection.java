@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.io.*; 
 import java.lang.*; 
 import java.util.*;
@@ -376,12 +378,12 @@ public class mysqlConnection {
 	public void insertOrder(Order order) {
 		try {
     		// SQL INSERT statement
-            String sql = "INSERT INTO g13.orders (OrderNumber, ParkName, VisitorId, Date, Time, NumberOfVisitors, PhoneNumber, Email, VisitorType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO g13.orders (OrderNumber, ParkName, VisitorId, Date, Time, NumberOfVisitors, PhoneNumber, Email, VisitorType, ExitTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
           
             PreparedStatement pstmt = conn.prepareStatement(sql);
-
+            order.setOrderNum(Integer.toString(getRandomOrderNumber()));
            // Set values for placeholders (?, ?, ?)
-           pstmt.setString(1, order.getOrderNum());
+           pstmt.setString(1,order.getOrderNum() );
            pstmt.setString(2, order.getParkName());
            pstmt.setString(3, order.getVisitorId());
            pstmt.setString(4, order.getDate());
@@ -390,6 +392,7 @@ public class mysqlConnection {
            pstmt.setString(7, order.getTelephone());
            pstmt.setString(8, order.getEmail());
            pstmt.setString(9, order.getVisitorType());
+           pstmt.setString(10, order.getExitTime());
                      
 
            // Execute the INSERT statement
@@ -400,6 +403,110 @@ public class mysqlConnection {
        }
 	}
 	
+	/**
+	   * This method sets the order details from the database according to the OrderNumber
+	   *
+	   * @param OrderNumber, an ordernumber that the client selected
+	   * @param order, a new order that has no info in it
+	   */
+	public Message checkReservation(Order order)
+	{	//this function to make reservation
+		Message msg;
+		try 
+		{	
+			// Prepare a statement with a placeholder
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND Time < ? AND ExitTime > ? AND Date = ?");
+			preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
+			preparedStatement.setString(2, order.getTime());
+			preparedStatement.setString(3, order.getTime());
+			preparedStatement.setString(4, order.getDate());
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+			 // Process the result set
+			// Process results
+			int currentAmountOfVisitors = Integer.parseInt(order.getAmountOfVisitors());
+            while (rs.next()) {
+            	currentAmountOfVisitors += Integer.parseInt(rs.getString("NumberOfVisitors"));
+            }
+		    rs.close();
+			preparedStatement.close();
+			// Prepare a statement with a placeholder
+			preparedStatement = conn.prepareStatement("SELECT Capacity FROM g13.parks WHERE ParkName = ?");
+			preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
+			// Execute the query
+			rs = preparedStatement.executeQuery();
+			rs.next();
+			int maxCapacity = Integer.parseInt(rs.getString("Capacity"));
+			rs.close();
+			preparedStatement.close();
+			if (currentAmountOfVisitors>maxCapacity)
+			{
+				msg = new Message (Message.ActionType.WAITINGLIST,order);
+				return msg;
+			}
+			// Original time string
+	        String timeString = order.getTime();
+	        // Number of hours to add
+	        int maxStay = getParkMaxStay(order.getParkName());
+	        // Parse the time string into LocalTime
+	        LocalTime time = LocalTime.parse(timeString);
+	        // Add x hours
+	        LocalTime newTime = time.plusHours(maxStay);
+	        // Format the new time back into a string
+	        String result = newTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+			order.setExitTime(result);
+			insertOrder(order);
+			
+			
+		} catch (SQLException e) {e.printStackTrace();}
+		msg = new Message (Message.ActionType.RESERVATION,"Reservation saved successfully");
+		return msg;
+	}
+	
+	public int getParkMaxStay(String parkName) {
+		int maxStayTime=0;
+		try {
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT MaxStay FROM g13.parks WHERE ParkName = ?");
+			preparedStatement.setString(1, parkName);
+			 // 1-indexed parameter position
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+			rs.next();
+			maxStayTime = Integer.parseInt(rs.getString("MaxStay"));
+			rs.close();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return maxStayTime;
+	}
+	
+	public int getRandomOrderNumber() {
+		// Create an instance of Random
+        Random random = new Random();
+        // Generate a random number of 8 digits
+        int randomNumber = random.nextInt(90000000) + 10000000;
+		try {
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.orders WHERE OrderNumber = ?");
+			preparedStatement.setString(1, Integer.toString(randomNumber));
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				rs.close();
+				preparedStatement.close();
+				randomNumber = random.nextInt(90000000) + 10000000;
+				preparedStatement = conn.prepareStatement("SELECT * FROM g13.orders WHERE OrderNumber = ?");
+				preparedStatement.setString(1, Integer.toString(randomNumber));
+				rs = preparedStatement.executeQuery();
+			}
+			rs.close();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return randomNumber;
+	}
 	
 	/**
 	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.

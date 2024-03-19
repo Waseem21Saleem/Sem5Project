@@ -13,6 +13,7 @@ import java.util.Vector;
 import gui.ServerInfoController;
 import logic.CurClient;
 import logic.Message;
+import logic.Order;
 import logic.User;
 import mysqlConnection.mysqlConnection;
 import ocsf.server.*;
@@ -159,8 +160,15 @@ public class EchoServer extends AbstractServer
     	    	
     	    case PARKNAMES:
     	    	msg=mysql.getParks();
-
-    	    	
+                try {
+					client.sendToClient(msg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                break;
+    	    case RESERVATION:
+    	    	msg=mysql.checkReservation((Order) ((Message) msg).getContent());
                 try {
 					client.sendToClient(msg);
 				} catch (IOException e) {

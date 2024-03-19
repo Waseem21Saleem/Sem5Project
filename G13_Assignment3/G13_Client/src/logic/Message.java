@@ -11,6 +11,8 @@ public class Message implements Serializable  {
 	    ERROR,
 	    LOGINSUCCESS,
 	    PARKNAMES,
+	    RESERVATION,
+	    WAITINGLIST,
 	    EXECUTEERROR,
 	    LOGOUT
 	    

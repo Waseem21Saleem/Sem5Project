@@ -41,6 +41,7 @@ public class ChatClient extends AbstractClient
   public static ArrayList<String> OrderInfo;
   public static ArrayList<String> parkNames;
   public static User user;
+  public static Order order;
   public static String error;
   public static OpenGUI openGUI;
 
@@ -63,6 +64,7 @@ public class ChatClient extends AbstractClient
 	OrderInfo = new ArrayList<String>();
 	parkNames = new ArrayList<String>();
 	user=new User();
+	order=new Order();
 	error="";
 	openGUI = new OpenGUI();
 
@@ -106,6 +108,13 @@ public void handleMessageFromServer(Object msg)
 	              break;
 	          case PARKNAMES:
 	        	  parkNames = (ArrayList<String>)((Message) msg).getContent();
+	        	  error="";
+	        	  break;
+	          case RESERVATION:
+	        	  error=(String)((Message) msg).getContent();
+	        	  break;
+	          case WAITINGLIST:
+	        	  order=(Order)((Message) msg).getContent();
 	        	  error="";
 	        	  break;
 	          default:

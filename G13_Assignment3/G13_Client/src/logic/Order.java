@@ -13,6 +13,7 @@ public class Order implements Serializable {
 	private String amountOfVisitors;
 	private String telephone;
 	private String email;
+	private String exitTime;
 	
 	
 	//constructor to edit order
@@ -26,8 +27,10 @@ public class Order implements Serializable {
 	    this.email=email;
 	 }
 	//constructor to make new order
-	public Order(String parkName, String date, String time, String amountOfVisitors, String telephone, String email) {
+	public Order(String parkName,String visitorId,String visitorType, String date, String time, String amountOfVisitors, String telephone, String email) {
 	    this.parkName = parkName;
+	    this.visitorId=visitorId;
+		this.visitorType=visitorType;
 	    this.date = date;
 	    this.time = time;
 	    this.amountOfVisitors = amountOfVisitors;
@@ -50,7 +53,7 @@ public class Order implements Serializable {
 	}
 	// Constructor
     public Order(String parkName, String orderNum, String visitorId, String visitorType,
-                 String date, String time, String amountOfVisitors, String telephone, String email) {
+                 String date, String time, String amountOfVisitors, String telephone, String email,String exitTime) {
         this.parkName = parkName;
         this.orderNum = orderNum;
         this.visitorId = visitorId;
@@ -60,9 +63,22 @@ public class Order implements Serializable {
         this.amountOfVisitors = amountOfVisitors;
         this.telephone = telephone;
         this.email = email;
+        this.exitTime=exitTime;
     }
 
-    // Getter methods
+    public Order() {
+    	this.parkName="";
+		this.orderNum="";
+		this.visitorId="";
+		this.visitorType="";
+		this.date="";
+		this.time="";
+		this.amountOfVisitors="";
+		this.telephone="";
+		this.email="";
+		this.exitTime="";
+	}
+	// Getter methods
     public String getParkName() {
         return parkName;
     }
@@ -97,6 +113,10 @@ public class Order implements Serializable {
 
     public String getEmail() {
         return email;
+    }
+    
+    public String getExitTime() {
+        return exitTime;
     }
 
     // Setter methods
@@ -135,5 +155,9 @@ public class Order implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+    public void setExitTime(String exitTime) {
+        this.exitTime = exitTime;
+    }
+    
 
 }

@@ -26,6 +26,6 @@
       <Label id="lblDate" layoutX="41.0" layoutY="157.0" text="Date: " />
       <DatePicker id="datepickDate" fx:id="datepickDate" layoutX="91.0" layoutY="153.0" />
       <Label id="lblError" fx:id="lblError" layoutX="164.0" layoutY="420.0" prefHeight="17.0" prefWidth="214.0" textAlignment="CENTER" />
-      <TextField id="txtTimeHour" fx:id="txtTimeHour" layoutX="89.0" layoutY="214.0" />
+      <TextField id="txtTime" fx:id="txtTime" layoutX="89.0" layoutY="214.0" />
    </children>
 </AnchorPane>
