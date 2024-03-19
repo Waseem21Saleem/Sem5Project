@@ -33,6 +33,8 @@ public class DepartmentManagerApprovalController   {
 	public static ClientController chat;
 	@FXML
 	private Button btnReject,btnAccept,btnBack;
+	@FXML
+	private Label lblerror;
 	
 	@FXML
 	private TableView listApprove;

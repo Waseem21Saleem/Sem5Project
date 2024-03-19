@@ -8,9 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="547.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DepartmentManagerApprovalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="547.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DepartmentManagerApprovalController">
    <children>
       <Label layoutX="251.0" layoutY="29.0" text="Approval List ">
          <font>
@@ -35,5 +33,6 @@
          </buttons>
       </ButtonBar>
       <Button id="btnBack" fx:id="btnBack" layoutX="113.0" layoutY="482.0" mnemonicParsing="false" onAction="#goBackBtn" text="Back" />
+      <Label id="lblError" fx:id="lblError" layoutX="453.0" layoutY="336.0" prefHeight="17.0" prefWidth="265.0" textAlignment="CENTER" />
    </children>
 </AnchorPane>

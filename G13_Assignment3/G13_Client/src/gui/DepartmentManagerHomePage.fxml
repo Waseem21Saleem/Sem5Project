@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="600.0" style="-fx-background-color: OLDLACE;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DepartmentManagerHomePageController">
    <children>
       <Label id="labelReportType" layoutX="59.0" layoutY="146.0" text="Report Type:">
@@ -28,7 +27,7 @@
       <ComboBox id="cmbReportType" fx:id="cmbReportType" layoutX="167.0" layoutY="148.0" prefWidth="150.0" />
       <ComboBox id="cmbReportMonth" fx:id="cmbReportMonth" layoutX="181.0" layoutY="221.0" prefHeight="25.0" prefWidth="121.0" />
       <ComboBox id="cmbReportYear" fx:id="cmbReportYear" layoutX="433.0" layoutY="221.0" prefHeight="25.0" prefWidth="121.0" />
-      <Button id="btnViewReport"  layoutX="232.0" layoutY="282.0" mnemonicParsing="false" onAction="#goViewReport" text="View Report">
+      <Button id="btnViewReport" layoutX="232.0" layoutY="282.0" mnemonicParsing="false" onAction="#goViewReport" text="View Report">
          <font>
             <Font size="18.0" />
          </font>
@@ -44,5 +43,6 @@
       <Label id="labelMakeReport" layoutX="218.0" layoutY="368.0" text="Make Report ?" />
       <Label id="labelApprove" layoutX="155.0" layoutY="409.0" text="Check If There Somthing To Approve ?" />
       <Button id="btnLogout" layoutX="46.0" layoutY="452.0" mnemonicParsing="false" onAction="#Logout" text="Logout" />
+      <Label id="lblError" fx:id="lblError" layoutX="163.0" layoutY="337.0" prefHeight="17.0" prefWidth="265.0" textAlignment="CENTER" />
    </children>
 </AnchorPane>

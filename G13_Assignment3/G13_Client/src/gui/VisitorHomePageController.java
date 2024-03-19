@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -38,6 +39,9 @@ public  class VisitorHomePageController   {
 
 	@FXML
 	private Label lblError;
+	
+	@FXML
+	private DatePicker datepickDate;
 	
 	@FXML
 	private TextField txtInputAmountVisitors,txtEmail,txtPhone;
