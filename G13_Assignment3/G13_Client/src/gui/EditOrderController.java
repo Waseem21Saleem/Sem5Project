@@ -39,7 +39,7 @@ public class EditOrderController implements Initializable {
 	private TextField txtVisitors,txtEmail,txtPhone;
 		
 	@FXML
-	private Button btnSave,btnBack;
+	private Button btnSave,btnBack,btnDeleteOrder;
 	@FXML
 	private DatePicker datepicherDate;
 	
