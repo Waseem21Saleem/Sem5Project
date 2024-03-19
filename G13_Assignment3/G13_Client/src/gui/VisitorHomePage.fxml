@@ -16,7 +16,6 @@
       <TextField id="txtInputAmountVisitors" fx:id="txtInputAmountVisitors" layoutX="145.0" layoutY="97.0" />
       <Button id="btnMakeReseravation" layoutX="198.0" layoutY="353.0" mnemonicParsing="false" onAction="#makeReservation" text="Make Reserevation" />
       <Label id="labelHour" layoutX="35.0" layoutY="218.0" text="Time:" />
-      <ComboBox id="cmbTime" fx:id="cmbTime" layoutX="78.0" layoutY="213.0" prefHeight="31.0" prefWidth="228.0" />
       <Button id="btnLogOut" layoutX="41.0" layoutY="437.0" mnemonicParsing="false" onAction="#Logout" style="-fx-font-weight: bold;" text="Logout" />
       <Label layoutX="116.0" layoutY="387.0" text="Have Alredy Order And Want To Edit?..." />
       <Hyperlink id="hyperClickHere" layoutX="336.0" layoutY="384.0" onAction="#goEditOrder" text="Click Here" />
@@ -27,5 +26,6 @@
       <Label id="lblDate" layoutX="41.0" layoutY="157.0" text="Date: " />
       <DatePicker id="datepickDate" fx:id="datepickDate" layoutX="91.0" layoutY="153.0" />
       <Label id="lblError" fx:id="lblError" layoutX="164.0" layoutY="420.0" prefHeight="17.0" prefWidth="214.0" textAlignment="CENTER" />
+      <TextField id="txtTimeHour" fx:id="txtTimeHour" layoutX="89.0" layoutY="214.0" />
    </children>
 </AnchorPane>
