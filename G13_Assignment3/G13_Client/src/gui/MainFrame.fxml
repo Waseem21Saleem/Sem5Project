@@ -13,7 +13,7 @@
    <children>
       <ImageView id="imgGoNature" fitHeight="368.0" fitWidth="564.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="125.46929931640625">
          <image>
-            <Image url="@logo_picture/GoNature_logo.jpeg" />
+            <Image url="gui/logo_picture/GoNature_logo.jpeg" />
          </image>
       </ImageView>
       <Label id="lblWelcome" alignment="CENTER" layoutY="-1.0" prefHeight="70.0" prefWidth="264.0" text="Welcome To GoNature" textAlignment="CENTER">
