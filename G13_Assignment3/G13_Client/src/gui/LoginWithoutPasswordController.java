@@ -10,6 +10,7 @@ import client.ChatClient;
 import client.ClientController;
 import client.ClientUI;
 import common.ChatIF;
+import common.OpenGUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -58,49 +59,30 @@ public  class LoginWithoutPasswordController   {
 	public void Login(ActionEvent event) throws Exception {
 		/* Check if this id has editable order then open this window
 		 */
-		User user = new User(getId());
-		Message msg = new Message (Message.ActionType.USERLOGIN,user);
-		ClientUI.chat.accept(msg);
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/VisitorHomePage.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		//scene.getStylesheets().add(getClass().getResource("/gui/EditOrder.css").toExternalForm());
-		primaryStage.setTitle("Visitor home page");
+		if (!getId().matches("[0-9]+") || getId().length()!=9)
+			lblError.setText("ID must contain only 9 digits");
+		else {
+			User user = new User(getId());
+			Message msg = new Message (Message.ActionType.USERLOGIN,user);
+			ClientUI.chat.accept(msg);
+			if (ChatClient.error!="")
+				lblError.setText(ChatClient.error);
+			else {
+			
+				
+				ChatClient.openGUI.goToGUI(event, "/gui/VisitorHomePage.fxml","","Visitor home page");
+				//goToGUI(event, "VisitorHomePage.fxml","","Visitor home page");
 
-		primaryStage.setScene(scene);		
-		primaryStage.show();
-
-		//ClientUI.chat.accept("refresh");
-
-        
-
+			
+			}
+	        
+			}
 		
 	}
 	public void GoToLoginPage(ActionEvent event) throws Exception {
 		/* Check if this id has editable order then open this window
 		 */
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/Login.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
-		primaryStage.setTitle("Worker login page");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();
-
-		//ClientUI.chat.accept("refresh");
-
-        
-
-		
+		ChatClient.openGUI.goToGUI(event, "/gui/Login.fxml","/gui/Login.css","Worker login page");		
 	}
 	
 	
@@ -113,20 +95,10 @@ public  class LoginWithoutPasswordController   {
 	   
 	   */	
 	public void goBackBtn(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/MainFrame.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/MainFrame.css").toExternalForm());
-		primaryStage.setTitle("Home page");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();
+		ChatClient.openGUI.goToGUI(event, "/gui/MainFrame.fxml","/gui/MainFrame.css","Home page");		
 		
 	}
+	
 	
 
 	

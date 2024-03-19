@@ -55,6 +55,7 @@ public  class MainFrameController   {
 	   
 	   */
 	public void Connect(ActionEvent event) throws Exception {
+
 		try {
 		
 			ClientUI.chat = new ClientController(getIP(), Integer.parseInt(getPort()));
@@ -104,8 +105,6 @@ public  class MainFrameController   {
 		
 		primaryStage.show();
 
-
-
 	}
 	
 	/**
@@ -122,6 +121,6 @@ public  class MainFrameController   {
 		
 	}
 	
-
+	
 	
 }

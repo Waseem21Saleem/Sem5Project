@@ -8,7 +8,7 @@ public class Message implements Serializable  {
 	public enum ActionType {
 	    USERLOGIN,
 	    WORKERLOGIN,
-	    VISITORALREADYLOGGED,
+	    ERROR,
 	    LOGINSUCCESS,
 	    EXECUTEERROR,
 	    LOGOUT

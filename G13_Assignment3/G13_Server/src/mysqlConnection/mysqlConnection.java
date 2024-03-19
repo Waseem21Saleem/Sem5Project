@@ -56,8 +56,10 @@ public class mysqlConnection {
 	   *
 	   * @param ordersList, an empty ArrayList
 	   */
-	public User verifyWorkerLogin(User user)
+	public Message verifyWorkerLogin(User user)
 	{
+		Message msg;
+		String error;
 		try 
 		{	
 			// Prepare a statement with a placeholder
@@ -68,13 +70,27 @@ public class mysqlConnection {
 			// Execute the query
 			ResultSet rs = preparedStatement.executeQuery();
 			 // Process the result set
-            rs.next();
-	        //order = new Order(rs.getString("ParkName"),rs.getString("OrderNumber"),rs.getString("TimeOfVisit"),rs.getString("NumberOfVisitors"),rs.getString("TelephoneNumber"),rs.getString("Email"))  ; 
-            user.setFullName(rs.getString("FullName"));
-            user.setEmail(rs.getString("Email"));
-            user.setPhoneNumber(rs.getString("PhoneNumber"));
-            user.setLogged(true);
-            user.setUserPermission(rs.getString("UserPermission"));
+			if (rs.next()) {
+            	
+            	if (rs.getBoolean("IsLogged"))
+            	{	error = "This user is already logged in.";
+            		msg = new Message (Message.ActionType.ERROR,error);
+            		return msg;
+            	}
+            	else {
+            		flipIsLogged(user);  //Update isLogged to true
+            		user.setFullName(rs.getString("FullName"));
+		            user.setEmail(rs.getString("Email"));
+		            user.setPhoneNumber(rs.getString("PhoneNumber"));
+		            user.setLogged(true);
+		            user.setUserPermission(rs.getString("UserPermission"));
+            	}}
+            else {
+            	error = "Invalid ID or password";
+            	msg = new Message (Message.ActionType.ERROR,error);
+        		return msg;
+            }
+            		
             
 
 	            
@@ -83,9 +99,9 @@ public class mysqlConnection {
 			preparedStatement.close();
 			
 			
-		} catch (SQLException e) {return user;}
-		return user;
-	}
+		} catch (SQLException e) { }
+		msg = new Message (Message.ActionType.LOGINSUCCESS,user);
+        return msg;	}
 	/**
 	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
 	   *
@@ -112,7 +128,7 @@ public class mysqlConnection {
 	                	
 	                	if (rs.getBoolean("IsLogged"))
 	                	{	error = "This user is already logged in.";
-	                		msg = new Message (Message.ActionType.VISITORALREADYLOGGED,error);
+	                		msg = new Message (Message.ActionType.ERROR,error);
 	                		return msg;
 	                	}
 	                	else {
