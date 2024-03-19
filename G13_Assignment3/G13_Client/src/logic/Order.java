@@ -10,27 +10,27 @@ public class Order implements Serializable {
 	private String visitorType;
 	private String date;
 	private String time;
-	private String visitors;
+	private String amountOfVisitors;
 	private String telephone;
 	private String email;
 	
 	
 	//constructor to edit order
-	public Order(String parkName, String orderNum, String date, String time, String visitors, String telephone, String email) {
+	public Order(String parkName, String orderNum, String date, String time, String amountOfVisitors, String telephone, String email) {
 	    this.parkName = parkName;
 	    this.orderNum = orderNum;
 	    this.date = date;
 	    this.time = time;
-	    this.visitors = visitors;
+	    this.amountOfVisitors = amountOfVisitors;
 	    this.telephone=telephone;
 	    this.email=email;
 	 }
 	//constructor to make new order
-	public Order(String parkName, String date, String time, String visitors, String telephone, String email) {
+	public Order(String parkName, String date, String time, String amountOfVisitors, String telephone, String email) {
 	    this.parkName = parkName;
 	    this.date = date;
 	    this.time = time;
-	    this.visitors = visitors;
+	    this.amountOfVisitors = amountOfVisitors;
 	    this.telephone=telephone;
 	    this.email=email;
 	}
@@ -44,20 +44,20 @@ public class Order implements Serializable {
 		this.visitorType="";
 		this.date="";
 		this.time="";
-		this.visitors="";
+		this.amountOfVisitors="";
 		this.telephone="";
 		this.email="";
 	}
 	// Constructor
     public Order(String parkName, String orderNum, String visitorId, String visitorType,
-                 String date, String time, String visitors, String telephone, String email) {
+                 String date, String time, String amountOfVisitors, String telephone, String email) {
         this.parkName = parkName;
         this.orderNum = orderNum;
         this.visitorId = visitorId;
         this.visitorType = visitorType;
         this.date = date;
         this.time = time;
-        this.visitors = visitors;
+        this.amountOfVisitors = amountOfVisitors;
         this.telephone = telephone;
         this.email = email;
     }
@@ -87,8 +87,8 @@ public class Order implements Serializable {
         return time;
     }
 
-    public String getVisitors() {
-        return visitors;
+    public String getAmountOfVisitors() {
+        return amountOfVisitors;
     }
 
     public String getTelephone() {
@@ -124,8 +124,8 @@ public class Order implements Serializable {
         this.time = time;
     }
 
-    public void setVisitors(String visitors) {
-        this.visitors = visitors;
+    public void setAmountOfVisitors(String amountOfVisitors) {
+        this.amountOfVisitors = amountOfVisitors;
     }
 
     public void setTelephone(String telephone) {

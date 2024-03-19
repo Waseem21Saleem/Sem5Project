@@ -39,6 +39,7 @@ public class ChatClient extends AbstractClient
   public static boolean awaitResponse = false;
   public static ArrayList<String> Orderslist;
   public static ArrayList<String> OrderInfo;
+  public static ArrayList<String> parkNames;
   public static User user;
   public static String error;
   public static OpenGUI openGUI;
@@ -60,6 +61,7 @@ public class ChatClient extends AbstractClient
     this.clientUI = clientUI;
 	Orderslist = new ArrayList<String>();
 	OrderInfo = new ArrayList<String>();
+	parkNames = new ArrayList<String>();
 	user=new User();
 	error="";
 	openGUI = new OpenGUI();
@@ -74,7 +76,8 @@ public class ChatClient extends AbstractClient
    *
    * @param msg The message from the server.
    */
-  public void handleMessageFromServer(Object msg) 
+  @SuppressWarnings("unchecked")
+public void handleMessageFromServer(Object msg) 
   {
 	  System.out.println("--> handleMessageFromServer");
      
@@ -94,13 +97,17 @@ public class ChatClient extends AbstractClient
 	  }
 	  else if (msg instanceof Message) {
 		  switch (((Message) msg).getActionType()) {
-	  	    case LOGINSUCCESS:
+	  	      case LOGINSUCCESS:
 	  	    	  user = (User) ((Message) msg).getContent();
 	  	    	  error="";
 	              break;
 	          case ERROR:
 	              error= (String)((Message) msg).getContent();
 	              break;
+	          case PARKNAMES:
+	        	  parkNames = (ArrayList<String>)((Message) msg).getContent();
+	        	  error="";
+	        	  break;
 	          default:
 	              System.out.println("Unknown action");
 	              break;

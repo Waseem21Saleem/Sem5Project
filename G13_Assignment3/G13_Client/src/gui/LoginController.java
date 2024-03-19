@@ -62,49 +62,42 @@ public  class LoginController   {
 		 */
 		String id = getId();
 		String password = getPassword();
-		if (!id.matches("[0-9]+") || id.length()!=9)
+		if ((!id.matches("[0-9]+") || id.length()!=9)||(password=="" || password==null ))
+			if (!id.matches("[0-9]+") || id.length()!=9)
 			lblError.setText("ID must contain only 9 digits");
-		else if (password!="" && password!=null )
+			else
 			lblError.setText("Password can not be empty");
 		else {
 			User user = new User(id,password);
 			Message msg = new Message (Message.ActionType.WORKERLOGIN,user);
 			ClientUI.chat.accept(msg);
-			String openPage="",pageTitle="";
-			if (id.equals("1")) {
-				openPage="/gui/VisitorHomePage.fxml";
-				pageTitle="Visitor home page"; }
-			else if (id.equals("2")) {
-				openPage="/gui/ParkManagerHomePage.fxml";
-				pageTitle="Park Manager home page";
+			if (ChatClient.error!="")
+				lblError.setText(ChatClient.error);
+			else {
+				String openPage="",pageTitle="";
+				switch (ChatClient.user.getUserPermission()){
+				case "PARK MANAGER":
+					openPage="/gui/ParkManagerHomePage.fxml";
+					pageTitle="Park Manager home page";
+					break;
+				case "DEPARTMENT MANAGER":
+					openPage="/gui/DepartmentManagerHomePage.fxml";
+					pageTitle="Department Manager home page";
+					break;
+					
+				case "SERVICE":
+					openPage="/gui/ServicesHomePage.fxml";
+					pageTitle="Services home page";
+					break;
+				}
+					
 				
-			}
-			else if (id.equals("3")) {
-				openPage="/gui/DepartmentManagerHomePage.fxml";
-				pageTitle="Department Manager home page";
-				
-			}
-			else if (id.equals("4")) {
-				openPage="/gui/ServicesHomePage.fxml";
-				pageTitle="Services home page";
-				
-			}
-	
+				ChatClient.openGUI.goToGUI(event, openPage,"",pageTitle);
+
 			
-			FXMLLoader loader = new FXMLLoader();
-			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-			Stage primaryStage = new Stage();
-			Pane root = loader.load(getClass().getResource(openPage).openStream());		
+			}
 			
-		
-			Scene scene = new Scene(root);			
-			//scene.getStylesheets().add(getClass().getResource(openPage).toExternalForm());
-			primaryStage.setTitle(pageTitle);
-	
-			primaryStage.setScene(scene);		
-			primaryStage.show();
-	
-			//ClientUI.chat.accept("refresh");
+			
 	
 	        
 	
@@ -119,18 +112,8 @@ public  class LoginController   {
 	   
 	   */	
 	public void goBackBtn(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/LoginWithoutPassword.fxml").openStream());		
 		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/LoginWithoutPassword.css").toExternalForm());
-		primaryStage.setTitle("Visitor Login page");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();
+		ChatClient.openGUI.goToGUI(event, "/gui/LoginWithoutPassword.fxml","/gui/LoginWithoutPassword.css","Visitor Login page");
 		
 	}
 	

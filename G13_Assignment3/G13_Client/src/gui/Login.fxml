@@ -6,14 +6,14 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="lblError" prefHeight="235.0" prefWidth="426.0" style="-fx-background-color: SILVER;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
+<AnchorPane id="lblError" prefHeight="235.0" prefWidth="426.0" style="-fx-background-color: SILVER;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
    <children>
       <Button id="btnBack" fx:id="btnBack" layoutX="340.0" layoutY="193.0" mnemonicParsing="false" onAction="#goBackBtn" style="-fx-background-color: SKYBLUE; -fx-font-weight: BOLD;" text="Back" />
       <Button id="btnLogin" fx:id="btnLogin" layoutX="166.0" layoutY="126.0" mnemonicParsing="false" onAction="#Login" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: SKYBLUE; -fx-text-fill: BLACK; -fx-font-weight: BOLD;" text="Login" />
       <Label id="lblId" layoutX="46.0" layoutY="42.0" style="-fx-font-weight: bold;" text="ID:" />
       <Label id="lblPassword" layoutX="48.0" layoutY="83.0" style="-fx-font-weight: bold;" text="Password:" />
       <TextField id="txtId" fx:id="txtId" layoutX="166.0" layoutY="37.0" />
-      <Label id="lblError" fx:id="lblError" layoutX="128.0" layoutY="172.0" prefHeight="21.0" prefWidth="54.0" style="-fx-font-weight: bold;" textFill="RED" />
+      <Label id="lblError" fx:id="lblError" layoutX="96.0" layoutY="172.0" prefHeight="21.0" prefWidth="246.0" style="-fx-font-weight: bold;" textFill="RED" />
       <PasswordField id="txtPassword" fx:id="txtPassword" layoutX="166.0" layoutY="78.0" />
    </children>
 </AnchorPane>

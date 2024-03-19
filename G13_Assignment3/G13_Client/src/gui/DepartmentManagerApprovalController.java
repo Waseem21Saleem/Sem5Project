@@ -27,6 +27,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import logic.Order;
+import logic.Requests;
+import mysqlConnection.mysqlConnection;
 
 public class DepartmentManagerApprovalController   {
 
@@ -37,30 +39,34 @@ public class DepartmentManagerApprovalController   {
 	private Label lblerror;
 	
 	@FXML
-	private TableView listApprove;
+	private TableView<Requests> listApprove;
 	/**
 	   * This method loads the current order into the fx
 	   *
 	   *@param order
   
 	   */	
+	
+	
+	
 	public void accept(ActionEvent event) throws Exception {
-		  Order selectedOrder = (Order) listApprove.getSelectionModel().getSelectedItem();
-	        if (selectedOrder != null) {
-	            //selectedOrde("Accepted"); // Update status to "Accepted"
-	            // Call a method to update the order status in your data source/database
-	            // For example: OrderDAO.updateOrderStatus(selectedOrder.getId(), "Accepted");
-	            listApprove.refresh(); // Refresh the table view
+		/*Requests  selectedRequests = (Requests) listApprove.getSelectionModel().getSelectedItem();
+        if (selectedRequests != null) {
+        	mysqlConnection.updateRequestInfo(selectedRequests.getStatus(),"Approved");
+            listApprove.getItems().remove(selectedRequests); // Remove the selected order from the table view
+        }*/
 	        }
-	}
+	        
+	        
+	       
+	
 	public void reject (ActionEvent event) throws Exception {
-		Order selectedOrder = (Order) listApprove.getSelectionModel().getSelectedItem();
-	        if (selectedOrder != null) {
-	            //selectedOrder.// Update status to "Rejected"
-	            // Call a method to update the order status in your data source/database
-	            // For example: OrderDAO.updateOrderStatus(selectedOrder.getId(), "Rejected");
-	            //listApprove.refresh(); // Refresh the table view
-	        }
+		/*Requests  selectedRequests = (Requests) listApprove.getSelectionModel().getSelectedItem();
+        if (selectedRequests != null) {
+        	selectedRequests.setStatus("Rejected");
+        	mysqlConnection.updateRequestInfo(selectedRequests.getStatus(),"Rejected");
+            listApprove.getItems().remove(selectedRequests); // Remove the selected order from the table view
+        }*/
 	}
 	
 public void goBackBtn(ActionEvent event) throws Exception {
@@ -69,7 +75,7 @@ public void goBackBtn(ActionEvent event) throws Exception {
 			fxml="/gui/DepartmentManagerHomePage.fxml";
 			css="/gui/DepartmentManagerHomePage.fxml";
 			title="Department Manager home page";
-			
+		
 		}
 		else if (event.getSource()==btnAccept) {
 			fxml="/gui/DepartmentManagerHomePage.fxml";
@@ -91,4 +97,3 @@ public void goBackBtn(ActionEvent event) throws Exception {
 		primaryStage.show();
 }
 }
-

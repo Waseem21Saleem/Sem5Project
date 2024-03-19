@@ -157,6 +157,17 @@ public class EchoServer extends AbstractServer
 				}
                 break;
     	    	
+    	    case PARKNAMES:
+    	    	msg=mysql.getParks();
+
+    	    	
+                try {
+					client.sendToClient(msg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                break;
             case LOGOUT:
             	user = (User) ((Message) msg).getContent();
             	System.out.println(user.isLogged());

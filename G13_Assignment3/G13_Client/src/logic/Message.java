@@ -10,6 +10,7 @@ public class Message implements Serializable  {
 	    WORKERLOGIN,
 	    ERROR,
 	    LOGINSUCCESS,
+	    PARKNAMES,
 	    EXECUTEERROR,
 	    LOGOUT
 	    

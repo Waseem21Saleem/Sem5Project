@@ -212,7 +212,7 @@ public class mysqlConnection {
 	   *
 	   * @param ordersList, an empty ArrayList
 	   */
-	public Park updatePark(Park park)
+	public void updatePark(Park park)
 	{
 		PreparedStatement ps;
 		try {
@@ -224,7 +224,6 @@ public class mysqlConnection {
 	            ps.close();
 	            
 		} catch (SQLException e) {	}
-		return park;
 	}
 	
 	/**
@@ -232,9 +231,10 @@ public class mysqlConnection {
 	   *
 	   * @param ordersList, an empty ArrayList
 	   */
-	public ArrayList<String> getParks(ArrayList<String> parksList)
+	public Message getParks()
 	{
-		parksList= new ArrayList<String>();
+		Message msg;
+		ArrayList<String> parksList= new ArrayList<String>();
 		try 
 		{	
 			Statement stmt = conn.createStatement();
@@ -244,14 +244,14 @@ public class mysqlConnection {
 	 			
 	 		
 	 			parksList.add(rs.getString("ParkName"));
-	 			//StudentFormController.addValue(rs.getString("ParkName"));
 				
 			} 
 	 		
 			rs.close();
 			
 		} catch (SQLException e) {e.printStackTrace();}
-		return parksList;
+		msg = new Message (Message.ActionType.PARKNAMES,parksList);
+		return msg;
 		
 	}
 	
@@ -312,7 +312,7 @@ public class mysqlConnection {
           order.setParkName(rs.getString("ParkName"));
           order.setDate(rs.getString("Date"));
           order.setTime(rs.getString("Time"));
-          order.setVisitors(rs.getString("NumberOfVisitors"));
+          order.setAmountOfVisitors(rs.getString("NumberOfVisitors"));
           order.setTelephone(rs.getString("PhoneNumber"));
           order.setEmail(rs.getString("Email"));
 	            
@@ -340,7 +340,7 @@ public class mysqlConnection {
 			 	ps.setString(1,order.getParkName());
 	            ps.setString(2,order.getDate());
 	            ps.setString(3,order.getTime());
-	            ps.setString(3,order.getVisitors());
+	            ps.setString(3,order.getAmountOfVisitors());
 	            ps.setString(3,order.getOrderNum());
 	            ps.executeUpdate();
 	            ps.close();
@@ -386,7 +386,7 @@ public class mysqlConnection {
            pstmt.setString(3, order.getVisitorId());
            pstmt.setString(4, order.getDate());
            pstmt.setString(5, order.getTime());
-           pstmt.setString(6, order.getVisitors());
+           pstmt.setString(6, order.getAmountOfVisitors());
            pstmt.setString(7, order.getTelephone());
            pstmt.setString(8, order.getEmail());
            pstmt.setString(9, order.getVisitorType());
@@ -443,6 +443,46 @@ public class mysqlConnection {
 		
 		
 	}
+
+	public ArrayList<String> getRequestInfo(String ParkName)
+	{
+		ArrayList<String> RequestInfo= new ArrayList<String>();
+
+		try 
+		{	
+			// Prepare a statement with a placeholder
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.requests WHERE ParkName=?");
+			preparedStatement.setString(1, ParkName); // 1-indexed parameter position
+
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+			 // Process the result set
+            rs.next();
+            RequestInfo.add(rs.getString("ParkName"));
+            RequestInfo.add(rs.getString("Chang-Type"));
+            RequestInfo.add(rs.getString("Status"));
+            
+			rs.close();
+			preparedStatement.close();
+			
+			
+			
+		} catch (SQLException e) {e.printStackTrace();}
+		return RequestInfo;
+	}
+	
+	public void updateRequestInfo(String Status,String NewStatus){
+			
+			PreparedStatement ps;
+			try {
+				 	ps = conn.prepareStatement("UPDATE g13.request SET Status= ? WHERE ParkName = ?;");
+		            ps.setString(1,NewStatus);
+		            ps.executeUpdate();
+		            ps.close();
+		            
+			} catch (SQLException e) {	e.printStackTrace();}
+			 		
+		}
 
 	
 	/**

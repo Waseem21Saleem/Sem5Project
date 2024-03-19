@@ -69,11 +69,10 @@ public  class LoginWithoutPasswordController   {
 				lblError.setText(ChatClient.error);
 			else {
 			
-				
+				msg = new Message (Message.ActionType.PARKNAMES,"");
+				ClientUI.chat.accept(msg);
 				ChatClient.openGUI.goToGUI(event, "/gui/VisitorHomePage.fxml","","Visitor home page");
-				//goToGUI(event, "VisitorHomePage.fxml","","Visitor home page");
 
-			
 			}
 	        
 			}

@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 import client.ChatClient;
 import client.ClientController;
 import client.ClientUI;
 import common.ChatIF;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +33,7 @@ import ocsf.server.ConnectionToClient;
 
 
 
-public  class VisitorHomePageController   {
+public  class VisitorHomePageController implements Initializable   {
 	public static ClientController chat;
 	private static int itemIndex = 3;
 	public static User user=ChatClient.user;
@@ -118,6 +121,34 @@ public  class VisitorHomePageController   {
 		
 	}
 	
+	public void setParkComboBox() {
+		  	this.cmbSelectPark.setValue("Select park");
+		    this.cmbSelectPark.setItems(FXCollections.observableArrayList(ChatClient.parkNames));
+			
+			// Add an event handler to the ComboBox
+		    /*cmbSelectPark.setOnAction(event -> {
+				
+				String selectedValue=(String) cmbPark.getValue();
+				ordersList = new ArrayList<String>();
+				ordersList.add(selectedValue);
+				ClientUI.chat.accept(ordersList);
+				loadOrder(ChatClient.OrderInfo);
+				
+
+
+	            
+	            lblSave.setText("");
+	            
+	        });*/
+  }
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {	
+
+		setParkComboBox();
+		
+		
+		
+	}
 	
 	
 
