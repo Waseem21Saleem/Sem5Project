@@ -1,73 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="611.0" prefWidth="708.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="611.0" prefWidth="708.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label id="labelTheReportParkName" fx:id="labelTheReportParkName" layoutX="297.0" layoutY="41.0" text="Park Name">
+      <Label id="labelTheReportParkName" fx:id="labelTheReportParkName" layoutX="297.0" layoutY="41.0" style="-fx-font-weight: bold;" text="Park Name">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="277.0" layoutY="82.0" text="Cancellation Report">
+      <Label layoutX="277.0" layoutY="82.0" style="-fx-font-weight: bold;" text="Cancellation Report">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label id="labelMonth" layoutX="96.0" layoutY="132.0" text="Month:">
+      <Label id="labelMonth" layoutX="80.0" layoutY="132.0" style="-fx-font-weight: bold;" text="Month:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label id="labelInputMonth" fx:id="labelInputMonth" layoutX="169.0" layoutY="132.0" text="Label">
+      <Label id="labelInputMonth" fx:id="labelInputMonth" alignment="CENTER" layoutX="148.0" layoutY="132.0" prefHeight="27.0" prefWidth="58.0" text="Label">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label id="labelYear" layoutX="297.0" layoutY="132.0" text="Year:">
+      <Label id="labelYear" layoutX="297.0" layoutY="132.0" style="-fx-font-weight: bold;" text="Year:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label id="labelInputYear" fx:id="labelInputYear" layoutX="346.0" layoutY="132.0" text="Label">
+      <Label id="labelInputYear" fx:id="labelInputYear" alignment="CENTER" layoutX="346.0" layoutY="132.0" prefHeight="27.0" prefWidth="58.0" text="Label">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
       <Line endX="274.0" layoutX="336.0" layoutY="188.0" startX="-274.0" />
-      <Label id="labelOrderType" layoutX="80.0" layoutY="204.0" text="Order Type">
+      <Label id="labelOrderType" layoutX="80.0" layoutY="204.0" style="-fx-font-weight: bold;" text="Order Type">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label id="labelAmount" layoutX="433.0" layoutY="204.0" text="Amount">
+      <Label id="labelAmount" alignment="CENTER" layoutX="433.0" layoutY="204.0" prefHeight="27.0" prefWidth="84.0" style="-fx-font-weight: bold;" text="Amount">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
       <Line endX="253.0" layoutX="357.0" layoutY="246.0" startX="-295.0" />
-      <Button id="btnBack" fx:id="btnBack" layoutX="54.0" layoutY="41.0" mnemonicParsing="false" text="Back">
+      <Button id="btnBack" fx:id="btnBack" layoutX="54.0" layoutY="41.0" mnemonicParsing="false" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="Back">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Label id="labelCancellOrder" layoutX="78.0" layoutY="269.0" text="Cancell Order">
+      <Label id="labelCancellOrder" layoutX="78.0" layoutY="269.0" style="-fx-font-weight: bold;" text="Cancel Order">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label id="labelAmountCancellOrder" fx:id="labelAmountCancellOrder" layoutX="452.0" layoutY="271.0" text="Label" />
-      <Label id="labelAriivedCancellOrder" layoutX="77.0" layoutY="314.0" text="Cancell Order Did Not Arrived">
+      <Label id="labelAmountCancellOrder" fx:id="labelAmountCancellOrder" alignment="CENTER" layoutX="446.0" layoutY="265.0" prefHeight="27.0" prefWidth="39.0" text="Label" />
+      <Label id="labelAriivedCancellOrder" layoutX="77.0" layoutY="314.0" style="-fx-font-weight: bold;" text="Cancel Order Did Not Arrived">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label id="labelAmountOrderCancellArriveNo" fx:id="labelAmountOrderCancellArriveNo" layoutX="452.0" layoutY="316.0" text="Label" />
+      <Label id="labelAmountOrderCancellArriveNo" fx:id="labelAmountOrderCancellArriveNo" alignment="CENTER" layoutX="446.0" layoutY="310.0" prefHeight="27.0" prefWidth="39.0" text="Label" />
    </children>
 </AnchorPane>

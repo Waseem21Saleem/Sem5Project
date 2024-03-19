@@ -92,10 +92,10 @@ public class PaymentController {
 		Pane root = loader.load(getClass().getResource("/gui/ConfirmOrder.fxml").openStream());		
 		
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/ConfirmOrder.css").toExternalForm());
+		//scene.getStylesheets().add(getClass().getResource("/gui/ConfirmOrder.css").toExternalForm());
 		primaryStage.setTitle("Confirm Order page");
 
-		primaryStage.setScene(scene);		
+		primaryStage.setScene(scene);
 		primaryStage.show();
 		
 	}
