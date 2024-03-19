@@ -35,16 +35,13 @@ public  class ParkManagerChangeCapacityController   {
 	
 
 	@FXML
-	private Label lblError;
+	private Label lblError,lblParkName;
 	
 	@FXML
-	private TextField txtMaxAmount;
-	
-	@FXML
-	private ComboBox cmbChooseParkName;
+	private TextField txtParkCapacity,txtMaxStay;
 	
 	private String getMaxAmount() {
-		return txtMaxAmount.getText();
+		return txtParkCapacity.getText();
 	}
 
 	
