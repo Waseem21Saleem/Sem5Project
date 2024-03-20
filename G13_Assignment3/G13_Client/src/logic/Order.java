@@ -171,6 +171,7 @@ public class Order implements Serializable {
     public void setExitTime(String exitTime) {
         this.exitTime = exitTime;
     }
+
     
 
 }

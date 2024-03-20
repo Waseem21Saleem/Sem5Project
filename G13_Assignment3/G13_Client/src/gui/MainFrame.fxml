@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="564.0" style="-fx-background-color: Silver;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainFrameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="564.0" style="-fx-background-color: Silver;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainFrameController">
    <children>
       <ImageView id="imgGoNature" fitHeight="368.0" fitWidth="564.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="125.46929931640625">
          <image>
@@ -28,8 +28,8 @@
       <TextField id="txtIP" fx:id="txtIP" layoutX="99.0" layoutY="374.0" />
       <Label id="lblPort" layoutX="49.0" layoutY="420.0" style="-fx-font-weight: bold;" text="Port:" />
       <TextField id="txtPort" fx:id="txtPort" layoutX="99.0" layoutY="416.0" />
-      <Button id="btnConnect" fx:id="btnConnect" layoutX="264.0" layoutY="396.0" mnemonicParsing="false" onAction="#Connect" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: SKYBLUE; -fx-text-fill: BLACK; -fx-font-weight: BOLD;" text="Connect" />
-      <Button id="btnExit" fx:id="btnExit" layoutX="492.0" layoutY="438.0" mnemonicParsing="false" onAction="#getExitBtn" prefHeight="31.0" prefWidth="42.0" style="-fx-background-color: SKYBLUE; -fx-font-weight: BOLD;" text="Exit" />
+      <Button id="btnConnect" fx:id="btnConnect" layoutX="314.0" layoutY="401.0" mnemonicParsing="false" onAction="#Connect" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: SKYBLUE; -fx-text-fill: BLACK; -fx-font-weight: BOLD;" text="Connect" />
+      <Button id="btnExit" fx:id="btnExit" layoutX="446.0" layoutY="450.0" mnemonicParsing="false" onAction="#getExitBtn" prefHeight="31.0" prefWidth="97.0" style="-fx-background-color: SKYBLUE; -fx-font-weight: BOLD;" text="Exit" />
       <Label id="lblError" fx:id="lblError" alignment="CENTER" layoutX="80.0" layoutY="452.0" prefHeight="26.0" prefWidth="130.0" style="-fx-font-weight: bold;" textFill="RED" />
    </children>
 </AnchorPane>

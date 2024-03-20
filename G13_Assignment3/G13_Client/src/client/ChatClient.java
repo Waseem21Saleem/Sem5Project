@@ -263,5 +263,6 @@ public void handleMessageFromClientUI(String[] text) {
     }
 	
 }
+
 }
 //End of ChatClient class

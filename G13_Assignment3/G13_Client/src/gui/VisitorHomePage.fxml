@@ -8,24 +8,24 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VisitorHomePageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="600.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VisitorHomePageController">
    <children>
-      <Label id="labelSelectPark" layoutX="50.0" layoutY="43.0" text="Select Park:" />
-      <Label id="labelAmountVisitors" layoutX="37.0" layoutY="101.0" text="Amount Visitors:" />
-      <ComboBox id="cmbSelectPark" fx:id="cmbSelectPark" layoutX="136.0" layoutY="39.0" prefWidth="150.0" />
-      <TextField id="txtInputAmountVisitors" fx:id="txtInputAmountVisitors" layoutX="145.0" layoutY="97.0" />
-      <Button id="btnMakeReseravation" layoutX="198.0" layoutY="353.0" mnemonicParsing="false" onAction="#makeReservation" text="Make Reserevation" />
-      <Label id="labelHour" layoutX="35.0" layoutY="218.0" text="Time:" />
-      <Button id="btnLogOut" layoutX="41.0" layoutY="437.0" mnemonicParsing="false" onAction="#Logout" style="-fx-font-weight: bold;" text="Logout" />
-      <Label layoutX="116.0" layoutY="387.0" text="Have Alredy Order And Want To Edit?..." />
-      <Hyperlink id="hyperClickHere" layoutX="336.0" layoutY="384.0" onAction="#goEditOrder" text="Click Here" />
-      <Label id="labelEamil" layoutX="37.0" layoutY="272.0" text="Email: " />
-      <Label id="labelPhoneNumber" layoutX="36.0" layoutY="316.0" text="Phone Number: " />
-      <TextField id="txtEmail" fx:id="txtEmail" layoutX="89.0" layoutY="268.0" />
-      <TextField id="txtPhone" fx:id="txtPhone" layoutX="145.0" layoutY="312.0" />
-      <Label id="lblDate" layoutX="41.0" layoutY="157.0" text="Date: " />
-      <DatePicker id="datepickDate" fx:id="datepickDate" layoutX="91.0" layoutY="153.0" />
-      <Label id="lblError" fx:id="lblError" layoutX="164.0" layoutY="420.0" prefHeight="17.0" prefWidth="214.0" textAlignment="CENTER" />
-      <TextField id="txtTime" fx:id="txtTime" layoutX="89.0" layoutY="214.0" />
+      <Label id="labelSelectPark" layoutX="103.0" layoutY="43.0" style="-fx-font-weight: bold;" text="Select Park:" />
+      <Label id="labelAmountVisitors" layoutX="103.0" layoutY="91.0" style="-fx-font-weight: bold;" text="Amount of visitors:" />
+      <ComboBox id="cmbSelectPark" fx:id="cmbSelectPark" layoutX="269.0" layoutY="38.0" prefHeight="31.0" prefWidth="187.0" style="-fx-background-color: skyblue;" />
+      <TextField id="txtInputAmountVisitors" fx:id="txtInputAmountVisitors" layoutX="269.0" layoutY="86.0" />
+      <Button id="btnMakeReseravation" layoutX="223.0" layoutY="343.0" mnemonicParsing="false" onAction="#makeReservation" style="-fx-font-weight: bold; -fx-background-color: SKYBLUE;" text="Make Reserevation" />
+      <Label id="labelHour" layoutX="105.0" layoutY="203.0" style="-fx-font-weight: bold;" text="Time:" />
+      <Button id="btnLogOut" layoutX="36.0" layoutY="463.0" mnemonicParsing="false" onAction="#Logout" style="-fx-font-weight: bold; -fx-background-color: skyblue;" text="Logout" />
+      <Label layoutX="103.0" layoutY="403.0" style="-fx-font-weight: bold;" text="Do you want to edit an existing order?" />
+      <Hyperlink id="hyperClickHere" layoutX="378.0" layoutY="399.0" onAction="#goEditOrder" style="-fx-font-weight: bold;" text="Click Here" />
+      <Label id="labelEamil" layoutX="105.0" layoutY="250.0" style="-fx-font-weight: bold;" text="Email: " />
+      <Label id="labelPhoneNumber" layoutX="107.0" layoutY="299.0" style="-fx-font-weight: bold;" text="Phone Number: " />
+      <TextField id="txtEmail" fx:id="txtEmail" layoutX="269.0" layoutY="245.0" prefHeight="31.0" prefWidth="187.0" />
+      <TextField id="txtPhone" fx:id="txtPhone" layoutX="269.0" layoutY="294.0" prefHeight="31.0" prefWidth="187.0" />
+      <Label id="lblDate" layoutX="103.0" layoutY="147.0" style="-fx-font-weight: bold;" text="Date: " />
+      <DatePicker id="datepickDate" fx:id="datepickDate" layoutX="269.0" layoutY="142.0" prefHeight="31.0" prefWidth="187.0" style="-fx-background-color: skyblue;" />
+      <Label id="lblError" fx:id="lblError" layoutX="167.0" layoutY="442.0" prefHeight="21.0" prefWidth="287.0" textAlignment="CENTER" />
+      <TextField id="txtTime" fx:id="txtTime" layoutX="269.0" layoutY="198.0" prefHeight="31.0" prefWidth="187.0" />
    </children>
 </AnchorPane>
