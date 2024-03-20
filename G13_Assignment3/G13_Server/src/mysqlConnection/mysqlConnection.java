@@ -262,32 +262,28 @@ public class mysqlConnection {
 	   *
 	   * @param ordersList, an empty ArrayList
 	   */
-	public ArrayList<String> getOrders(String visitorId)
-	{
+	public Message getOrdersNumbers(User user)
+	{	
+		Message msg;
 		ArrayList<String> ordersList= new ArrayList<String>();
-		
 		try 
 		{	
 			PreparedStatement preparedStatement = conn.prepareStatement("SELECT OrderNumber FROM g13.orders WHERE VisitorId = ?");
-			preparedStatement.setString(1, visitorId); // 1-indexed parameter position
-
-			// Execute the query
+			preparedStatement.setString(1, user.getId());
 			ResultSet rs = preparedStatement.executeQuery();
-			 // Process the result set
-			// Process result set
 	 		while(rs.next())
 	 		{
 	 			
 	 		
 	 			ordersList.add(rs.getString("OrderNumber"));
-	 			//StudentFormController.addValue(rs.getString("ParkName"));
 				
 			} 
 	 		
 			rs.close();
 			
 		} catch (SQLException e) {e.printStackTrace();}
-		return ordersList;
+		msg = new Message (Message.ActionType.ORDERSNUMBERS,ordersList);
+		return msg;
 		
 	}
 	
@@ -297,13 +293,14 @@ public class mysqlConnection {
 	   * @param OrderNumber, an ordernumber that the client selected
 	   * @param order, a new order that has no info in it
 	   */
-	public Order getOrderInfo(Order order)
+	public Message getOrderInfo(Order order)
 	{
+		Message msg;
 
 		try 
 		{	
 			// Prepare a statement with a placeholder
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.order WHERE OrderNumber=?");
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.orders WHERE OrderNumber=?");
 			preparedStatement.setString(1, order.getOrderNum()); // 1-indexed parameter position
 
 			// Execute the query
@@ -312,11 +309,15 @@ public class mysqlConnection {
           rs.next();
 	        //order = new Order(rs.getString("ParkName"),rs.getString("OrderNumber"),rs.getString("TimeOfVisit"),rs.getString("NumberOfVisitors"),rs.getString("TelephoneNumber"),rs.getString("Email"))  ; 
           order.setParkName(rs.getString("ParkName"));
+          order.setVisitorId(rs.getString("VisitorId"));
           order.setDate(rs.getString("Date"));
           order.setTime(rs.getString("Time"));
           order.setAmountOfVisitors(rs.getString("NumberOfVisitors"));
           order.setTelephone(rs.getString("PhoneNumber"));
           order.setEmail(rs.getString("Email"));
+          order.setVisitorType(rs.getString("VisitorType"));
+          order.setExitTime(rs.getString("ExitTime"));
+
 	            
           
 			rs.close();
@@ -325,7 +326,8 @@ public class mysqlConnection {
 			
 			
 		} catch (SQLException e) {e.printStackTrace();}
-		return order;
+		msg = new Message (Message.ActionType.ORDERINFO,order);
+		return msg;
 	}
 	
 	
@@ -334,21 +336,24 @@ public class mysqlConnection {
 	   *
 	   * @param ordersList, an empty ArrayList
 	   */
-	public Order updateOrderInfo(Order order)
+	public void updateOrderInfo(Order order)
 	{
 		PreparedStatement ps;
 		try {
-			 	ps = conn.prepareStatement("UPDATE g13.orders SET ParkName=?,Date=?,Time=?,NumberOfVisitors=? WHERE OrderNumber = ?");
+
+			 	ps = conn.prepareStatement("UPDATE g13.orders SET ParkName=?,Date=?,Time=?,NumberOfVisitors=?,Email=?,PhoneNumber=?,ExitTime=? WHERE OrderNumber = ?");
 			 	ps.setString(1,order.getParkName());
 	            ps.setString(2,order.getDate());
 	            ps.setString(3,order.getTime());
-	            ps.setString(3,order.getAmountOfVisitors());
-	            ps.setString(3,order.getOrderNum());
+	            ps.setString(4,order.getAmountOfVisitors());
+	            ps.setString(5,order.getEmail());
+	            ps.setString(6,order.getTelephone());
+	            ps.setString(7,order.getExitTime());
+	            ps.setString(8,order.getOrderNum());
 	            ps.executeUpdate();
 	            ps.close();
 	            
-		} catch (SQLException e) {	}
-		return order;
+		} catch (SQLException e) {System.out.println("Error");	}
 	}
 	
 	/**
@@ -462,6 +467,71 @@ public class mysqlConnection {
 		msg = new Message (Message.ActionType.RESERVATION,"Reservation saved successfully");
 		return msg;
 	}
+	
+	/**
+	   * This method sets the order details from the database according to the OrderNumber
+	   *
+	   * @param OrderNumber, an ordernumber that the client selected
+	   * @param order, a new order that has no info in it
+	   */
+	public Message checkUpdatedReservation(Order order)
+	{	//this function to make reservation
+		Message msg;
+		try 
+		{	
+			// Prepare a statement with a placeholder
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND Time < ? AND ExitTime > ? AND Date = ? AND OrderNumber != ?");
+			preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
+			preparedStatement.setString(2, order.getTime());
+			preparedStatement.setString(3, order.getTime());
+			preparedStatement.setString(4, order.getDate());
+			preparedStatement.setString(5, order.getOrderNum());
+
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+			 // Process the result set
+			// Process results
+			int currentAmountOfVisitors = Integer.parseInt(order.getAmountOfVisitors());
+          while (rs.next()) {
+          	currentAmountOfVisitors += Integer.parseInt(rs.getString("NumberOfVisitors"));
+          }
+		    rs.close();
+			preparedStatement.close();
+			// Prepare a statement with a placeholder
+			preparedStatement = conn.prepareStatement("SELECT Capacity FROM g13.parks WHERE ParkName = ?");
+			preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
+			// Execute the query
+			rs = preparedStatement.executeQuery();
+			rs.next();
+			int maxCapacity = Integer.parseInt(rs.getString("Capacity"));
+			rs.close();
+			preparedStatement.close();
+			if (currentAmountOfVisitors>maxCapacity)
+			{
+				msg = new Message (Message.ActionType.WAITINGLIST,order);
+				return msg;
+			}
+			// Original time string
+	        String timeString = order.getTime();
+	        // Number of hours to add
+	        int maxStay = getParkMaxStay(order.getParkName());
+	        // Parse the time string into LocalTime
+	        LocalTime time = LocalTime.parse(timeString);
+	        // Add x hours
+	        LocalTime newTime = time.plusHours(maxStay);
+	        // Format the new time back into a string
+	        String result = newTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+			order.setExitTime(result);
+			updateOrderInfo(order);
+
+			
+			
+		} catch (SQLException e) {e.printStackTrace();}
+		msg = new Message (Message.ActionType.RESERVATION,"Reservation saved successfully");
+		return msg;
+	}
+
+	
 	
 	public int getParkMaxStay(String parkName) {
 		int maxStayTime=0;
@@ -591,131 +661,7 @@ public class mysqlConnection {
 			 		
 		}
 
-	
-	/**
-	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
-	   *
-	   * @param ordersList, an empty ArrayList
-	   */
-/*	public String signUp(User user)
-	{
-		String message="";
 
-		// SQL INSERT statement
-        String sql = "INSERT INTO g13.users (UserId, Password, FullName, Email, PhoneNumber, IsLogged, UserPermission) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        
-        try {
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-
-            // Set values for placeholders (?, ?, ?)
-            pstmt.setString(1, user.getId());
-            pstmt.setString(2, user.getPassword());
-            pstmt.setString(3, user.getFullName());
-            pstmt.setString(4, user.getEmail());
-            pstmt.setString(5, user.getPhoneNumber());
-            pstmt.setBoolean(6, user.isLogged());
-            pstmt.setString(7, user.getUserPermission());
-            
-
-            // Execute the INSERT statement
-            pstmt.executeUpdate();
-            message="success";
-           
-        } catch (SQLException e) {
-            message="error";
-        }
-        return message;
-	}
-*/
-	
-	/**
-	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
-	   *
-	   * @param ordersList, an empty ArrayList
-	   */
-	public ArrayList<String> getOrders(ArrayList<String> ordersList)
-	{
-		ordersList= new ArrayList<String>();
-		try 
-		{	
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM g13.order;");
-	 		while(rs.next())
-	 		{
-	 			
-	 		
-	 			ordersList.add(rs.getString("OrderNumber"));
-	 			//StudentFormController.addValue(rs.getString("ParkName"));
-				
-			} 
-	 		
-			rs.close();
-			return ordersList;
-			
-		} catch (SQLException e) {e.printStackTrace();}
-		return ordersList;
-		
-	}
-	
-	/**
-	   * This method sets the order details from the database according to the OrderNumber
-	   *
-	   * @param OrderNumber, an ordernumber that the client selected
-	   * @param order, a new order that has no info in it
-	   */
-	public ArrayList<String> getOrderInfo(String OrderNumber)
-	{
-		ArrayList<String> orderInfo= new ArrayList<String>();
-
-		try 
-		{	
-			// Prepare a statement with a placeholder
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.order WHERE OrderNumber=?");
-			preparedStatement.setString(1, OrderNumber); // 1-indexed parameter position
-
-			// Execute the query
-			ResultSet rs = preparedStatement.executeQuery();
-			 // Process the result set
-            rs.next();
-	        //order = new Order(rs.getString("ParkName"),rs.getString("OrderNumber"),rs.getString("TimeOfVisit"),rs.getString("NumberOfVisitors"),rs.getString("TelephoneNumber"),rs.getString("Email"))  ; 
-            orderInfo.add(rs.getString("ParkName"));
-            orderInfo.add(rs.getString("OrderNumber"));
-            orderInfo.add(rs.getString("TimeOfVisit"));
-            orderInfo.add(rs.getString("NumberOfVisitors"));
-            orderInfo.add(rs.getString("TelephoneNumber"));
-            orderInfo.add(rs.getString("Email"));
-	            
-            
-			rs.close();
-			preparedStatement.close();
-			
-			
-			
-		} catch (SQLException e) {e.printStackTrace();}
-		return orderInfo;
-	}
-
-	/**
-	   * This method updates the order details to the database according to the OrderNumber
-	   *
-	   * @param OrderNumber, an ordernumber that the client selected
-	   * @param newParkName, the new name 
-	   * @param newTelphone, the new phone number
-	   */
-	public void updateOrderInfo(String orderNumber,String newParkName,String newTelphone){
-		
-		PreparedStatement ps;
-		try {
-			 	ps = conn.prepareStatement("UPDATE g13.order SET ParkName = ?,TelephoneNumber=? WHERE OrderNumber = ?;");
-			 	ps.setString(1,newParkName);
-	            ps.setString(2,newTelphone);
-	            ps.setString(3,orderNumber);
-	            ps.executeUpdate();
-	            ps.close();
-	            
-		} catch (SQLException e) {	e.printStackTrace();}
-		 		
-	}
 	
 	/**
 	   * This method adds the client info to the database
@@ -836,5 +782,4 @@ public class mysqlConnection {
 	
 	
 }
-
 

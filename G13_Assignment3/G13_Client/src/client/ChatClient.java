@@ -117,6 +117,14 @@ public void handleMessageFromServer(Object msg)
 	        	  order=(Order)((Message) msg).getContent();
 	        	  error="";
 	        	  break;
+	          case ORDERSNUMBERS:
+	        	  Orderslist=(ArrayList<String>)((Message) msg).getContent();
+	        	  error="";
+	        	  break;
+	          case ORDERINFO:
+	        	  order=(Order)((Message) msg).getContent();
+	        	  error="";
+	        	  break;
 	          default:
 	              System.out.println("Unknown action");
 	              break;

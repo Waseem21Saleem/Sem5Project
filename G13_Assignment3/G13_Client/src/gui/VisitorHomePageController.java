@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,7 +24,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -71,18 +76,10 @@ public  class VisitorHomePageController implements Initializable   {
 		/* Send a message to server to check username and password then check Role and open next window 
 		 * according to the role
 		 */
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/EditOrder.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/EditOrder.css").toExternalForm());
-		primaryStage.setTitle("Orders Managment Tool");
+		Message msg = new Message (Message.ActionType.ORDERSNUMBERS,user); 
+		ClientUI.chat.accept(msg);
+		ChatClient.openGUI.goToGUI(event, "/gui/EditOrder.fxml","/gui/EditOrder.css","Orders Managment Tool");		
 
-		primaryStage.setScene(scene);		
-		primaryStage.show();
 
 
         
@@ -109,7 +106,7 @@ public  class VisitorHomePageController implements Initializable   {
 			lblError.setText("Email is not in a correct format");
 		else if (!txtPhone.getText().matches("[0-9]+") || txtPhone.getText().length()!=10)
 			lblError.setText("Phone number must contain 10 digits");
-		else if (Integer.parseInt(amountOfVisitors)>5 && user.getUserPermission().equals("VISITOR"))
+		else if (Integer.parseInt(amountOfVisitors)>5 && (!user.getUserPermission().equals("GUIDE")))
 			lblError.setText("You can't make a reservation for more than 5 visitors");
 		else {
 			if (Integer.parseInt(amountOfVisitors)>1)
@@ -118,16 +115,59 @@ public  class VisitorHomePageController implements Initializable   {
 				else
 					visitorType="big group";
 			Order order = new Order (selectedPark,user.getId(),visitorType,date,txtTime.getText(),amountOfVisitors,txtPhone.getText(),txtEmail.getText());
-			Message msg = new Message (Message.ActionType.RESERVATION,order);
-			ClientUI.chat.accept(msg);
-			if (ChatClient.error!="") {
-				lblError.setText(ChatClient.error);
-				lblError.setTextFill(Color.GREEN);
+			double arr [] = calculatePrice(order);
+			// Create the alert
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Confirmation Dialog");
+			alert.setHeaderText("Are you sure you want to reserve?");
+			alert.setContentText("The price if you want to reserve now is ₪" + arr[1] + " you will save ₪"+ (arr[0]-arr[1])+" than going without reserving." );
+			
+			// Add buttons
+			ButtonType buttonTypeAccept = new ButtonType("Accept");
+			ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().setAll(buttonTypeAccept, buttonTypeCancel);
+
+			// Show the alert and wait for user response
+			Optional<ButtonType> result = alert.showAndWait();
+
+			// Check which button was clicked
+			if (result.isPresent() && result.get() == buttonTypeAccept) {
+				Message msg = new Message (Message.ActionType.RESERVATION,order);
+				ClientUI.chat.accept(msg);
+				if (ChatClient.error!="") {
+					lblError.setText(ChatClient.error);
+					lblError.setTextFill(Color.GREEN);
+				} else {
+					ChatClient.openGUI.goToGUI(event, "/gui/WaitingList.fxml","","Waiting list");
+					
+				}
 			} else {
-				ChatClient.openGUI.goToGUI(event, "/gui/WaitingList.fxml","","Waiting list");
-				
+			    // User clicked Cancel or closed the dialog
+			    // Do nothing or handle cancellation
 			}
+			
 		}
+	}
+	
+	public static double [] calculatePrice ( Order order ) {
+		double normalPrice=100;
+		double reservationPrice=100;
+		double arr []  = new double [2];
+		int amountOfVisitors=Integer.parseInt(order.getAmountOfVisitors());
+		if ( amountOfVisitors<6) {
+			normalPrice*=amountOfVisitors;
+			reservationPrice=normalPrice*(0.85);
+		}
+		else {
+			normalPrice*=(amountOfVisitors*0.9);
+			reservationPrice*=((amountOfVisitors-1)*0.75);
+		}
+		arr[0]=normalPrice;
+		arr[1]=reservationPrice;
+			
+		
+		
+		return arr;
 	}
 	
 	

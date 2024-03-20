@@ -88,53 +88,14 @@ public class EchoServer extends AbstractServer
 	 User user;
 	    System.out.println("Message received: " + msg + " from " + client);
 	    if (msg instanceof String ) {
-		    if (msg.toString().contains("updateOrder")) {
-		    	String [] order = msg.toString().split(" ");
-				mysql.updateOrderInfo(order[1].toString(),order[2].toString(),order[3].toString());
-	
-					}
-		    else 
-		    		if(msg.toString().contains("ClientDisconnected")) {
+		    if(msg.toString().contains("ClientDisconnected")) {
 		    			
 		    			mysql.deleteHostInfo(client.getInetAddress().getHostAddress());
 		    			
 	
 						}
 	    }
-	    else if (msg instanceof ArrayList)
-	    {
-	    	if (((ArrayList) msg).get(0).toString().contains("getOrders"))
-	    	{
-	    		ArrayList<String> ordersList = mysql.getOrders((ArrayList<String>)msg);
-	    		try {
-					client.sendToClient(ordersList);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	    		
-	    	}
-	    	
-	    	else
-	    	{
-	    		ArrayList<String> orderInfo = mysql.getOrderInfo(((ArrayList) msg).get(0).toString());
-	    		try {
-					client.sendToClient(orderInfo);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	    	}
-	    }
-	    
-	    else if (msg instanceof Object[]) {
-	    	    Object[] arr = (Object[]) msg;
-	    	    if (arr.length > 0 && arr[0] instanceof String && ((String) arr[0]).equals("updateOrder")) {
-	    	        
-	    	            mysql.updateOrderInfo((String) arr[1], (String) arr[2], (String) arr[3]);
-	    	        
-	    	    }
-	    	}
+
 	    else if (msg instanceof Message) {
     	    switch (((Message) msg).getActionType()) {
     	    case USERLOGIN:
@@ -176,6 +137,35 @@ public class EchoServer extends AbstractServer
 					e.printStackTrace();
 				}
                 break;
+    	    case ORDERSNUMBERS:
+    	    	msg=mysql.getOrdersNumbers((User) ((Message) msg).getContent());    	    	
+                try {
+					client.sendToClient(msg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                break; 
+    	    case ORDERINFO:
+    	    	msg=mysql.getOrderInfo((Order) ((Message) msg).getContent());
+    	    	
+                try {
+					client.sendToClient(msg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                break; 
+    	    case UPDATEORDER:
+    	    	msg=mysql.checkUpdatedReservation((Order) ((Message) msg).getContent());
+    	    	System.out.println((String) ((Message) msg).getContent());
+                try {
+					client.sendToClient(msg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                break; 
             case LOGOUT:
             	user = (User) ((Message) msg).getContent();
             	System.out.println(user.isLogged());

@@ -36,11 +36,11 @@ public  class WaitingListController   {
 	private Button btnBack = null;
 	
 	@FXML
-	private Label lblError;
+	private Label lblError,labelParkName;
 	
 public void goBackBtn(ActionEvent event) throws Exception {
 		
-		ChatClient.openGUI.goToGUI(event, "/gui/VisitorHomePage.fxml","/gui/VisitorHomePage.css","Visitor Home page");
+		ChatClient.openGUI.goToGUI(event, "/gui/VisitorHomePage.fxml","","Visitor Home page");
 		
 	}
 
