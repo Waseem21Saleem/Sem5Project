@@ -5,16 +5,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="328.0" prefWidth="435.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ParkManagerChangeCapacityController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="328.0" prefWidth="435.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ParkManagerChangeCapacityController">
    <children>
       <Label id="labelSelectPark" layoutX="156.0" layoutY="33.0" text="Park Name " />
-      <Label id="lblParkCapacity" layoutX="76.0" layoutY="154.0" text="Park Capacity: " />
+      <Label id="lblParkCapacity" layoutX="76.0" layoutY="154.0" style="-fx-font-weight: bold;" text="Park Capacity: " />
       <TextField id="txtParkCapacity" fx:id="txtParkCapacity" layoutX="173.0" layoutY="150.0" />
-      <Button id="btnConfirm" layoutX="197.0" layoutY="206.0" mnemonicParsing="false" onAction="#Confirm" text="Confirm" />
-      <Button id="btnBack" layoutX="360.0" layoutY="284.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
-      <Label id="lblError" fx:id="lblError" layoutX="103.0" layoutY="252.0" prefHeight="17.0" prefWidth="265.0" textAlignment="CENTER" />
-      <Label id="lblParkName" fx:id="lblParkName" layoutX="229.0" layoutY="33.0" text="ParkName" />
-      <Label layoutX="87.0" layoutY="99.0" text="Max Stay" />
+      <Button id="btnConfirm" layoutX="197.0" layoutY="206.0" mnemonicParsing="false" onAction="#Confirm" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="Confirm" />
+      <Button id="btnBack" layoutX="360.0" layoutY="284.0" mnemonicParsing="false" onAction="#goBack" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="Back" />
+      <Label id="lblError" fx:id="lblError" alignment="CENTER" layoutX="97.0" layoutY="252.0" prefHeight="18.0" prefWidth="272.0" textAlignment="CENTER" textFill="RED" />
+      <Label id="lblParkName" fx:id="lblParkName" layoutX="220.0" layoutY="33.0" text="ParkName" />
+      <Label layoutX="76.0" layoutY="91.0" style="-fx-font-weight: bold;" text="Max Stay:" />
       <TextField id="txtMaxStay" fx:id="txtMaxStay" layoutX="173.0" layoutY="87.0" />
    </children>
 </AnchorPane>

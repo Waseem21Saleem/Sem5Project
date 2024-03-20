@@ -6,18 +6,18 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ParkManagerHomePageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ParkManagerHomePageController">
    <children>
-      <Label id="lblReportType" layoutX="62.0" layoutY="57.0" text="Report Type:" />
-      <Label id="labelMonth" layoutX="68.0" layoutY="127.0" text="Month:" />
-      <Label id="labelYear" layoutX="285.0" layoutY="127.0" text="Year: " />
-      <ComboBox id="cmbReportType" fx:id="cmbReportType" layoutX="136.0" layoutY="53.0" prefWidth="150.0" />
+      <Label id="lblReportType" layoutX="62.0" layoutY="57.0" style="-fx-font-weight: bold;" text="Report Type:" />
+      <Label id="labelMonth" layoutX="62.0" layoutY="128.0" style="-fx-font-weight: bold;" text="Month:" />
+      <Label id="labelYear" layoutX="285.0" layoutY="127.0" style="-fx-font-weight: bold;" text="Year: " />
+      <ComboBox id="cmbReportType" fx:id="cmbReportType" layoutX="149.0" layoutY="53.0" prefWidth="150.0" />
       <ComboBox id="cmbChooseMonth" fx:id="cmbChooseMonth" layoutX="115.0" layoutY="124.0" prefWidth="150.0" />
       <ComboBox id="cmbChooseYear" fx:id="cmbChooseYear" layoutX="330.0" layoutY="124.0" prefWidth="150.0" />
-      <Button id="btnCreateReport" layoutX="248.0" layoutY="188.0" mnemonicParsing="false" onAction="#createReportPage" text="Create Report" />
-      <Hyperlink id="hyperClickHere" layoutX="301.0" layoutY="263.0" onAction="#goChangeCapacity" text="Click Here" />
-      <Label id="labelChangeCapacity" layoutX="122.0" layoutY="266.0" text="You Want change capacity?" />
-      <Button id="btnLogOut" layoutX="62.0" layoutY="336.0" mnemonicParsing="false" onAction="#Logout" text="Logout" />
-      <Label id="lblError" fx:id="lblError" layoutX="155.0" layoutY="319.0" prefHeight="17.0" prefWidth="265.0" textAlignment="CENTER" />
+      <Button id="btnCreateReport" layoutX="248.0" layoutY="188.0" mnemonicParsing="false" onAction="#createReportPage" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="Create Report" />
+      <Hyperlink id="hyperClickHere" layoutX="338.0" layoutY="263.0" onAction="#goChangeCapacity" style="-fx-font-weight: bold;" text="Click Here" />
+      <Label id="labelChangeCapacity" layoutX="122.0" layoutY="266.0" style="-fx-font-weight: bold;" text="Do you want to change the capacity?" />
+      <Button id="btnLogOut" layoutX="47.0" layoutY="337.0" mnemonicParsing="false" onAction="#Logout" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="Logout" />
+      <Label id="lblError" fx:id="lblError" alignment="CENTER" layoutX="155.0" layoutY="313.0" prefHeight="24.0" prefWidth="270.0" textAlignment="CENTER" textFill="RED" />
    </children>
 </AnchorPane>

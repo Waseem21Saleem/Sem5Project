@@ -40,8 +40,8 @@
       <ComboBox id="cmbSelectPark" fx:id="cmbSelectPark" layoutX="180.0" layoutY="70.0" prefWidth="150.0" />
       <Hyperlink id="hyperMakeReport" layoutX="386.0" layoutY="365.0" onAction="#goCreateReport" text="Click Here" />
       <Hyperlink id="hyperApproveCapacity" layoutX="386.0" layoutY="406.0" onAction="#goApproveCapacity" text="Click Here" />
-      <Label id="labelMakeReport" layoutX="218.0" layoutY="368.0" style="-fx-font-weight: bold;" text="Make Report ?" />
-      <Label id="labelApprove" layoutX="155.0" layoutY="409.0" style="-fx-font-weight: bold;" text="Check If There Somthing To Approve ?" />
+      <Label id="labelMakeReport" layoutX="218.0" layoutY="368.0" style="-fx-font-weight: bold;" text="Make A Report ?" />
+      <Label id="labelApprove" layoutX="155.0" layoutY="409.0" style="-fx-font-weight: bold;" text="Check If There Something To Approve ?" />
       <Button id="btnLogout" layoutX="46.0" layoutY="452.0" mnemonicParsing="false" onAction="#Logout" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="Logout" />
       <Label id="lblError" fx:id="lblError" layoutX="163.0" layoutY="337.0" prefHeight="17.0" prefWidth="265.0" textAlignment="CENTER" />
    </children>
