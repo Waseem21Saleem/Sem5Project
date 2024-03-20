@@ -9,12 +9,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="461.0" prefWidth="331.0" style="-fx-background-color: SILVER;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.EditOrderController">
+<AnchorPane prefHeight="471.0" prefWidth="351.0" style="-fx-background-color: SILVER;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.EditOrderController">
    <children>
       <Label id="lblDate" layoutX="33.0" layoutY="167.0" style="-fx-font-weight: BOLD;" text="Date:" />
       <ComboBox id="cmbOrder" fx:id="cmbOrder" layoutX="135.0" layoutY="58.0" prefWidth="150.0" style="-fx-background-color: SKYBLUE; -fx-font-weight: BOLD;" />
       <Label id="labelPark" layoutX="32.0" layoutY="63.0" style="-fx-font-weight: BOLD;" text="Select Order:" />
-      <Button id="btnBack" fx:id="btnBack" layoutX="271.0" layoutY="419.0" mnemonicParsing="false" onAction="#goBackBtn" style="-fx-background-color: SKYBLUE; -fx-font-weight: BOLD; -fx-text-fill: BLACK;" text="Back" />
+      <Button id="btnBack" fx:id="btnBack" layoutX="287.0" layoutY="426.0" mnemonicParsing="false" onAction="#goBackBtn" style="-fx-background-color: SKYBLUE; -fx-font-weight: BOLD; -fx-text-fill: BLACK;" text="Back" />
       <Label id="labelID" layoutX="34.0" layoutY="115.0" style="-fx-font-weight: BOLD;" text="Park Name:" />
       <Button id="btnSave" fx:id="btnSave" layoutX="74.0" layoutY="382.0" mnemonicParsing="false" onAction="#getSaveBtn" style="-fx-background-color: SKYBLUE; -fx-font-weight: BOLD; -fx-text-fill: BLACK;" text="Save" />
       <Label id="labelVisitors" layoutX="32.0" layoutY="263.0" style="-fx-font-weight: BOLD;" text="Visitors:" />
@@ -26,12 +26,15 @@
       <Label id="labelPhoneNumber" layoutX="32.0" layoutY="341.0" style="-fx-font-weight: bold;" text="Phone Number: " />
       <TextField id="txtEmail" fx:id="txtEmail" layoutX="135.0" layoutY="299.0" />
       <TextField id="txtPhone" fx:id="txtPhone" layoutX="135.0" layoutY="337.0" />
-      <DatePicker id="datepicherDate" fx:id="datepicherDate" layoutX="130.0" layoutY="163.0" />
-      <Label id="lblError" fx:id="lblError" layoutX="91.0" layoutY="423.0" prefHeight="17.0" prefWidth="149.0" textAlignment="CENTER" textFill="RED" />
-      <Button id="btnDeleteOrder" fx:id="btnDeleteOrder" layoutX="186.0" layoutY="382.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="90.0" style="-fx-font-weight: bold; -fx-text-fill: red;" text="Delete Order" textFill="#ea0000" />
+      <DatePicker id="datepicherDate" fx:id="datepicherDate" layoutX="135.0" layoutY="163.0" />
+      <Label id="lblError" fx:id="lblError" layoutX="91.0" layoutY="423.0" prefHeight="26.0" prefWidth="162.0" textAlignment="CENTER" textFill="RED" />
+      <Button id="btnDeleteOrder" fx:id="btnDeleteOrder" layoutX="186.0" layoutY="382.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" style="-fx-font-weight: bold; -fx-text-fill: red;" text="Delete Order" textFill="#ea0000">
+         <font>
+            <Font size="10.0" />
+         </font></Button>
       <Label layoutX="147.0" layoutY="388.0" style="-fx-font-weight: bold;" text="OR" />
       <TextField id="txtEditTime" layoutX="135.0" layoutY="213.0" />
-      <Label id="lblEditOrder" alignment="CENTER" layoutX="129.0" layoutY="14.0" prefHeight="26.0" prefWidth="70.0" style="-fx-font-weight: bold;" text="Edit Order">
+      <Label id="lblEditOrder" alignment="CENTER" layoutX="131.0" layoutY="14.0" prefHeight="30.0" prefWidth="110.0" style="-fx-font-weight: bold;" text="Edit Order">
          <font>
             <Font size="16.0" />
          </font>
