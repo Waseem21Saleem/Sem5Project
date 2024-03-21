@@ -14,6 +14,10 @@ public class Order implements Serializable {
 	private String telephone;
 	private String email;
 	private String exitTime;
+	private String totalCost;
+	private String payStatus;
+	private String orderStatus;
+	
 	
 	
 	//constructor to edit order
@@ -131,6 +135,17 @@ public class Order implements Serializable {
     public String getExitTime() {
         return exitTime;
     }
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public String getPayStatus() {
+        return payStatus;
+    }
+    
+    public String getTotalCost() {
+        return totalCost;
+    }
 
     // Setter methods
     public void setParkName(String parkName) {
@@ -170,6 +185,16 @@ public class Order implements Serializable {
     }
     public void setExitTime(String exitTime) {
         this.exitTime = exitTime;
+    }
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public void setPayStatus(String payStatus) {
+        this.payStatus = payStatus;
+    }
+    public void setTotalCost(String totalCost) {
+        this.totalCost = totalCost;
     }
 
     

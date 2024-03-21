@@ -73,6 +73,7 @@ public class EditOrderController implements Initializable {
   
 	   */	
 	public void loadOrder(Order order) {
+		this.order=order;
 		
 		this.cmbPark.setValue(order.getParkName());
 		// Parse the String to a LocalDate
@@ -86,6 +87,15 @@ public class EditOrderController implements Initializable {
 		this.txtEmail.setText(order.getEmail());
 		this.txtPhone.setText(order.getTelephone());
 		
+	}
+	
+	public void deleteOrder() {
+		Message msg = new Message (Message.ActionType.DELETEORDER,order);
+		ClientUI.chat.accept(msg);
+		lblSave.setText(ChatClient.error);
+		msg = new Message (Message.ActionType.ORDERSNUMBERS,user); 
+		ClientUI.chat.accept(msg);
+		refreshComboBox();
 	}
 
 	/**
@@ -101,25 +111,31 @@ public class EditOrderController implements Initializable {
 		    cmbOrder.setOnAction(event -> {
 				
 				String selectedValue=(String) cmbOrder.getValue();
-				Order order = new Order (selectedValue);
-				Message  msg = new Message (Message.ActionType.ORDERINFO,order); 
-				ClientUI.chat.accept(msg);
-				loadOrder(ChatClient.order);
-				
-
-
-	            
-	            lblSave.setText("");
-	            
+				if (cmbOrder.getValue()!="Order number") {
+					Order order = new Order (selectedValue);
+					Message  msg = new Message (Message.ActionType.ORDERINFO,order); 
+					ClientUI.chat.accept(msg);
+					loadOrder(ChatClient.order);
+					
+	
+	
+		            
+		            lblSave.setText("");
+				} 
 	        });
     }
     
     
-	public void refreshComboBox(String selectedValue) {
-		/*  ordersList = new ArrayList<String>();
-		  ordersList.add(selectedValue);
-		  ClientUI.chat.accept(ordersList);
-		  loadOrder(ChatClient.OrderInfo);*/
+	public void refreshComboBox() {
+		this.cmbOrder.setValue("Order number");
+		this.cmbPark.setValue("");
+	  	this.cmbOrder.setItems(FXCollections.observableArrayList(ChatClient.Orderslist));
+	  	this.cmbPark.setItems(FXCollections.observableArrayList(ChatClient.parkNames));
+	  	this.datepickerDate.setValue(null);
+		this.txtTime.setText("");
+		this.txtVisitors.setText("");
+		this.txtEmail.setText("");
+		this.txtPhone.setText("");
 	}
 	
 
@@ -176,20 +192,31 @@ public class EditOrderController implements Initializable {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Confirmation Dialog");
 			alert.setHeaderText("Are you sure you want to reserve?");
-			alert.setContentText("The price if you want to reserve now is ₪" + arr[1] + " you will save ₪"+ (arr[0]-arr[1])+" than going without reserving." );
+alert.setContentText("The price if you want to reserve now is ₪" + arr[1] + " you will save ₪"+ (arr[0]-arr[1])+" than going without reserving.\n The price if you want to pay now is ₪" + arr[2] + " you will save ₪"+ (arr[0]-arr[2])+" than going without reserving. ");
 			
 			// Add buttons
-			ButtonType buttonTypeAccept = new ButtonType("Accept");
+			ButtonType buttonPayLater = new ButtonType("Pay later");
+			ButtonType buttonPayNow = new ButtonType("Pay now");
 			ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
-			alert.getButtonTypes().setAll(buttonTypeAccept, buttonTypeCancel);
+			alert.getButtonTypes().setAll(buttonPayLater,buttonPayNow, buttonTypeCancel);
 
 			// Show the alert and wait for user response
 			Optional<ButtonType> result = alert.showAndWait();
-			System.out.println("TEST");
+
 			// Check which button was clicked
-			if (result.isPresent() && result.get() == buttonTypeAccept) {
+			if (result.isPresent() && result.get() == buttonTypeCancel) {
+				
+			} else {
+				if (result.isPresent() && result.get() == buttonPayNow) {
+					order.setPayStatus("paid");
+					order.setTotalCost(String.valueOf(arr[2]));
+				}
+				else
+					{order.setPayStatus("not paid");
+					order.setTotalCost(String.valueOf(arr[1]));
+					}
+				order.setOrderStatus("processing");
 				Message msg = new Message (Message.ActionType.UPDATEORDER,order);
-				System.out.println(order.getAmountOfVisitors());
 				ClientUI.chat.accept(msg);
 				if (ChatClient.error!="") {
 					lblError.setText(ChatClient.error);
@@ -198,9 +225,6 @@ public class EditOrderController implements Initializable {
 					ChatClient.openGUI.goToGUI(event, "/gui/WaitingList.fxml","","Waiting list");
 					
 				}
-			} else {
-			    // User clicked Cancel or closed the dialog
-			    // Do nothing or handle cancellation
 			}
 			
 		}

@@ -120,30 +120,44 @@ public  class VisitorHomePageController implements Initializable   {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Confirmation Dialog");
 			alert.setHeaderText("Are you sure you want to reserve?");
-			alert.setContentText("The price if you want to reserve now is ₪" + arr[1] + " you will save ₪"+ (arr[0]-arr[1])+" than going without reserving." );
+			alert.setContentText("-The price if you want to reserve now is ₪" + arr[1] + " you will save ₪"+ (arr[0]-arr[1])+" than going without reserving.\n-The price if you want to pay now is ₪" + arr[2] + " you will save ₪"+ (arr[0]-arr[2])+" than going without reserving. ");
 			
 			// Add buttons
-			ButtonType buttonTypeAccept = new ButtonType("Accept");
+			ButtonType buttonPayLater = new ButtonType("Pay later");
+			ButtonType buttonPayNow = new ButtonType("Pay now");
 			ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
-			alert.getButtonTypes().setAll(buttonTypeAccept, buttonTypeCancel);
-
+			alert.getButtonTypes().setAll(buttonPayLater,buttonPayNow, buttonTypeCancel);
+			// Get the dialog pane
+	        alert.getDialogPane().setPrefWidth(600); // Set preferred width
+	        alert.getDialogPane().setPrefHeight(200); // Set preferred height
 			// Show the alert and wait for user response
 			Optional<ButtonType> result = alert.showAndWait();
 
 			// Check which button was clicked
-			if (result.isPresent() && result.get() == buttonTypeAccept) {
+			if (result.isPresent() && result.get() == buttonTypeCancel) {
+				
+			} else {
+				if (result.isPresent() && result.get() == buttonPayNow) {
+					order.setPayStatus("paid");
+					order.setTotalCost(String.valueOf(arr[2]));
+				}
+				else
+					{order.setPayStatus("not paid");
+					order.setTotalCost(String.valueOf(arr[1]));
+					}
+				order.setOrderStatus("processing");
 				Message msg = new Message (Message.ActionType.RESERVATION,order);
 				ClientUI.chat.accept(msg);
 				if (ChatClient.error!="") {
 					lblError.setText(ChatClient.error);
 					lblError.setTextFill(Color.GREEN);
 				} else {
+					
+					msg = new Message (Message.ActionType.WAITINGLISTTABLE,order);
+					ClientUI.chat.accept(msg);
 					ChatClient.openGUI.goToGUI(event, "/gui/WaitingList.fxml","","Waiting list");
 					
 				}
-			} else {
-			    // User clicked Cancel or closed the dialog
-			    // Do nothing or handle cancellation
 			}
 			
 		}
@@ -152,18 +166,22 @@ public  class VisitorHomePageController implements Initializable   {
 	public static double [] calculatePrice ( Order order ) {
 		double normalPrice=100;
 		double reservationPrice=100;
-		double arr []  = new double [2];
+		double payNowPrice=100;
+		double arr []  = new double [3];
 		int amountOfVisitors=Integer.parseInt(order.getAmountOfVisitors());
 		if ( amountOfVisitors<6) {
 			normalPrice*=amountOfVisitors;
 			reservationPrice=normalPrice*(0.85);
+			payNowPrice=reservationPrice;
 		}
 		else {
 			normalPrice*=(amountOfVisitors*0.9);
 			reservationPrice*=((amountOfVisitors-1)*0.75);
+			payNowPrice=reservationPrice*0.88;
 		}
 		arr[0]=normalPrice;
 		arr[1]=reservationPrice;
+		arr[2]=payNowPrice;
 			
 		
 		
@@ -175,18 +193,8 @@ public  class VisitorHomePageController implements Initializable   {
 	public void Logout(ActionEvent event) throws Exception {
 		Message msg = new Message (Message.ActionType.LOGOUT,user);
 		ClientUI.chat.accept(msg);
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/LoginWithoutPassword.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/LoginWithoutPassword.css").toExternalForm());
-		primaryStage.setTitle("Visitor login page");
+		ChatClient.openGUI.goToGUI(event, "/gui/LoginWithoutPassword.fxml","/gui/LoginWithoutPassword.css","Visitor login page");
 
-		primaryStage.setScene(scene);		
-		primaryStage.show();
 		
 	}
 	

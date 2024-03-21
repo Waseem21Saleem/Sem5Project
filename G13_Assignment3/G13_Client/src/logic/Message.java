@@ -14,8 +14,11 @@ public class Message implements Serializable  {
 	    ORDERSNUMBERS,
 	    ORDERINFO,
 	    UPDATEORDER,
+	    DELETEORDER,
 	    RESERVATION,
 	    WAITINGLIST,
+	    WAITINGLISTTABLE,
+	    CHANGEROLE,
 	    EXECUTEERROR,
 	    LOGOUT
 	    

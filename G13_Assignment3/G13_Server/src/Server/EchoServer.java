@@ -101,74 +101,52 @@ public class EchoServer extends AbstractServer
     	    case USERLOGIN:
     	    	user = (User) ((Message) msg).getContent();
     	    	msg=mysql.verifyVisitorLogin(user);
-                try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+    	    	sendMsgToClient(msg,client);
                 break;
     	    case WORKERLOGIN:
     	    	user = (User) ((Message) msg).getContent();
     	    	msg=mysql.verifyWorkerLogin(user);
-                try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+    	    	sendMsgToClient(msg,client);
                 break;
     	    	
     	    case PARKNAMES:
     	    	msg=mysql.getParks();
-                try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+    	    	sendMsgToClient(msg,client);
                 break;
     	    case RESERVATION:
     	    	msg=mysql.checkReservation((Order) ((Message) msg).getContent());
-                try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+    	    	sendMsgToClient(msg,client);
                 break;
     	    case ORDERSNUMBERS:
     	    	msg=mysql.getOrdersNumbers((User) ((Message) msg).getContent());    	    	
-                try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+    	    	sendMsgToClient(msg,client);
                 break; 
     	    case ORDERINFO:
     	    	msg=mysql.getOrderInfo((Order) ((Message) msg).getContent());
     	    	
-                try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+    	    	sendMsgToClient(msg,client);
                 break; 
     	    case UPDATEORDER:
     	    	msg=mysql.checkUpdatedReservation((Order) ((Message) msg).getContent());
-    	    	System.out.println((String) ((Message) msg).getContent());
-                try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+    	    	sendMsgToClient(msg,client);
+                break; 
+    	    case DELETEORDER:
+    	    	msg=mysql.deleteOrder((Order) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
+                break; 
+    	    case WAITINGLIST:
+    	    	mysql.addOrderToWaitingList((Order) ((Message) msg).getContent());
+                break; 
+    	    case WAITINGLISTTABLE:
+    	    	msg=mysql.getWaitingListTable((Order) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
+                break; 
+    	    case CHANGEROLE:
+    	    	msg=mysql.updateRoleToGuide((User) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
                 break; 
             case LOGOUT:
             	user = (User) ((Message) msg).getContent();
-            	System.out.println(user.isLogged());
     	    	mysql.flipIsLogged(user);
                 break;
             default:
@@ -190,6 +168,15 @@ public class EchoServer extends AbstractServer
 		} 
   }
    
+  public void sendMsgToClient (Object msg,ConnectionToClient client) {
+	  
+	  try {
+			client.sendToClient(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+  }
   /**
    * This method overrides the one in the superclass.  Called
    * when the server starts listening for connections.

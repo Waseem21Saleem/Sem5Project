@@ -14,6 +14,9 @@ import javafx.stage.Stage;
 import logic.Message;
 import logic.Order;
 import logic.User;
+import logic.WaitingListEntry;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ public class ChatClient extends AbstractClient
   public static ArrayList<String> Orderslist;
   public static ArrayList<String> OrderInfo;
   public static ArrayList<String> parkNames;
+  public static ArrayList<WaitingListEntry> waitingListEntries;
   public static User user;
   public static Order order;
   public static String error;
@@ -63,6 +67,7 @@ public class ChatClient extends AbstractClient
 	Orderslist = new ArrayList<String>();
 	OrderInfo = new ArrayList<String>();
 	parkNames = new ArrayList<String>();
+	waitingListEntries = new ArrayList<>();
 	user=new User();
 	order=new Order();
 	error="";
@@ -115,6 +120,10 @@ public void handleMessageFromServer(Object msg)
 	        	  break;
 	          case WAITINGLIST:
 	        	  order=(Order)((Message) msg).getContent();
+	        	  error="";
+	        	  break;
+	          case WAITINGLISTTABLE:
+	        	  waitingListEntries=(ArrayList<WaitingListEntry>)((Message) msg).getContent();
 	        	  error="";
 	        	  break;
 	          case ORDERSNUMBERS:

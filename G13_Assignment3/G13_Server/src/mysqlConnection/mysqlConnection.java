@@ -11,11 +11,15 @@ import java.io.*;
 import java.lang.*; 
 import java.util.*;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import java.io.Serializable;
 import logic.CurClient;
 import logic.Message;
 import logic.Order;
 import logic.Park;
 import logic.User;
+import logic.WaitingListEntry;
 
 
 public class mysqlConnection {
@@ -268,8 +272,9 @@ public class mysqlConnection {
 		ArrayList<String> ordersList= new ArrayList<String>();
 		try 
 		{	
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT OrderNumber FROM g13.orders WHERE VisitorId = ?");
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT OrderNumber FROM g13.orders WHERE VisitorId = ? AND OrderStatus = ?");
 			preparedStatement.setString(1, user.getId());
+			preparedStatement.setString(2, "processing");
 			ResultSet rs = preparedStatement.executeQuery();
 	 		while(rs.next())
 	 		{
@@ -341,7 +346,7 @@ public class mysqlConnection {
 		PreparedStatement ps;
 		try {
 
-			 	ps = conn.prepareStatement("UPDATE g13.orders SET ParkName=?,Date=?,Time=?,NumberOfVisitors=?,Email=?,PhoneNumber=?,ExitTime=? WHERE OrderNumber = ?");
+			 	ps = conn.prepareStatement("UPDATE g13.orders SET ParkName=?,Date=?,Time=?,NumberOfVisitors=?,Email=?,PhoneNumber=?,ExitTime=?,PayStatus=?,TotalCost=? WHERE OrderNumber = ?");
 			 	ps.setString(1,order.getParkName());
 	            ps.setString(2,order.getDate());
 	            ps.setString(3,order.getTime());
@@ -349,7 +354,9 @@ public class mysqlConnection {
 	            ps.setString(5,order.getEmail());
 	            ps.setString(6,order.getTelephone());
 	            ps.setString(7,order.getExitTime());
-	            ps.setString(8,order.getOrderNum());
+	            ps.setString(8,order.getPayStatus());
+	            ps.setString(9,order.getTotalCost());
+	            ps.setString(10,order.getOrderNum());
 	            ps.executeUpdate();
 	            ps.close();
 	            
@@ -361,20 +368,22 @@ public class mysqlConnection {
 	   *
 	   * @param ip, the client's ip
 	   */
-	public void deleteOrder(Order order) {
-		 // SQL DELETE statement
-      String sql = "DELETE FROM g13.orders WHERE OrderNumber = ?";
-      
-      try {
-              PreparedStatement pstmt = conn.prepareStatement(sql) ;
-              pstmt.setString(1, order.getOrderNum());
+	public Message deleteOrder(Order order) {
+		Message msg ;
+		PreparedStatement ps;
+		try {
+			 	ps = conn.prepareStatement("UPDATE g13.orders SET OrderStatus=? WHERE OrderNumber = ?");
+			 	ps.setString(1,"cancelled manually");
+	            ps.setString(2,order.getOrderNum());
+	            ps.executeUpdate();
 
-             // Execute the DELETE statement
-             pstmt.executeUpdate();
-             
-         } catch (SQLException e) {
-             e.printStackTrace();
-         }
+
+	    
+	           
+	            
+		} catch (SQLException e) {	}
+        msg = new Message (Message.ActionType.ERROR,"Cancelled order successfully");
+		return msg;
 		
 		
 	}
@@ -383,7 +392,7 @@ public class mysqlConnection {
 	public void insertOrder(Order order) {
 		try {
     		// SQL INSERT statement
-            String sql = "INSERT INTO g13.orders (OrderNumber, ParkName, VisitorId, Date, Time, NumberOfVisitors, PhoneNumber, Email, VisitorType, ExitTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO g13.orders (OrderNumber, ParkName, VisitorId, Date, Time, NumberOfVisitors, PhoneNumber, Email, VisitorType, ExitTime, OrderStatus, PayStatus, TotalCost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)";
           
             PreparedStatement pstmt = conn.prepareStatement(sql);
             order.setOrderNum(Integer.toString(getRandomOrderNumber()));
@@ -398,6 +407,58 @@ public class mysqlConnection {
            pstmt.setString(8, order.getEmail());
            pstmt.setString(9, order.getVisitorType());
            pstmt.setString(10, order.getExitTime());
+           pstmt.setString(11, order.getOrderStatus());
+           pstmt.setString(12, order.getPayStatus());
+           pstmt.setString(13, order.getTotalCost());
+                     
+
+           // Execute the INSERT statement
+           pstmt.executeUpdate();
+     
+          
+       } catch (SQLException e) {
+       }
+	}
+	public void addOrderToWaitingList(Order order) {
+		try {
+			int placement=getPlacement(order);
+			// Original time string
+	        String timeString = order.getTime();
+	        // Number of hours to add
+	        int maxStay = getParkMaxStay(order.getParkName());
+	        // Parse the time string into LocalTime
+	        LocalTime time = LocalTime.parse(timeString);
+	        // Add x hours
+	        LocalTime newTime = time.plusHours(maxStay);
+	        // Format the new time back into a string
+	        String result = newTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+			order.setExitTime(result);
+			
+			// SQL INSERT statement
+            String sql = "INSERT INTO g13.waitinglist (Placement,OrderNumber, ParkName, VisitorId, Date, Time, NumberOfVisitors, PhoneNumber, Email, VisitorType, ExitTime, OrderStatus, PayStatus, TotalCost) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)";
+          
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            if (order.getOrderNum()=="" || order.getOrderNum()==null)
+            	order.setOrderNum(Integer.toString(getRandomOrderNumber()));
+         // Prepare a statement with a placeholder
+			
+            //System.out.println(placement+" "+order.getOrderNum()+" "+order.getParkName()+order.getVisitorId()+order.getDate()+order.getTime()+);
+           
+            // Set values for placeholders (?, ?, ?)
+           pstmt.setString(1,String.valueOf(placement) );
+           pstmt.setString(2,order.getOrderNum() );
+           pstmt.setString(3, order.getParkName());
+           pstmt.setString(4, order.getVisitorId());
+           pstmt.setString(5, order.getDate());
+           pstmt.setString(6, order.getTime());
+           pstmt.setString(7, order.getAmountOfVisitors());
+           pstmt.setString(8, order.getTelephone());
+           pstmt.setString(9, order.getEmail());
+           pstmt.setString(10, order.getVisitorType());
+           pstmt.setString(11, order.getExitTime());
+           pstmt.setString(12, order.getOrderStatus());
+           pstmt.setString(13, order.getPayStatus());
+           pstmt.setString(14, order.getTotalCost());
                      
 
            // Execute the INSERT statement
@@ -408,6 +469,73 @@ public class mysqlConnection {
        }
 	}
 	
+	public int getPlacement(Order order) {
+		int placement=1;
+		
+		try 
+		{	
+			// Prepare a statement with a placeholder
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT COUNT(*) FROM g13.waitinglist WHERE ParkName = ? AND Time <= ? AND ExitTime >= ? AND Date = ? ");
+			preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
+			preparedStatement.setString(2, order.getTime());
+			preparedStatement.setString(3, order.getTime());
+			preparedStatement.setString(4, order.getDate());
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+			 // Process the result set
+			 if (rs.next()) {
+				 placement += rs.getInt(1); // Get the value of the first column in the result set
+	            }
+	       
+
+	            
+          
+			rs.close();
+			preparedStatement.close();
+			
+			
+			
+		} catch (SQLException e) {e.printStackTrace();}
+		
+		
+		
+		return placement;
+		
+		
+	}
+	
+	public Message getWaitingListTable(Order order) {
+		Message msg;
+		 // Create an ArrayList to store WaitingListEntry objects
+        ArrayList<WaitingListEntry> waitingListEntries = new ArrayList<>();
+		try {
+
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT Placement, Time, ExitTime, Date, NumberOfVisitors FROM g13.waitinglist WHERE ParkName = ? AND Time <= ? AND ExitTime >= ? AND Date = ? ");
+			preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
+			preparedStatement.setString(2, order.getTime());
+			preparedStatement.setString(3, order.getTime());
+			preparedStatement.setString(4, order.getDate());
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+            	waitingListEntries.add(new WaitingListEntry(
+            		    rs.getString("Placement"),
+            		    rs.getString("Time"),
+            		    rs.getString("ExitTime"),
+            		    rs.getString("Date"),
+            		    rs.getString("NumberOfVisitors")
+            		));
+            	
+           
+	        }} catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+		msg = new Message (Message.ActionType.WAITINGLISTTABLE,waitingListEntries);
+		return msg;
+		
+		
+	}
 	/**
 	   * This method sets the order details from the database according to the OrderNumber
 	   *
@@ -420,11 +548,13 @@ public class mysqlConnection {
 		try 
 		{	
 			// Prepare a statement with a placeholder
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND Time < ? AND ExitTime > ? AND Date = ?");
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND Time <= ? AND ExitTime >= ? AND Date = ? AND OrderStatus!=? AND OrderStatus!=?");
 			preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
 			preparedStatement.setString(2, order.getTime());
 			preparedStatement.setString(3, order.getTime());
 			preparedStatement.setString(4, order.getDate());
+			preparedStatement.setString(5, "cancelled automatically");
+			preparedStatement.setString(6, "cancelled manually");
 			// Execute the query
 			ResultSet rs = preparedStatement.executeQuery();
 			 // Process the result set
@@ -444,6 +574,7 @@ public class mysqlConnection {
 			int maxCapacity = Integer.parseInt(rs.getString("Capacity"));
 			rs.close();
 			preparedStatement.close();
+			
 			if (currentAmountOfVisitors>maxCapacity)
 			{
 				msg = new Message (Message.ActionType.WAITINGLIST,order);
@@ -480,12 +611,14 @@ public class mysqlConnection {
 		try 
 		{	
 			// Prepare a statement with a placeholder
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND Time < ? AND ExitTime > ? AND Date = ? AND OrderNumber != ?");
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND Time <= ? AND ExitTime >= ? AND Date = ? AND OrderStatus!=? AND OrderStatus!=? AND OrderNumber != ?");
 			preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
 			preparedStatement.setString(2, order.getTime());
 			preparedStatement.setString(3, order.getTime());
 			preparedStatement.setString(4, order.getDate());
-			preparedStatement.setString(5, order.getOrderNum());
+			preparedStatement.setString(5, "cancelled automatically");
+			preparedStatement.setString(6, "cancelled manually");
+			preparedStatement.setString(7, order.getOrderNum());
 
 			// Execute the query
 			ResultSet rs = preparedStatement.executeQuery();
@@ -583,17 +716,27 @@ public class mysqlConnection {
 	   *
 	   * @param ordersList, an empty ArrayList
 	   */
-	public void updateRoleToGuide(User user)
-	{
+	public Message updateRoleToGuide(User user)
+	{	Message msg = new Message (Message.ActionType.ERROR,"ID is not found or his role is not visitor");
 		PreparedStatement ps;
 		try {
-			 	ps = conn.prepareStatement("UPDATE g13.users SET UserPermission=? WHERE UserId = ?");
-			 	ps.setString(1,"Guide");
+			 	ps = conn.prepareStatement("UPDATE g13.users SET UserPermission=? WHERE UserId = ? AND UserPermission = ?");
+			 	ps.setString(1,"GUIDE");
 	            ps.setString(2,user.getId());
-	            ps.executeUpdate();
+	            ps.setString(3,"VISITOR");
+	            // Execute the update and get the number of rows affected
+	            int rowsAffected = ps.executeUpdate();
+	         // Check if any rows were affected
+	            if (rowsAffected > 0) 
+	                // Update was successful
+	            	 msg = new Message (Message.ActionType.ERROR,"Updated role successfully");
 	            ps.close();
+
+	    
+	           
 	            
 		} catch (SQLException e) {	}
+		return msg;
 	}
 	
 	/**
