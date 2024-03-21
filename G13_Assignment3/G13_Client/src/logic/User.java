@@ -12,6 +12,7 @@ public class User implements Serializable{
 	private String phoneNumber;
 	private boolean isLogged;
 	private String userPermission;
+	private String parkName;
 	
 	public User(String id)
 	{
@@ -85,6 +86,9 @@ public class User implements Serializable{
         return userPermission;
     }
 
+    public String getParkName() {
+        return parkName;
+    }
     // Setter methods
     public void setId(String id) {
         this.id = id;
@@ -112,6 +116,9 @@ public class User implements Serializable{
 
     public void setUserPermission(String userPermission) {
         this.userPermission = userPermission;
+    }
+    public void setParkName(String parkName) {
+        this.parkName = parkName;
     }
 
 

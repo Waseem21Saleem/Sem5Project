@@ -16,11 +16,19 @@ public class Park implements Serializable{
         this.capacity = capacity;
         this.maxStay = maxStay;
     }
-	
+	// Constructor
+    public Park( String parkName) {
+
+        this.parkName = parkName;
+       
+    }
 
 
 
-    public String getParkName() {
+    public Park() {
+		// TODO Auto-generated constructor stub
+	}
+	public String getParkName() {
         return parkName;
     }
 

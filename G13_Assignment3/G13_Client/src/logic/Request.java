@@ -2,15 +2,16 @@ package logic;
 
 import java.io.Serializable;
 
-public class Requests implements Serializable{
+public class Request implements Serializable{
 
 	private String parkName;
 	private String capacity ;
 	private String maxStay;
+	private String status;
 
 
 	// Constructor
-    public Requests( String parkName, String capacity, String maxStay) {
+    public Request( String parkName, String capacity, String maxStay) {
 
         this.parkName = parkName;
         this.capacity = capacity;
@@ -31,6 +32,11 @@ public class Requests implements Serializable{
     public String getMaxStay() {
         return maxStay;
     }
+    
+    
+    public String getStatus() {
+        return status;
+    }
 
 
     public void setParkName(String parkName) {
@@ -45,6 +51,9 @@ public class Requests implements Serializable{
     	this.maxStay=maxStay;
     }
     
+    public void setStatus (String status) {
+    	this.status=status;
+    }
 
 
 

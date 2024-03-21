@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 import client.ChatClient;
 import client.ClientController;
@@ -24,15 +26,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import logic.Message;
+import logic.User;
 import ocsf.server.ConnectionToClient;
 
 
 
 
-public  class DepartmentManagerHomePageController   {
+public  class DepartmentManagerHomePageController  implements Initializable {
 	public static ClientController chat;
 	private static int itemIndex = 3;
-	
+	public static User user;
+
 
 	@FXML
 	private Label lblError;
@@ -57,18 +62,10 @@ public  class DepartmentManagerHomePageController   {
 		/* Send a message to server to check username and password then check Role and open next window 
 		 * according to the role
 		 */
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/DepartmentManagerApproval.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/DepartmentManagerApproval.css").toExternalForm());
-		primaryStage.setTitle("Department Managment Tool");
+		Message msg = new Message (Message.ActionType.REQUESTSTABLE,"");
+		ClientUI.chat.accept(msg);
+		ChatClient.openGUI.goToGUI(event, "/gui/DepartmentManagerApproval.fxml","/gui/DepartmentManagerApproval.css","Department Managment Tool");
 
-		primaryStage.setScene(scene);		
-		primaryStage.show();
 
 
         
@@ -108,23 +105,20 @@ public  class DepartmentManagerHomePageController   {
 	
 
 	public void Logout(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/Login.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/Login.css").toExternalForm());
-		primaryStage.setTitle("Login page");
+		Message msg = new Message (Message.ActionType.LOGOUT,user);
+		ClientUI.chat.accept(msg);
+		ChatClient.openGUI.goToGUI(event, "/gui/LoginWithoutPassword.fxml","/gui/LoginWithoutPassword.css","Visitor login page");
 
-		primaryStage.setScene(scene);		
-		primaryStage.show();
 		
 	}
 	
 	
-	
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {	
+		user=ChatClient.user;
+		
+		
+	}
 
 	
 }

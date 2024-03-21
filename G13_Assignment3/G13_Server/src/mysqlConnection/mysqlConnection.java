@@ -18,6 +18,7 @@ import logic.CurClient;
 import logic.Message;
 import logic.Order;
 import logic.Park;
+import logic.Request;
 import logic.User;
 import logic.WaitingListEntry;
 
@@ -90,6 +91,7 @@ public class mysqlConnection {
 		            user.setPhoneNumber(rs.getString("PhoneNumber"));
 		            user.setLogged(true);
 		            user.setUserPermission(rs.getString("UserPermission"));
+		            user.setParkName(rs.getString("ParkName"));
             	}}
             else {
             	error = "Invalid ID or password";
@@ -424,8 +426,10 @@ public class mysqlConnection {
 			int placement=getPlacement(order);
 			// Original time string
 	        String timeString = order.getTime();
+	        Message msg2 = getParkInfo(order.getParkName());
+	        Park park = (Park) ((Message) msg2).getContent();
 	        // Number of hours to add
-	        int maxStay = getParkMaxStay(order.getParkName());
+	        int maxStay = Integer.parseInt(park.getMaxStay());
 	        // Parse the time string into LocalTime
 	        LocalTime time = LocalTime.parse(timeString);
 	        // Add x hours
@@ -582,8 +586,10 @@ public class mysqlConnection {
 			}
 			// Original time string
 	        String timeString = order.getTime();
+	        Message msg2 = getParkInfo(order.getParkName());
+	        Park park = (Park) ((Message) msg2).getContent();
 	        // Number of hours to add
-	        int maxStay = getParkMaxStay(order.getParkName());
+	        int maxStay = Integer.parseInt(park.getMaxStay());
 	        // Parse the time string into LocalTime
 	        LocalTime time = LocalTime.parse(timeString);
 	        // Add x hours
@@ -646,8 +652,10 @@ public class mysqlConnection {
 			}
 			// Original time string
 	        String timeString = order.getTime();
+	        Message msg2 = getParkInfo(order.getParkName());
+	        Park park = (Park) ((Message) msg2).getContent();
 	        // Number of hours to add
-	        int maxStay = getParkMaxStay(order.getParkName());
+	        int maxStay = Integer.parseInt(park.getMaxStay());
 	        // Parse the time string into LocalTime
 	        LocalTime time = LocalTime.parse(timeString);
 	        // Add x hours
@@ -666,23 +674,42 @@ public class mysqlConnection {
 
 	
 	
-	public int getParkMaxStay(String parkName) {
-		int maxStayTime=0;
+	public Message getParkInfo(String parkName) {
+		Message msg;
+		Park park = new Park(parkName);
 		try {
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT MaxStay FROM g13.parks WHERE ParkName = ?");
-			preparedStatement.setString(1, parkName);
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.parks WHERE ParkName = ?");
+			preparedStatement.setString(1, park.getParkName());
 			 // 1-indexed parameter position
 			// Execute the query
 			ResultSet rs = preparedStatement.executeQuery();
 			rs.next();
-			maxStayTime = Integer.parseInt(rs.getString("MaxStay"));
+			park.setCapacity(rs.getString("Capacity"));
+			park.setMaxStay(rs.getString("MaxStay"));
 			rs.close();
 			preparedStatement.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return maxStayTime;
+		msg = new Message (Message.ActionType.PARKINFO,park);
+		return msg;
+	}
+	
+	public void updateParkInfo(Request request)
+	{
+		PreparedStatement ps;
+		try {
+
+			 	ps = conn.prepareStatement("UPDATE g13.parks SET Capacity=?,MaxStay=? WHERE ParkName = ?");
+			 	ps.setString(1,request.getCapacity());
+	            ps.setString(2,request.getMaxStay());
+	            ps.setString(3,request.getParkName());
+
+	            ps.executeUpdate();
+	            ps.close();
+	            
+		} catch (SQLException e) {System.out.println("Error");	}
 	}
 	
 	public int getRandomOrderNumber() {
@@ -739,71 +766,89 @@ public class mysqlConnection {
 		return msg;
 	}
 	
+	public void insertRequest(Park park)
+	{
+		try {
+    		// SQL INSERT statement
+            String sql = "INSERT INTO g13.requests (ParkName, Capacity, MaxStay, Status) VALUES (?, ?, ?, ?)";
+          
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+          
+           // Set values for placeholders (?, ?, ?)
+           pstmt.setString(1,park.getParkName() );
+           pstmt.setString(2, park.getCapacity());
+           pstmt.setString(3, park.getMaxStay());
+           pstmt.setString(4, "waiting for approval");
+
+                     
+
+           // Execute the INSERT statement
+           pstmt.executeUpdate();
+     
+          
+       } catch (SQLException e) {
+       }
+		
+	}
 	/**
 	   * This method deletes the client details from the database according to the ip
 	   *
 	   * @param ip, the client's ip
 	   */
-	public void deleteRequest(Park park) {
-		 // SQL DELETE statement
-    String sql = "DELETE FROM g13.requests WHERE ParkName = ?,Capacity = ?,MaxStay = ?";
-    
-    try {
-            PreparedStatement pstmt = conn.prepareStatement(sql) ;
-            pstmt.setString(1, park.getParkName());
-            pstmt.setString(2, park.getCapacity());
-            pstmt.setString(3, park.getMaxStay());
+	public Message updateRequest(Request request) {
+		Message msg = new Message (Message.ActionType.ERROR,"");
+		PreparedStatement ps;
+		try {
+			 	ps = conn.prepareStatement("UPDATE g13.requests SET Status=? WHERE ParkName = ? AND Capacity = ? AND MaxStay = ?");
+			 	ps.setString(1,request.getStatus());
+	            ps.setString(2,request.getParkName());
+	            ps.setString(3,request.getCapacity());
+	            ps.setString(4,request.getMaxStay());
 
-           // Execute the DELETE statement
-           pstmt.executeUpdate();
-           
-       } catch (SQLException e) {
-           e.printStackTrace();
-       }
-		
+	            // Execute the update and get the number of rows affected
+	            int rowsAffected = ps.executeUpdate();
+	         // Check if any rows were affected
+	            if (rowsAffected > 0) 
+	                // Update was successful
+	            	 msg = new Message (Message.ActionType.ERROR,"Request status changed successfully");
+	            ps.close();
+
+	    
+	           
+	            
+		} catch (SQLException e) {	}
+		return msg;
 		
 	}
 
-	public ArrayList<String> getRequestInfo(String ParkName)
-	{
-		ArrayList<String> RequestInfo= new ArrayList<String>();
+	public Message getRequestsTable() {
+		Message msg;
+		 // Create an ArrayList to store WaitingListEntry objects
+        ArrayList<Request> requests = new ArrayList<>();
+		try {
 
-		try 
-		{	
-			// Prepare a statement with a placeholder
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.requests WHERE ParkName=?");
-			preparedStatement.setString(1, ParkName); // 1-indexed parameter position
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.requests WHERE Status = ? ");
+			preparedStatement.setString(1, "waiting for approval"); // 1-indexed parameter position
 
 			// Execute the query
 			ResultSet rs = preparedStatement.executeQuery();
-			 // Process the result set
-            rs.next();
-            RequestInfo.add(rs.getString("ParkName"));
-            RequestInfo.add(rs.getString("Chang-Type"));
-            RequestInfo.add(rs.getString("Status"));
-            
-			rs.close();
-			preparedStatement.close();
-			
-			
-			
-		} catch (SQLException e) {e.printStackTrace();}
-		return RequestInfo;
-	}
-	
-	public void updateRequestInfo(String Status,String NewStatus){
-			
-			PreparedStatement ps;
-			try {
-				 	ps = conn.prepareStatement("UPDATE g13.request SET Status= ? WHERE ParkName = ?;");
-		            ps.setString(1,NewStatus);
-		            ps.executeUpdate();
-		            ps.close();
-		            
-			} catch (SQLException e) {	e.printStackTrace();}
-			 		
-		}
+            while (rs.next()) {
+            	requests.add(new Request(
+            		    rs.getString("ParkName"),
+            		    rs.getString("Capacity"),
+            		    rs.getString("MaxStay")
+            		    ));
 
+           
+	        }} catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+		msg = new Message (Message.ActionType.REQUESTSTABLE,requests);
+		return msg;
+		
+		
+	}
 
 	
 	/**

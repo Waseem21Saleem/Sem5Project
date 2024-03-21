@@ -14,6 +14,8 @@ import gui.ServerInfoController;
 import logic.CurClient;
 import logic.Message;
 import logic.Order;
+import logic.Park;
+import logic.Request;
 import logic.User;
 import mysqlConnection.mysqlConnection;
 import ocsf.server.*;
@@ -141,6 +143,26 @@ public class EchoServer extends AbstractServer
     	    	msg=mysql.getWaitingListTable((Order) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
                 break; 
+    	    case PARKINFO:
+    	    	msg=mysql.getParkInfo((String) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
+    	    	break;
+    	    case NEWREQUEST:
+    	    	mysql.insertRequest((Park) ((Message) msg).getContent());
+    	    	break;
+    	    case REQUESTSTABLE:
+    	    	msg=mysql.getRequestsTable();
+    	    	sendMsgToClient(msg,client);
+                break; 
+    	    case APPROVEREQUEST:
+    	    	mysql.updateParkInfo((Request) ((Message) msg).getContent());
+    	    	msg=mysql.updateRequest((Request) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
+    	    	break;
+    	    case REJECTREQUEST:
+    	    	msg=mysql.updateRequest((Request) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
+    	    	break;
     	    case CHANGEROLE:
     	    	msg=mysql.updateRoleToGuide((User) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
