@@ -81,6 +81,8 @@ public  class LoginController   {
 					pageTitle="Park Manager home page";
 					break;
 				case "DEPARTMENT MANAGER":
+					msg = new Message (Message.ActionType.PARKNAMES,user);
+					ClientUI.chat.accept(msg);
 					openPage="/gui/DepartmentManagerHomePage.fxml";
 					pageTitle="Department Manager home page";
 					break;

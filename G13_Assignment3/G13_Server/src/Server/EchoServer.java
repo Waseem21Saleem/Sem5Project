@@ -15,6 +15,7 @@ import logic.CurClient;
 import logic.Message;
 import logic.Order;
 import logic.Park;
+import logic.Report;
 import logic.Request;
 import logic.User;
 import mysqlConnection.mysqlConnection;
@@ -110,7 +111,6 @@ public class EchoServer extends AbstractServer
     	    	msg=mysql.verifyWorkerLogin(user);
     	    	sendMsgToClient(msg,client);
                 break;
-    	    	
     	    case PARKNAMES:
     	    	msg=mysql.getParks();
     	    	sendMsgToClient(msg,client);
@@ -163,6 +163,26 @@ public class EchoServer extends AbstractServer
     	    	msg=mysql.updateRequest((Request) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
     	    	break;
+    	    case CANCELLATIONREPORT:
+    	    	mysql.CreateCancellationReport((Report) ((Message) msg).getContent());
+    	    	break;
+    	    case TOTALVISITORSREPORT:
+    	    	mysql.CreateTotalVisitorsReport((Report) ((Message) msg).getContent());
+    	    	break;
+    	    case REPORTINFO:
+    	    	Report report = (Report) ((Message) msg).getContent();
+    	    	System.out.println(report.getReportType());
+    	    	System.out.println(report.getParkName());
+    	    	if (report.getReportType().equals("Cancellation report"))
+    	    		msg=mysql.getCancellationReport(report);
+    	    	else if (report.getReportType().equals("Total visitors report"))
+    	    		msg=mysql.getTotalVisitorsReport(report);
+    	    	/*else if (report.getReportType().equals("Usage report"))
+    	    		msg=mysql.getTotalVisitorsReport(report);
+    	    	else
+    	    		msg=mysql.getTotalVisitorsReport(report);*/
+    	    	sendMsgToClient(msg,client);
+                break; 
     	    case CHANGEROLE:
     	    	msg=mysql.updateRoleToGuide((User) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);

@@ -7,12 +7,15 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import client.ChatClient;
 import client.ClientController;
 import client.ClientUI;
 import common.ChatIF;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,8 +28,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.Message;
+import logic.Report;
 import logic.User;
 import ocsf.server.ConnectionToClient;
 
@@ -74,34 +79,23 @@ public  class DepartmentManagerHomePageController  implements Initializable {
 	}
 	
 	public void goCreateReport(ActionEvent event) throws Exception {
-		/*FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/SignUp.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/SignUp.css").toExternalForm());
-		primaryStage.setTitle("Signup page");
+		ChatClient.openGUI.goToGUI(event, "/gui/ParkManagerHomePage.fxml","","Report creation page");
 
-		primaryStage.setScene(scene);		
-		primaryStage.show();*/
 	}
 	
 	public void goViewReport(ActionEvent event) throws Exception {
-		/*FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/SignUp.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/SignUp.css").toExternalForm());
-		primaryStage.setTitle("Signup page");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();*/
-	}
+		Message msg;
+		String reportType = cmbReportType.getValue().toString();
+		Report report = new Report (reportType,cmbSelectPark.getValue().toString(),cmbReportMonth.getValue().toString(),cmbReportYear.getValue().toString());
+		msg = new Message (Message.ActionType.REPORTINFO,report);
+		ClientUI.chat.accept(msg);
+		if (ChatClient.error.equals(""))
+			ChatClient.openGUI.goToGUI(event, "/gui/CancellationReport.fxml","","Report view page");
+		else {
+			lblError.setText(ChatClient.error);
+			lblError.setTextFill(Color.GREEN);
+			}
+		}
 	
 
 	public void Logout(ActionEvent event) throws Exception {
@@ -116,7 +110,19 @@ public  class DepartmentManagerHomePageController  implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {	
 		user=ChatClient.user;
-		
+		List<String> reportTypes = new ArrayList<String>();
+		reportTypes.add("Total visitors report");
+		reportTypes.add("Usage report");
+		reportTypes.add("Cancellation report");
+		reportTypes.add("Visits report");
+		this.cmbReportType.setValue("Report type");
+		this.cmbReportType.setItems(FXCollections.observableArrayList(reportTypes));
+		this.cmbSelectPark.setValue("Park name");
+		this.cmbSelectPark.setItems(FXCollections.observableArrayList(ChatClient.parkNames));
+		this.cmbReportMonth.setValue("Month");
+		this.cmbReportMonth.setItems(FXCollections.observableArrayList(ChatClient.months));
+		this.cmbReportYear.setValue("Year");
+		this.cmbReportYear.setItems(FXCollections.observableArrayList(ChatClient.years));
 		
 	}
 

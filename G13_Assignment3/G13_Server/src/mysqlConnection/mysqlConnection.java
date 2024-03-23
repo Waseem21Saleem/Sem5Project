@@ -18,6 +18,7 @@ import logic.CurClient;
 import logic.Message;
 import logic.Order;
 import logic.Park;
+import logic.Report;
 import logic.Request;
 import logic.User;
 import logic.WaitingListEntry;
@@ -850,7 +851,156 @@ public class mysqlConnection {
 		
 	}
 
+	public void CreateCancellationReport(Report report)
+	{	
+		int manually=0,automatically=0;
+		try {
+			String date = report.getMonth()+"-"+report.getYear();
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT OrderStatus FROM g13.orders WHERE ParkName = ? AND Date LIKE ?");
+			preparedStatement.setString(1, report.getParkName()); // 1-indexed parameter position
+			preparedStatement.setString(2, "%" + date); // Use "%" to match any characters before the date pattern
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+            	if (rs.getString("OrderStatus").equals("cancelled manually"))
+            		manually++;
+            	else if (rs.getString("OrderStatus").equals("cancelled automatically"))
+            		automatically++;
+            }
+            rs.close();
+			preparedStatement.close();
+    		// SQL INSERT statement
+            String sql = "INSERT INTO g13.cancellationreport (ParkName, Month, Year, CancelledManually, CancelledAutomatically) VALUES (?, ?, ?, ?,?)";
+          
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+          
+           // Set values for placeholders (?, ?, ?)
+           pstmt.setString(1,report.getParkName() );
+           pstmt.setString(2, report.getMonth());
+           pstmt.setString(3, report.getYear());
+           pstmt.setString(4, String.valueOf(manually));
+           pstmt.setString(5, String.valueOf(automatically));
+
+           // Execute the INSERT statement
+           pstmt.executeUpdate();
+     
+          
+       } catch (SQLException e) {
+       }
+		
+	}
 	
+	public void CreateTotalVisitorsReport(Report report)
+	{	
+		int organized=0,others=0;
+		try {
+			String date = report.getMonth()+"-"+report.getYear();
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT VisitorType,OrderStatus,NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND Date LIKE ?");
+			preparedStatement.setString(1, report.getParkName()); // 1-indexed parameter position
+			preparedStatement.setString(2, "%" + date); // Use "%" to match any characters before the date pattern
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+            	if (rs.getString("OrderStatus").equals("confirmed") || rs.getString("OrderStatus").equals("inside"))
+            		if (rs.getString("VisitorType").equals("group"))
+            			organized+=Integer.parseInt(rs.getString("NumberOfVisitors"));
+            		else
+            			others+=Integer.parseInt(rs.getString("NumberOfVisitors"));
+            
+            }
+            rs.close();
+			preparedStatement.close();
+			
+    		// SQL INSERT statement
+            String sql = "INSERT INTO g13.totalvisitorsreport (ParkName, Month, Year, TotalIndividuals, TotalGroups) VALUES (?, ?, ?, ?,?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+          
+           // Set values for placeholders (?, ?, ?)
+           pstmt.setString(1,report.getParkName() );
+           pstmt.setString(2, report.getMonth());
+           pstmt.setString(3, report.getYear());
+           pstmt.setString(4, String.valueOf(others));
+           pstmt.setString(5, String.valueOf(organized));
+
+           // Execute the INSERT statement
+           pstmt.executeUpdate();
+     
+          
+       } catch (SQLException e) {
+       }
+		
+	}
+	
+	public Message getCancellationReport(Report report)
+	{
+		Message msg;
+		ArrayList<String> details = new ArrayList<>();
+
+		try 
+		{	
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.cancellationreport WHERE ParkName = ? AND Month = ? AND Year = ?");
+			preparedStatement.setString(1, report.getParkName()); // 1-indexed parameter position
+			preparedStatement.setString(2, report.getMonth()); 
+			preparedStatement.setString(3, report.getYear()); 
+
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+			 // Process the result set
+			if (rs.next()) {
+				details.add(rs.getString("CancelledManually"));
+				details.add(rs.getString("CancelledAutomatically"));
+			}
+			else {
+				msg = new Message (Message.ActionType.ERROR,"Report not found!");
+				return msg;
+			}
+	            
+          
+			rs.close();
+			preparedStatement.close();
+			report.setDetails(details);
+			
+			
+			
+		} catch (SQLException e) {e.printStackTrace();}
+		msg = new Message (Message.ActionType.REPORTINFO,report);
+		return msg;
+	}
+	
+	public Message getTotalVisitorsReport(Report report)
+	{
+		Message msg;
+		ArrayList<String> details = new ArrayList<>();
+
+		try 
+		{	
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.totalvisitorsreport WHERE ParkName = ? AND Month = ? AND Year = ?");
+			preparedStatement.setString(1, report.getParkName()); // 1-indexed parameter position
+			preparedStatement.setString(2, report.getMonth()); 
+			preparedStatement.setString(3, report.getYear()); 
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+			 // Process the result set
+			if (rs.next()) {
+				details.add(rs.getString("TotalIndividuals"));
+				details.add(rs.getString("TotalGroups"));
+			}
+			else {
+				msg = new Message (Message.ActionType.ERROR,"Report not found!");
+				return msg;
+			}
+	            
+          
+			rs.close();
+			preparedStatement.close();
+			report.setDetails(details);
+			
+			
+			
+		} catch (SQLException e) {e.printStackTrace();}
+		msg = new Message (Message.ActionType.REPORTINFO,report);
+		return msg;
+	}
 	/**
 	   * This method adds the client info to the database
 	   *

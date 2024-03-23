@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import logic.Message;
 import logic.Order;
 import logic.Park;
+import logic.Report;
 import logic.Request;
 import logic.User;
 import logic.WaitingListEntry;
@@ -22,6 +23,8 @@ import javafx.collections.ObservableList;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class overrides some of the methods defined in the abstract
@@ -45,6 +48,8 @@ public class ChatClient extends AbstractClient
   public static ArrayList<String> Orderslist;
   public static ArrayList<String> OrderInfo;
   public static ArrayList<String> parkNames;
+  public static List<String> years= new ArrayList<>(Arrays.asList("23", "24"));
+  public static List<String> months;
   public static ArrayList<WaitingListEntry> waitingListEntries;
   public static ArrayList<Request> requests;
   public static User user;
@@ -52,6 +57,7 @@ public class ChatClient extends AbstractClient
   public static String error;
   public static OpenGUI openGUI;
   public static Park park;
+  public static Report report;
 
   //Constructors ****************************************************
   
@@ -71,6 +77,9 @@ public class ChatClient extends AbstractClient
 	Orderslist = new ArrayList<String>();
 	OrderInfo = new ArrayList<String>();
 	parkNames = new ArrayList<String>();
+	months = new ArrayList<String>();
+	for ( int i=0;i<12;i++)
+		months.add(""+(i+1));
 	waitingListEntries = new ArrayList<>();
 	requests= new ArrayList<>();
 	user=new User();
@@ -78,6 +87,7 @@ public class ChatClient extends AbstractClient
 	error="";
 	openGUI = new OpenGUI();
 	park= new Park();
+	report= new Report();
 
     this.openConnection();
   }
@@ -146,6 +156,10 @@ public void handleMessageFromServer(Object msg)
 	        	  break;
 	          case REQUESTSTABLE:
 	        	  requests=(ArrayList<Request>)((Message) msg).getContent();
+	        	  error="";
+	        	  break;
+	          case REPORTINFO:
+	        	  report=(Report)((Message) msg).getContent();
 	        	  error="";
 	        	  break;
 	          default:

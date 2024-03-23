@@ -9,12 +9,12 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="708.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CancellationReportController">
    <children>
-      <Label id="labelTheReportParkName" fx:id="labelTheReportParkName" layoutX="297.0" layoutY="41.0" style="-fx-font-weight: bold;" text="Park Name">
+      <Label id="lblParkName" fx:id="lblParkName" layoutX="297.0" layoutY="41.0" style="-fx-font-weight: bold;" text="Park Name">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="277.0" layoutY="82.0" style="-fx-font-weight: bold;" text="Cancellation Report">
+      <Label id="lblReportType" fx:id="lblReportType" layoutX="277.0" layoutY="82.0" style="-fx-font-weight: bold;" text="Cancellation Report">
          <font>
             <Font size="18.0" />
          </font>
@@ -24,7 +24,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label id="labelInputMonth" fx:id="labelInputMonth" alignment="CENTER" layoutX="148.0" layoutY="132.0" prefHeight="27.0" prefWidth="58.0" text="Label">
+      <Label id="lblInputMonth" fx:id="labelInputMonth" alignment="CENTER" layoutX="148.0" layoutY="132.0" prefHeight="27.0" prefWidth="58.0" text="Label">
          <font>
             <Font size="18.0" />
          </font>
@@ -34,13 +34,13 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label id="labelInputYear" fx:id="labelInputYear" alignment="CENTER" layoutX="346.0" layoutY="132.0" prefHeight="27.0" prefWidth="58.0" text="Label">
+      <Label id="lblInputYear" fx:id="labelInputYear" alignment="CENTER" layoutX="346.0" layoutY="132.0" prefHeight="27.0" prefWidth="58.0" text="Label">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
       <Line endX="274.0" layoutX="336.0" layoutY="188.0" startX="-274.0" />
-      <Label id="labelOrderType" layoutX="80.0" layoutY="204.0" style="-fx-font-weight: bold;" text="Order Type">
+      <Label id="labelOrderType" fx:id="labelOrderType" layoutX="80.0" layoutY="204.0" style="-fx-font-weight: bold;" text="Cancel Type">
          <font>
             <Font size="18.0" />
          </font>
@@ -51,23 +51,23 @@
          </font>
       </Label>
       <Line endX="253.0" layoutX="357.0" layoutY="246.0" startX="-295.0" />
-      <Button id="btnBack" fx:id="btnBack" layoutX="25.0" layoutY="619.0" mnemonicParsing="false" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="Back">
+      <Button id="btnBack" layoutX="25.0" layoutY="619.0" mnemonicParsing="false" onAction="#goBack" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="Back">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Label id="labelCancellOrder" layoutX="78.0" layoutY="269.0" style="-fx-font-weight: bold;" text="Cancel Order">
+      <Label id="lblFirstType" fx:id="lblFirstType"  layoutX="78.0" layoutY="269.0" style="-fx-font-weight: bold;" text="Cancelled manually">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label id="labelAmountCancellOrder" fx:id="labelAmountCancellOrder" alignment="CENTER" layoutX="446.0" layoutY="265.0" prefHeight="27.0" prefWidth="39.0" text="Label" />
-      <Label id="labelAriivedCancellOrder" layoutX="77.0" layoutY="314.0" style="-fx-font-weight: bold;" text="Cancel Order Did Not Arrived">
+      <Label id="lblFirstAnswer" fx:id="lblFirstAnswer"  alignment="CENTER" layoutX="446.0" layoutY="265.0" prefHeight="27.0" prefWidth="39.0" text="Label" />
+      <Label id="lblSecondType" fx:id="lblSecondType" layoutX="77.0" layoutY="314.0" style="-fx-font-weight: bold;" text="Cancelled automatically">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label id="labelAmountOrderCancellArriveNo" fx:id="labelAmountOrderCancellArriveNo" alignment="CENTER" layoutX="446.0" layoutY="310.0" prefHeight="27.0" prefWidth="39.0" text="Label" />
-      <PieChart fx:id="pieChart" layoutX="96.0" layoutY="355.0" prefHeight="301.0" prefWidth="577.0" style="-fx-background-color: skyblue;" />
+      <Label id="lblSecondAnswer" fx:id="lblSecondAnswer" alignment="CENTER" layoutX="446.0" layoutY="310.0" prefHeight="27.0" prefWidth="39.0" text="Label" />
+      <PieChart id="pieChart" fx:id="pieChart" layoutX="96.0" layoutY="355.0" prefHeight="301.0" prefWidth="577.0" style="-fx-background-color: skyblue; -fx-font-weight: BOLD;" title="Chart" />
    </children>
 </AnchorPane>
