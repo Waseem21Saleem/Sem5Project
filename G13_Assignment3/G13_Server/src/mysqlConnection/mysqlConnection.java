@@ -902,7 +902,7 @@ public class mysqlConnection {
 			ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
             	if (rs.getString("OrderStatus").equals("confirmed") || rs.getString("OrderStatus").equals("inside"))
-            		if (rs.getString("VisitorType").equals("group"))
+            		if (rs.getString("VisitorType").equals("organized group"))
             			organized+=Integer.parseInt(rs.getString("NumberOfVisitors"));
             		else
             			others+=Integer.parseInt(rs.getString("NumberOfVisitors"));

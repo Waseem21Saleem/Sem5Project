@@ -4,6 +4,7 @@ package gui;
 import java.net.InetAddress;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -26,6 +27,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -182,17 +184,17 @@ public class EditOrderController implements Initializable {
 			 date = datepickerDate.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yy")).toString();
 		if (checkInput()) {
 			if (Integer.parseInt(amountOfVisitors)>1)
-				if (Integer.parseInt(amountOfVisitors)<6)
+				if (Integer.parseInt(amountOfVisitors)<6&& (!user.getUserPermission().equals("GUIDE")))
 					visitorType="small group";
 				else
-					visitorType="big group";
+					visitorType="organized group";
 			Order order = new Order (selectedPark,selectedOrder,user.getId(),visitorType,date,txtTime.getText(),amountOfVisitors,txtPhone.getText(),txtEmail.getText());
 			double arr [] = VisitorHomePageController.calculatePrice(order);
 			// Create the alert
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Confirmation Dialog");
 			alert.setHeaderText("Are you sure you want to reserve?");
-alert.setContentText("The price if you want to reserve now is ₪" + arr[1] + " you will save ₪"+ (arr[0]-arr[1])+" than going without reserving.\n The price if you want to pay now is ₪" + arr[2] + " you will save ₪"+ (arr[0]-arr[2])+" than going without reserving. ");
+			alert.setContentText("The price if you want to reserve now is ₪" + arr[1] + " you will save ₪"+ (arr[0]-arr[1])+" than going without reserving.\n The price if you want to pay now is ₪" + arr[2] + " you will save ₪"+ (arr[0]-arr[2])+" than going without reserving. ");
 			
 			// Add buttons
 			ButtonType buttonPayLater = new ButtonType("Pay later");
@@ -243,8 +245,8 @@ alert.setContentText("The price if you want to reserve now is ₪" + arr[1] + " 
 			lblError.setText("Missing information");
 		else if (!amountOfVisitors.matches("[0-9]+") || Integer.parseInt(amountOfVisitors)<1 || Integer.parseInt(amountOfVisitors)>15)
 			lblError.setText("Amount of visitors should be in range of 1 to 15");
-		else if (!VisitorHomePageController.isValidTime(txtTime.getText()))
-			lblError.setText("Time must be inbetween 08:00-16:00");
+		else if (!VisitorHomePageController.isValidTime(date,txtTime.getText()))
+			lblError.setText("Time must be inbetween 08:00 or higher than current time to 16:00 ");
 		else if (!VisitorHomePageController.isValidEmail(txtEmail.getText()))
 			lblError.setText("Email is not in a correct format");
 		else if (!txtPhone.getText().matches("[0-9]+") || txtPhone.getText().length()!=10)
@@ -269,7 +271,17 @@ alert.setContentText("The price if you want to reserve now is ₪" + arr[1] + " 
 	public void initialize(URL arg0, ResourceBundle arg1) {	
 
 		setOrderComboBox();
-		
+		// Set the minimum date based on the current time
+        LocalDate today = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+        LocalDate minDate = currentTime.isBefore(LocalTime.of(16, 0)) ? today : today.plusDays(1);
+		// Set the minimum date to today's date and Set the maximum date to 1 year from today's date
+		datepickerDate.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.compareTo(minDate) < 0 || date.compareTo(LocalDate.now().plusYears(1)) > 0);
+            }
+        });
 		
 		
 	}

@@ -30,6 +30,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -40,6 +41,8 @@ import logic.Message;
 import logic.Order;
 import logic.User;
 import ocsf.server.ConnectionToClient;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 
@@ -100,8 +103,8 @@ public  class VisitorHomePageController implements Initializable   {
 			lblError.setText("Missing information");
 		else if (!amountOfVisitors.matches("[0-9]+") || Integer.parseInt(amountOfVisitors)<1 || Integer.parseInt(amountOfVisitors)>15)
 			lblError.setText("Amount of visitors should be in range of 1 to 15");
-		else if (!isValidTime(txtTime.getText()))
-			lblError.setText("Time must be inbetween 08:00-16:00");
+		else if (!isValidTime(date,txtTime.getText()))
+			lblError.setText("Time must be inbetween 08:00 or higher than current time to 16:00 ");
 		else if (!isValidEmail(txtEmail.getText()))
 			lblError.setText("Email is not in a correct format");
 		else if (!txtPhone.getText().matches("[0-9]+") || txtPhone.getText().length()!=10)
@@ -110,10 +113,10 @@ public  class VisitorHomePageController implements Initializable   {
 			lblError.setText("You can't make a reservation for more than 5 visitors");
 		else {
 			if (Integer.parseInt(amountOfVisitors)>1)
-				if (Integer.parseInt(amountOfVisitors)<6)
+				if (Integer.parseInt(amountOfVisitors)<6&& (!user.getUserPermission().equals("GUIDE")))
 					visitorType="small group";
 				else
-					visitorType="big group";
+					visitorType="organized group";
 			Order order = new Order (selectedPark,user.getId(),visitorType,date,txtTime.getText(),amountOfVisitors,txtPhone.getText(),txtEmail.getText());
 			double arr [] = calculatePrice(order);
 			// Create the alert
@@ -228,8 +231,16 @@ public  class VisitorHomePageController implements Initializable   {
         return matcher.matches();
     }
 	
-	public static boolean isValidTime(String timeStr) {
-        // Regular expression for hh:mm format
+	public static boolean isValidTime(String date,String timeStr) {
+		LocalTime currentTime = LocalTime.now();
+		LocalDate today = LocalDate.now();
+		int minHour = 8;
+		int minMinute = 0;
+		if (date.equals(today.toString())) {
+		// Get hour and minute components as integers
+			minHour= currentTime.getHour();
+			minMinute= currentTime.getMinute();
+		}
         String timeRegex = "^(?:[01]\\d|2[0-3]):(?:[0-5]\\d)$";
         Pattern pattern = Pattern.compile(timeRegex);
         Matcher matcher = pattern.matcher(timeStr);
@@ -244,14 +255,27 @@ public  class VisitorHomePageController implements Initializable   {
         int minute = Integer.parseInt(parts[1]);
 
         // Check if time falls between 08:00 and 16:00
-        return (hour >= 8 && hour <= 16);
+        return (hour >= minHour && hour <= 16 && minute >= minMinute && minute <= 59 );
     }
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {	
 
-		setParkComboBox();
-		
+		setParkComboBox(); 
+		// Set the minimum date based on the current time
+        LocalDate today = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+		System.out.println(currentTime);
+
+        LocalDate minDate = currentTime.isBefore(LocalTime.of(16, 0)) ? today : today.plusDays(1);
+		// Set the minimum date to today's date and Set the maximum date to 1 year from today's date
+        datepickDate.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.compareTo(minDate) < 0 || date.compareTo(LocalDate.now().plusYears(1)) > 0);
+            }
+        });
+
 		
 		
 	}
