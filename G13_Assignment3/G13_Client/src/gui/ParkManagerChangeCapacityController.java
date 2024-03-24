@@ -46,7 +46,7 @@ public  class ParkManagerChangeCapacityController  implements Initializable {
 	private Label lblError,lblParkName;
 	
 	@FXML
-	private TextField txtParkCapacity,txtMaxStay;
+	private TextField txtParkCapacity,txtMaxStay,txtTotalCapacity;
 	
 	private String getCapacity() {
 		return txtParkCapacity.getText();
