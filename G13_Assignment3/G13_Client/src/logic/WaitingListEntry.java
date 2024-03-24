@@ -17,6 +17,7 @@ public class WaitingListEntry implements Serializable {
         this.numberOfVisitors = numberOfVisitors;
     }
 
+    
     // Getters and Setters
     public String getPlacement() {
         return placement;

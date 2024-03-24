@@ -74,6 +74,7 @@ public class Report implements Serializable{
         return details;
     }
     
+    
     // Setter for ParkName
     public void setDetails(ArrayList<String> details) {
         this.details = details;

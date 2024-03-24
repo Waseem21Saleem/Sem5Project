@@ -106,6 +106,7 @@ public  class ParkManagerHomePageController implements Initializable  {
 		return msg;
 	}
 
+	
 	public void Logout(ActionEvent event) throws Exception {
 		if (btnLogOut.getText().equals("Back"))
 			ChatClient.openGUI.goToGUI(event, "/gui/DepartmentManagerHomePage.fxml","","Department manager home page");

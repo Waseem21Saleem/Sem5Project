@@ -56,6 +56,7 @@ public  class LoginController   {
 	   *@param event , the "open order manager" button
 	   
 	   */
+	
 	public void Login(ActionEvent event) throws Exception {
 		/* Send a message to server to check username and password then check Role and open next window 
 		 * according to the role

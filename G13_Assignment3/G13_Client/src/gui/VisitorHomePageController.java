@@ -91,6 +91,7 @@ public  class VisitorHomePageController implements Initializable   {
 	}
 	
 	
+	
 	public void makeReservation(ActionEvent event) throws Exception {
 		String visitorType="individual";
 		String selectedPark = cmbSelectPark.getValue().toString();
@@ -265,8 +266,6 @@ public  class VisitorHomePageController implements Initializable   {
 		// Set the minimum date based on the current time
         LocalDate today = LocalDate.now();
         LocalTime currentTime = LocalTime.now();
-		System.out.println(currentTime);
-
         LocalDate minDate = currentTime.isBefore(LocalTime.of(16, 0)) ? today : today.plusDays(1);
 		// Set the minimum date to today's date and Set the maximum date to 1 year from today's date
         datepickDate.setDayCellFactory(picker -> new DateCell() {

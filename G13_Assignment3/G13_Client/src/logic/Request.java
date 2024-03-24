@@ -18,6 +18,7 @@ public class Request implements Serializable{
         this.maxStay = maxStay;
     }
 	
+    
 
 
 

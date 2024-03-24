@@ -34,6 +34,7 @@ public class ConfirmOrderController {
 	private Label lblError;
 	
 	
+	
 	@FXML
 	private Label labelGetParkNameDB,labelGetVisitorsNumDB,labelPriceShowPayNow,labelPriceShowPayLater,labelGetDayDB,labelGetMonthDB,labelGetTimeDB;
     

@@ -18,6 +18,7 @@ import logic.Park;
 import logic.Report;
 import logic.Request;
 import logic.User;
+import mysqlConnection.RunnableSql;
 import mysqlConnection.mysqlConnection;
 import ocsf.server.*;
 
@@ -51,6 +52,7 @@ public class EchoServer extends AbstractServer
    */
 	public static ArrayList<String> hostList = new  ArrayList<String>();
 
+	private RunnableSql runnableSql;
 	public mysqlConnection mysql;
 	private ServerInfoController serv;
 	private String dbPath,dbUsername,dbPassword;
@@ -227,6 +229,13 @@ public class EchoServer extends AbstractServer
   {	
     System.out.println ("Server listening for connections on port " + getPort());
     mysql= new mysqlConnection(getDbPath(),getDbUsername(),getDbPassword());
+    runnableSql = new RunnableSql();
+    runnableSql.setConnection(mysql.getConn());
+    // Create a Thread object and pass MyTaskRunnable to its constructor
+    Thread thread = new Thread(runnableSql);
+
+    // Start the thread
+    thread.start();
     
 
   }

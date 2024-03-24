@@ -26,6 +26,7 @@ public class CancellationReportController implements Initializable {
 		ChatClient.openGUI.goToGUI(event, "/gui/DepartmentManagerHomePage.fxml","","Department manager home page");
 		
 	}
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {	
 		Report report = ChatClient.report;

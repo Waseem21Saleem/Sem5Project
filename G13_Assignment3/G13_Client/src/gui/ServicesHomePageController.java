@@ -68,6 +68,7 @@ public  class ServicesHomePageController   {
 		}
 	}
 	
+	
 
 	public void Logout(ActionEvent event) throws Exception {
 		Message msg = new Message (Message.ActionType.LOGOUT,user);

@@ -83,6 +83,7 @@ public  class DepartmentManagerHomePageController  implements Initializable {
 
 	}
 	
+	
 	public void goViewReport(ActionEvent event) throws Exception {
 		Message msg;
 		String reportType = cmbReportType.getValue().toString();

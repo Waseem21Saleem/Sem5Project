@@ -39,6 +39,7 @@ import ocsf.server.ConnectionToClient;
 
 
 
+
 public  class WaitingListController  implements Initializable  {
 	public static ClientController chat;
 	public static Order order=ChatClient.order;

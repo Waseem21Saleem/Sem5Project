@@ -32,6 +32,7 @@ public class Message implements Serializable  {
 	    EXECUTEERROR,
 	    LOGOUT
 	    
+	    
 	}
 	
 	private ActionType actionType;

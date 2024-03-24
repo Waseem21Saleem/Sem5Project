@@ -56,6 +56,7 @@ public  class LoginWithoutPasswordController   {
 	   *@param event , the "open order manager" button
 	   
 	   */
+	
 	public void Login(ActionEvent event) throws Exception {
 		/* Check if this id has editable order then open this window
 		 */

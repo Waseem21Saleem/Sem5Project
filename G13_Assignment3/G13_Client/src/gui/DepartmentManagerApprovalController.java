@@ -38,6 +38,7 @@ import mysqlConnection.mysqlConnection;
 
 public class DepartmentManagerApprovalController implements Initializable  {
 
+	
 
 	public static ClientController chat;
 	@FXML

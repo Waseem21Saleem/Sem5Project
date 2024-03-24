@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 public class PaymentController {
 	
+	
 	@FXML
 	private Button btnPay = null;
 	@FXML

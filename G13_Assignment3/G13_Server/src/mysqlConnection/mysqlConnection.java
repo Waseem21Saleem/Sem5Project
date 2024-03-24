@@ -59,6 +59,9 @@ public class mysqlConnection {
 
    	}
 	
+	public Connection getConn() {
+		return conn;
+	}
 	/**
 	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
 	   *

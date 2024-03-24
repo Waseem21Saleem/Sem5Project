@@ -107,6 +107,7 @@ public  class MainFrameController   {
 
 	}
 	
+	
 	/**
 	   * This method exits the client when exit button pressed
 	   *

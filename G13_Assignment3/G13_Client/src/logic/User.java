@@ -25,6 +25,7 @@ public class User implements Serializable{
 		this.userPermission="";
 		
 	}
+	
 	public User(String id, String password)
 	{
 		this.id=id;
