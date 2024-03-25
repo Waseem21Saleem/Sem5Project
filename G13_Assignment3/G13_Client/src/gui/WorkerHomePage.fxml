@@ -3,22 +3,32 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="521.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="436.0" prefWidth="541.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button id="btnCheckCapacity" fx:id="btnCheckCapacity" layoutX="90.0" layoutY="94.0" mnemonicParsing="false" text="Check Capacity Now" />
-      <Label id="txtParkName" fx:id="txtParkName" layoutX="213.0" layoutY="39.0" text="ParkName" textAlignment="CENTER">
+      <Button id="btnCheckCapacity" fx:id="btnCheckCapacity" layoutX="94.0" layoutY="94.0" mnemonicParsing="false" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="Check Capacity Now" />
+      <Label id="txtParkName" fx:id="txtParkName" layoutX="219.0" layoutY="34.0" style="-fx-font-weight: bold;" text="ParkName" textAlignment="CENTER">
          <font>
             <Font size="18.0" />
          </font>
+         <effect>
+            <Glow />
+         </effect>
       </Label>
-      <Label id="lblViewCurrCapacity" fx:id="lblViewCurrCapacity" layoutX="225.0" layoutY="98.0" prefHeight="17.0" prefWidth="246.0" />
-      <Button id="btnUnplanned" fx:id="btnUnplanned" layoutX="178.0" layoutY="215.0" mnemonicParsing="false" text="Enter Unplanned Visitors" />
-      <Label layoutX="39.0" layoutY="160.0" text="Enter ID:" />
-      <Label layoutX="251.0" layoutY="160.0" text="Amount Visitors:" />
-      <TextField id="txtEnetrID" fx:id="txtEnetrID" layoutX="90.0" layoutY="156.0" />
-      <TextField id="txtEnterAmount" fx:id="txtEnterAmount" layoutX="348.0" layoutY="156.0" />
+      <Label id="lblViewCurrCapacity" fx:id="lblViewCurrCapacity" layoutX="241.0" layoutY="93.0" prefHeight="26.0" prefWidth="250.0" style="-fx-font-weight: bold;" />
+      <Button id="btnUnplanned" fx:id="btnUnplanned" layoutX="169.0" layoutY="205.0" mnemonicParsing="false" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="Enter Unplanned Visitors" />
+      <Label id="lblID" layoutX="39.0" layoutY="160.0" style="-fx-font-weight: bold;" text="Enter ID:" />
+      <Label id="lblAmout" layoutX="260.0" layoutY="160.0" style="-fx-font-weight: bold;" text="Amount Visitors:" />
+      <TextField id="txtEnetrID" fx:id="txtEnetrID" layoutX="94.0" layoutY="156.0" />
+      <TextField id="txtEnterAmount" fx:id="txtEnterAmount" layoutX="366.0" layoutY="156.0" />
+      <Button id="btnLogout" layoutX="14.0" layoutY="394.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="57.0" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="logout" />
+      <Label id="lblOrderID" layoutX="147.0" layoutY="284.0" style="-fx-font-weight: bold;" text="Order ID:" />
+      <TextField id="txtOrderID" fx:id="txtEnterAmount1" layoutX="251.0" layoutY="280.0" />
+      <Button id="btnApproveExit" fx:id="btnUnplanned1" layoutX="207.0" layoutY="332.0" mnemonicParsing="false" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="Approve Exit" />
+      <Label layoutX="135.0" layoutY="242.0" prefHeight="26.0" prefWidth="230.0" style="-fx-font-weight: bold;" text="Unplanned visitors entered successfully" textFill="#002dff" visible="false" />
+      <Label alignment="CENTER" layoutX="211.0" layoutY="365.0" prefHeight="26.0" prefWidth="89.0" style="-fx-font-weight: bold;" text="Exit Approved" textFill="#002fff" visible="false" />
    </children>
 </AnchorPane>

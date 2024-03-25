@@ -27,22 +27,22 @@
       <ComboBox id="cmbReportType" fx:id="cmbReportType" layoutX="180.0" layoutY="147.0" prefWidth="150.0" />
       <ComboBox id="cmbReportMonth" fx:id="cmbReportMonth" layoutX="180.0" layoutY="220.0" prefHeight="25.0" prefWidth="121.0" />
       <ComboBox id="cmbReportYear" fx:id="cmbReportYear" layoutX="439.0" layoutY="220.0" prefHeight="25.0" prefWidth="121.0" />
-      <Button id="btnViewReport" layoutX="232.0" layoutY="282.0" mnemonicParsing="false" onAction="#goViewReport" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="View Report">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-      <Label id="labelSelectPark" layoutX="59.0" layoutY="69.0" style="-fx-font-weight: bold;" text="Select Park:">
+      <Label id="labelSelectPark" layoutX="59.0" layoutY="69.0" onAction="#goViewReport" style="-fx-font-weight: bold;" text="Select Park:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
       <ComboBox id="cmbSelectPark" fx:id="cmbSelectPark" layoutX="180.0" layoutY="70.0" prefWidth="150.0" />
-      <Hyperlink id="hyperMakeReport" layoutX="386.0" layoutY="365.0" onAction="#goCreateReport" text="Click Here" />
-      <Hyperlink id="hyperApproveCapacity" layoutX="386.0" layoutY="406.0" onAction="#goApproveCapacity" text="Click Here" />
+      <Hyperlink id="hyperMakeReport" layoutX="386.0" layoutY="365.0" onAction="#goCreateReport" style="-fx-font-weight: bold;" text="Click Here" />
+      <Hyperlink id="hyperApproveCapacity" layoutX="386.0" layoutY="406.0" onAction="#goApproveCapacity" style="-fx-font-weight: bold;" text="Click Here" />
       <Label id="labelMakeReport" layoutX="218.0" layoutY="368.0" style="-fx-font-weight: bold;" text="Make A Report ?" />
       <Label id="labelApprove" layoutX="155.0" layoutY="409.0" style="-fx-font-weight: bold;" text="Check If There Something To Approve ?" />
       <Button id="btnLogout" layoutX="46.0" layoutY="452.0" mnemonicParsing="false" onAction="#Logout" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="Logout" />
-      <Label id="lblError" fx:id="lblError" layoutX="163.0" layoutY="337.0" prefHeight="17.0" prefWidth="265.0" textAlignment="CENTER" />
+      <Label id="lblError" fx:id="lblError" alignment="CENTER" layoutX="163.0" layoutY="337.0" prefHeight="17.0" prefWidth="265.0" style="-fx-font-weight: bold;" textAlignment="CENTER" textFill="RED" />
+      <Button id="btnViewReport" layoutX="231.0" layoutY="290.0" mnemonicParsing="false" onAction="#goViewReport" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="View Report">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
