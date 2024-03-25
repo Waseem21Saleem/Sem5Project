@@ -48,7 +48,7 @@ public class DepartmentManagerApprovalController implements Initializable  {
 	
 	@FXML
 	private TableView requestsTable;
-	
+	 
 	@FXML
 	private TableColumn<Request, String> columnParkName,columnCapacity,columnMaxStay;
 	

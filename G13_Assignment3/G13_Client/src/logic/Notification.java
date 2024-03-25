@@ -80,6 +80,6 @@ public class Notification implements Serializable{
         this.amountOfVisitors = amountOfVisitors;
     }
 
-    
+   
 
 }

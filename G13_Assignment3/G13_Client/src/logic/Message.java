@@ -34,7 +34,7 @@ public class Message implements Serializable  {
 	    
 	    
 	}
-	
+
 	private ActionType actionType;
     private Object content;
 

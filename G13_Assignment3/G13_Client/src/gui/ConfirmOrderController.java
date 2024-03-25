@@ -37,7 +37,7 @@ public class ConfirmOrderController {
 	
 	@FXML
 	private Label labelGetParkNameDB,labelGetVisitorsNumDB,labelPriceShowPayNow,labelPriceShowPayLater,labelGetDayDB,labelGetMonthDB,labelGetTimeDB;
-    
+     
 	
 	public void PayNow(ActionEvent event) throws Exception {
 		FXMLLoader loader = new FXMLLoader();

@@ -18,7 +18,7 @@ public class Order implements Serializable {
 	private String payStatus;
 	private String orderStatus;
 	
-	
+
 	
 	//constructor to edit order
 	public Order(String parkName, String orderNum, String date, String time, String amountOfVisitors, String telephone, String email) {

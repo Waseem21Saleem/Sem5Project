@@ -16,4 +16,4 @@
       <Label id="lblError" fx:id="lblError" layoutX="96.0" layoutY="172.0" prefHeight="21.0" prefWidth="246.0" style="-fx-font-weight: bold;" textFill="RED" />
       <PasswordField id="txtPassword" fx:id="txtPassword" layoutX="166.0" layoutY="78.0" />
    </children>
-</AnchorPane>
+</AnchorPane> 

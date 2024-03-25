@@ -21,7 +21,6 @@ public class Request implements Serializable{
     
 
 
-
     public String getParkName() {
         return parkName;
     }

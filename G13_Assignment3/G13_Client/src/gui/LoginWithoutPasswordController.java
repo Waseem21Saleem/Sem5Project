@@ -36,7 +36,7 @@ public  class LoginWithoutPasswordController   {
 	
 	@FXML
 	private Button btnBack = null;
-	
+	 
 	@FXML
 	private Button btnLogin = null;
 	@FXML

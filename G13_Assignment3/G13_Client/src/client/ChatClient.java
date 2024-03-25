@@ -171,6 +171,7 @@ public void handleMessageFromServer(Object msg)
   }
   
 
+  
   /**
    * This method handles all data coming from the UI            
    *

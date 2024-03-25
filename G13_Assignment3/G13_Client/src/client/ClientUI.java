@@ -18,7 +18,7 @@ public class ClientUI extends Application {
 		    launch(args);  
 	   } // end main
 	
-
+ 
 	@Override
 	public void stop() {
 		System.exit(0);
@@ -28,6 +28,7 @@ public class ClientUI extends Application {
 		MainFrameController aFrame = new MainFrameController();
 		aFrame.start(primaryStage);
 			  		
+		
 		
 		
 	

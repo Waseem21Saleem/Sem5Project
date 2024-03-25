@@ -17,7 +17,6 @@ public class CurClient {
 		this.connected=connected;
 		
 	}
-	
 	/**
 	 * @return the ip
 	 */

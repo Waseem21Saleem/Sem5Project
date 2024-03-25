@@ -24,7 +24,7 @@ public class CancellationReportController implements Initializable {
 	public void goBack(ActionEvent event) throws Exception {
 		
 		ChatClient.openGUI.goToGUI(event, "/gui/DepartmentManagerHomePage.fxml","","Department manager home page");
-		
+		 
 	}
 	
 	@Override

@@ -14,6 +14,7 @@ public class User implements Serializable{
 	private String userPermission;
 	private String parkName;
 	
+	
 	public User(String id)
 	{
 		this.id=id;

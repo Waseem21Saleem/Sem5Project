@@ -25,7 +25,6 @@ public class Park implements Serializable{
     }
 
 
-
     public Park() {
 		// TODO Auto-generated constructor stub
 	}

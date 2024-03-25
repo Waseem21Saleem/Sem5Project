@@ -33,7 +33,7 @@ public  class MainFrameController   {
 	
 	@FXML
 	private Button btnExit = null;
-	
+	 
 	@FXML
 	private Button btnConnect = null;
 	@FXML

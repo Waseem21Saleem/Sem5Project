@@ -45,7 +45,7 @@ public  class WaitingListController  implements Initializable  {
 	public static Order order=ChatClient.order;
 
 	private static int itemIndex = 3;
-	
+	 
 	@FXML
 	private Button btnBack = null,btnEnterWaitingList= null;
 	

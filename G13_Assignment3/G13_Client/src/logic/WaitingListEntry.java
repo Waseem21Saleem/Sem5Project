@@ -18,6 +18,7 @@ public class WaitingListEntry implements Serializable {
     }
 
     
+    
     // Getters and Setters
     public String getPlacement() {
         return placement;

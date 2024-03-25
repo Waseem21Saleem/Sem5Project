@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
+ 
 <AnchorPane id="lblError" prefHeight="448.0" prefWidth="415.0" style="-fx-background-color: SILVER;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SignUpController">
    <children>
       <Button id="btnSignUp" fx:id="btnSignUp" layoutX="187.0" layoutY="299.0" mnemonicParsing="false" onAction="#SignUp" prefHeight="31.0" prefWidth="106.0" style="-fx-background-color: SKYBLUE; -fx-text-fill: BLACK; -fx-font-weight: BOLD;" text="Signup" />

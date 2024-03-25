@@ -13,7 +13,6 @@ public class Report implements Serializable{
 	// Constructor without parameters
     public Report() {
     }
-
     // Constructor with parameters
     public Report(String reportType,String parkName, String month, String year) {
     	this.reportType=reportType;

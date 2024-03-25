@@ -45,7 +45,7 @@ public class NotificationPageController implements Initializable  {
 	private Button btnReject,btnAccept,btnBack;
 	@FXML
 	private Label lblError;
-	
+	 
 	@FXML
 	private TableView requestsTable;
 	
