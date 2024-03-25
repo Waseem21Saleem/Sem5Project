@@ -971,7 +971,7 @@ public class mysqlConnection {
 	}
 	
 	public Message getTotalVisitorsReport(Report report)
-	{
+	{ 
 		Message msg;
 		ArrayList<String> details = new ArrayList<>();
 

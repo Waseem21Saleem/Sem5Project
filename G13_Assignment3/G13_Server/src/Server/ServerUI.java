@@ -34,7 +34,7 @@ public class ServerUI extends Application {
 		try {
 			if (sv!=null)
 				sv.close();
-			
+			 
 		}
 		catch(Exception ex) 
         {

@@ -181,7 +181,7 @@ public class EchoServer extends AbstractServer
     	    		msg=mysql.getTotalVisitorsReport(report);
     	    	/*else if (report.getReportType().equals("Usage report"))
     	    		msg=mysql.getTotalVisitorsReport(report);
-    	    	else
+    	    	else 
     	    		msg=mysql.getTotalVisitorsReport(report);*/
     	    	sendMsgToClient(msg,client);
                 break; 

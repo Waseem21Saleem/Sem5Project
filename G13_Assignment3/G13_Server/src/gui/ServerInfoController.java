@@ -213,7 +213,7 @@ public class ServerInfoController implements Initializable {
 								
 					}
 			else
-		{
+		{ 
 			if (ev == null || !ev.isListening()) {
 				String tempport = p;
 				ev = new EchoServer(Integer.parseInt(tempport), this,dbPath,dbUsername,dbPassword);
