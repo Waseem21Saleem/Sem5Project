@@ -10,7 +10,7 @@
  
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="547.0" prefWidth="757.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.NotificationPageController">
    <children>
-      <Label layoutX="251.0" layoutY="29.0" style="-fx-font-weight: bold;" text="Approval List ">
+      <Label layoutX="168.0" layoutY="29.0" style="-fx-font-weight: bold;" text="Notification Approval ">
          <font>
             <Font size="37.0" />
          </font>
@@ -18,17 +18,19 @@
             <Glow />
          </effect>
       </Label>
-      <TableView id="listApprove" fx:id="requestsTable" layoutX="68.0" layoutY="133.0" prefHeight="298.0" prefWidth="467.0" style="-fx-background-color: skyblue;">
+      <TableView id="listApprove" fx:id="requestsTable" layoutX="42.0" layoutY="133.0" prefHeight="298.0" prefWidth="677.0" style="-fx-background-color: skyblue;">
         <columns>
-          <TableColumn fx:id="columnParkName" prefWidth="129.0" text="Park Name" />
-          <TableColumn fx:id="columnCapacity" prefWidth="138.0" text="Reserved Capacity" />
-            <TableColumn prefWidth="107.99993896484375" text="Total Capacity" />
-            <TableColumn fx:id="columnMaxStay" prefWidth="88.79998168945315" text="Max Stay" />
+          <TableColumn fx:id="columnParkName" prefWidth="129.0" text="Order Number" />
+          <TableColumn fx:id="columnCapacity" prefWidth="138.0" text="Park Name" />
+            <TableColumn prefWidth="107.99993896484375" text="Visitor ID" />
+            <TableColumn fx:id="columnMaxStay" prefWidth="88.79998168945315" text="Date" />
+            <TableColumn prefWidth="84.00003051757812" text="Time" />
+            <TableColumn prefWidth="127.99993896484375" text="Number Of Visitors" />
         </columns>
       </TableView>
-      <Button id="btnBack" fx:id="btnBack" layoutX="68.0" layoutY="495.0" mnemonicParsing="false" onAction="#goBackBtn" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="Back" />
-      <Label id="lblError" fx:id="lblError" layoutX="371.0" layoutY="482.0" prefHeight="26.0" prefWidth="274.0" style="-fx-font-weight: bold;" textAlignment="CENTER" textFill="RED" />
-    <Button id="btnAccept" layoutX="657.0" layoutY="171.0" mnemonicParsing="false" onAction="#accept" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="Accept" />
-    <Button id="btnReject" layoutX="656.0" layoutY="284.0" mnemonicParsing="false" onAction="#reject" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="Reject" />
+      <Button id="btnBack" fx:id="btnBack" layoutX="42.0" layoutY="495.0" mnemonicParsing="false" onAction="#goBackBtn" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="Back" />
+      <Label id="lblError" fx:id="lblError" layoutX="216.0" layoutY="482.0" prefHeight="26.0" prefWidth="274.0" style="-fx-font-weight: bold;" textAlignment="CENTER" textFill="RED" />
+    <Button id="btnAccept" layoutX="241.0" layoutY="439.0" mnemonicParsing="false" onAction="#accept" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="Accept" />
+    <Button id="btnReject" layoutX="424.0" layoutY="439.0" mnemonicParsing="false" onAction="#reject" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="Reject" />
    </children>
 </AnchorPane>
