@@ -208,7 +208,8 @@ public class EchoServer extends AbstractServer
 
 	    if (flag!=1) {
 			System.out.println("");
-			this.sendToAllClients("");
+			this.sendMsgToClient("", client);
+			//this.sendToAllClients("");
 		} 
   }
    

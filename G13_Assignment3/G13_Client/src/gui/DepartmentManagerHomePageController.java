@@ -94,7 +94,7 @@ public  class DepartmentManagerHomePageController  implements Initializable {
 			ChatClient.openGUI.goToGUI(event, "/gui/CancellationReport.fxml","","Report view page");
 		else {
 			lblError.setText(ChatClient.error);
-			lblError.setTextFill(Color.GREEN);
+			lblError.setTextFill(Color.RED);
 			}
 		}
 	

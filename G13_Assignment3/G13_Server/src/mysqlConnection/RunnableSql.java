@@ -22,7 +22,7 @@ public class RunnableSql implements Runnable  {
         Thread orderInsideThread = new Thread(()-> updateOrderInside());
         Thread orderCompletedThread = new Thread(()-> updateOrderCompleted());
         Thread deleteWaitingListThread = new Thread(()-> deleteWaitingList());
-        // Start both threads
+        // Start threads
         orderThread.start();
         notificationThread.start();
         orderInsideThread.start();
@@ -30,7 +30,7 @@ public class RunnableSql implements Runnable  {
         deleteWaitingListThread.start();
 
         try {
-            // Join both threads to wait for them to complete
+            // Join threads to wait for them to complete
             orderThread.join();
             notificationThread.join();
             orderInsideThread.join();
