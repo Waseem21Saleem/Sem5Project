@@ -15,6 +15,9 @@ public class Message implements Serializable  {
 	    ORDERINFO,
 	    UPDATEORDER,
 	    DELETEORDER,
+	    AVAILABLEPLACES,
+	    ADDUNPLANNED,
+	    APPROVEEXIT,
 	    PARKINFO,
 	    NEWREQUEST,
 	    REQUESTSTABLE,
@@ -28,6 +31,7 @@ public class Message implements Serializable  {
 	    RESERVATION,
 	    WAITINGLIST,
 	    WAITINGLISTTABLE,
+	    ALTERNATIVEDATE,
 	    CHANGEROLE,
 	    EXECUTEERROR,
 	    LOGOUT

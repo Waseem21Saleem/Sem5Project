@@ -27,7 +27,7 @@
       <ComboBox id="cmbReportType" fx:id="cmbReportType" layoutX="180.0" layoutY="147.0" prefWidth="150.0" />
       <ComboBox id="cmbReportMonth" fx:id="cmbReportMonth" layoutX="180.0" layoutY="220.0" prefHeight="25.0" prefWidth="121.0" />
       <ComboBox id="cmbReportYear" fx:id="cmbReportYear" layoutX="439.0" layoutY="220.0" prefHeight="25.0" prefWidth="121.0" />
-      <Label id="labelSelectPark" layoutX="59.0" layoutY="69.0" onAction="#goViewReport" style="-fx-font-weight: bold;" text="Select Park:">
+      <Label id="labelSelectPark" layoutX="59.0" layoutY="69.0" style="-fx-font-weight: bold;" text="Select Park:">
          <font>
             <Font size="16.0" />
          </font>

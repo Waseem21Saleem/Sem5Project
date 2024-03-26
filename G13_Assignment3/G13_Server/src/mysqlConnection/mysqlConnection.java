@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.io.*; 
@@ -224,20 +225,21 @@ public class mysqlConnection {
 	   *
 	   * @param ordersList, an empty ArrayList
 	   */
-	public void updatePark(Park park)
+/*	public void updatePark(Park park)
 	{
 		PreparedStatement ps;
 		try {
-			 	ps = conn.prepareStatement("UPDATE g13.parks SET Capacity=?,MaxStay=? WHERE ParkName = ?");
-			 	ps.setString(1,park.getCapacity());
-	            ps.setString(2,park.getMaxStay());
-	            ps.setString(3,park.getParkName());
+			 	ps = conn.prepareStatement("UPDATE g13.parks SET ReservedCapacity=?,TotalCapacity=?,MaxStay=? WHERE ParkName = ?");
+			 	ps.setString(1,park.getReservedCapacity());
+			 	ps.setString(2,park.getTotalCapacity());
+	            ps.setString(3,park.getMaxStay());
+	            ps.setString(4,park.getParkName());
 	            ps.executeUpdate();
 	            ps.close();
 	            
 		} catch (SQLException e) {	}
 	}
-	
+	*/
 	/**
 	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
 	   *
@@ -544,6 +546,224 @@ public class mysqlConnection {
 		
 		
 	}
+	
+	public Message getAlternativeDate (Order order) {
+		//this function to make reservation
+		Order tempOrder = order;
+		String curTime= order.getTime();
+		Message msg;
+		ArrayList<Order> alternative = new ArrayList<Order>();
+		int i=0;
+		while (i<5)
+		{
+			try 
+			{	
+				
+				// Prepare a statement with a placeholder
+				PreparedStatement preparedStatement = conn.prepareStatement("SELECT NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND Time <= ? AND ExitTime >= ? AND Date = ? AND OrderStatus!=? AND OrderStatus!=?");
+				String timeStr = order.getTime(); // Example time string
+		        // Define the formatter for hh:mm format
+		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+		        // Parse the time string into a LocalTime object
+		        LocalTime time = LocalTime.parse(timeStr, formatter);
+		        // Define the LocalTime object for 15:00
+		        LocalTime maxTime = LocalTime.of(15, 0);
+		        // Check if the parsed time is before 15:00
+		        if (time.isBefore(maxTime)) {
+		        	// Add one hour to the time
+		            LocalTime modifiedTime = time.plusHours(1);
+		            // Format the modified time back into the string
+		            String modifiedTimeStr = modifiedTime.format(formatter);
+		            order.setTime(modifiedTimeStr);
+		        } else { //Add 1 day to the date
+		        	String dateString = order.getDate(); // Original date string
+		            // Define the formatter for dd-MM-yy format
+		            formatter = DateTimeFormatter.ofPattern("dd-MM-yy");
+		            // Parse the date string into a LocalDate object
+		            LocalDate date = LocalDate.parse(dateString, formatter);
+		            // Add one day to the date
+		            LocalDate modifiedDate = date.plusDays(1);
+		            // Format the modified date back into the string
+		            String modifiedDateString = modifiedDate.format(formatter);
+		            order.setDate(modifiedDateString);
+		            order.setTime(curTime);
+		            
+		        }
+				preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
+				preparedStatement.setString(2, order.getTime());
+				preparedStatement.setString(3, order.getTime());
+				preparedStatement.setString(4, order.getDate());
+				preparedStatement.setString(5, "cancelled automatically");
+				preparedStatement.setString(6, "cancelled manually");
+				// Execute the query
+				ResultSet rs = preparedStatement.executeQuery();
+				 // Process the result set
+				// Process results
+				int currentAmountOfVisitors = Integer.parseInt(order.getAmountOfVisitors());
+	            while (rs.next()) {
+	            	currentAmountOfVisitors += Integer.parseInt(rs.getString("NumberOfVisitors"));
+	            }
+			    rs.close();
+				preparedStatement.close();
+				// Prepare a statement with a placeholder
+				preparedStatement = conn.prepareStatement("SELECT ReservedCapacity FROM g13.parks WHERE ParkName = ?");
+				preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
+				// Execute the query
+				rs = preparedStatement.executeQuery();
+				rs.next();
+				int maxCapacity = Integer.parseInt(rs.getString("ReservedCapacity"));
+				rs.close();
+				preparedStatement.close();
+				
+				if (currentAmountOfVisitors<=maxCapacity)
+				{
+					// Original time string
+			        String timeString = order.getTime();
+			        Message msg2 = getParkInfo(order.getParkName());
+			        Park park = (Park) ((Message) msg2).getContent();
+			        // Number of hours to add
+			        int maxStay = Integer.parseInt(park.getMaxStay());
+			        // Parse the time string into LocalTime
+			        time = LocalTime.parse(timeString);
+			        // Add x hours
+			        LocalTime newTime = time.plusHours(maxStay);
+			        // Format the new time back into a string
+			        String result = newTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+					order.setExitTime(result);
+					if (checkAlternativeOrder(order,alternative)) {
+					alternative.add(order);
+					i++;
+					System.out.println(order.toString());
+					order=new Order(tempOrder.getParkName(),tempOrder.getOrderNum(),tempOrder.getVisitorId(),tempOrder.getVisitorType(),tempOrder.getDate(),curTime,tempOrder.getAmountOfVisitors(),tempOrder.getTelephone(),tempOrder.getEmail(),tempOrder.getExitTime(),tempOrder.getTotalCost(),tempOrder.getPayStatus(),tempOrder.getOrderStatus());
+					System.out.println(curTime);
+					}
+					
+					
+				}
+				
+				
+				
+			} 
+			catch (SQLException e) 
+				{e.printStackTrace();}
+		}
+		msg = new Message (Message.ActionType.ALTERNATIVEDATE,alternative);
+		return msg;
+	}
+	private Boolean checkAlternativeOrder(Order order,ArrayList<Order> alternative) {
+		for (int i=0;i<alternative.size();i++)
+		{
+			if (order.getDate().equals(alternative.get(i).getDate())&& order.getTime().equals(alternative.get(i).getTime()))
+				return false;
+		}
+		return true;
+	}
+	public Message getAvailablePlaces ( String parkName) {
+		Message msg;
+		String available="";
+		try 
+		{	int count=0;
+			int totalCapacity=0;
+			
+			// Prepare a statement with a placeholder
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND OrderStatus = ?");
+			preparedStatement.setString(1, parkName); // 1-indexed parameter position
+			preparedStatement.setString(2, "inside");
+
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+			 // Process the result set
+			 while (rs.next()) {
+				 count += rs.getInt(1); // Get the value of the first column in the result set
+	            }
+	       
+			rs.close();
+			preparedStatement.close();
+			preparedStatement = conn.prepareStatement("SELECT TotalCapacity FROM g13.parks WHERE ParkName = ?");
+			preparedStatement.setString(1, parkName); // 1-indexed parameter position
+			// Execute the query
+			rs = preparedStatement.executeQuery();
+			 // Process the result set
+			 if (rs.next()) {
+				 totalCapacity = rs.getInt(1); // Get the value of the first column in the result set
+	            }
+	       
+			rs.close();
+			preparedStatement.close();
+			available=String.valueOf(totalCapacity-count);
+
+			
+			
+			
+		} catch (SQLException e) {e.printStackTrace();}
+		msg = new Message (Message.ActionType.ERROR,available);
+		return msg;
+	}
+	
+	public void addUnplannedOrder(Order order) {
+		try {
+    		// SQL INSERT statement
+            String sql = "INSERT INTO g13.orders (OrderNumber, ParkName, VisitorId, Date, Time, NumberOfVisitors, VisitorType, ExitTime, OrderStatus, PayStatus, TotalCost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            order.setOrderNum(Integer.toString(getRandomOrderNumber()));
+            order.setDate(RunnableSql.getCurrentDatePlusX(0));
+            order.setTime(RunnableSql.getCurrentTimeMinusX(0));
+         // Original time string
+	        String timeString = order.getTime();
+	        Message msg2 = getParkInfo(order.getParkName());
+	        Park park = (Park) ((Message) msg2).getContent();
+	        // Number of hours to add
+	        int maxStay = Integer.parseInt(park.getMaxStay());
+	        // Parse the time string into LocalTime
+	        LocalTime time = LocalTime.parse(timeString);
+	        // Add x hours
+	        LocalTime newTime = time.plusHours(maxStay);
+	        // Format the new time back into a string
+	        String exitTime = newTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+	        order.setExitTime(exitTime);
+            
+           // Set values for placeholders (?, ?, ?)
+           pstmt.setString(1,order.getOrderNum() );
+           pstmt.setString(2, order.getParkName());
+           pstmt.setString(3, order.getVisitorId());
+           pstmt.setString(4, order.getDate());
+           pstmt.setString(5, order.getTime());
+           pstmt.setString(6, order.getAmountOfVisitors());
+           pstmt.setString(7, order.getVisitorType());
+           pstmt.setString(8, order.getExitTime());
+           pstmt.setString(9, "inside");
+           pstmt.setString(10, order.getPayStatus());
+           pstmt.setString(11, order.getTotalCost());
+                     
+
+           // Execute the INSERT statement
+           pstmt.executeUpdate();
+     
+          
+       } catch (SQLException e) {
+       }
+	}
+	
+	public Message approveExit (String orderNumber) {
+		Message msg=new Message (Message.ActionType.ERROR,"Order number is incorrect or not currently inside the park");
+		PreparedStatement ps;
+		try {
+
+			 	ps = conn.prepareStatement("UPDATE g13.orders SET ExitTime=?,OrderStatus=? WHERE OrderNumber = ?");
+			 	ps.setString(1,RunnableSql.getCurrentTimeMinusX(0));
+	            ps.setString(2,"completed");
+	            ps.setString(3,orderNumber);
+	            int rowsAffected = ps.executeUpdate();
+	            // Check if any rows were affected
+	            if (rowsAffected > 0) 
+	                // Update was successful
+	            	 msg = new Message (Message.ActionType.ERROR,"Exit approved for order number "+orderNumber);
+	            ps.close();
+	            
+		} catch (SQLException e) {System.out.println("Error");	}
+		return msg;
+		
+	}
 	/**
 	   * This method sets the order details from the database according to the OrderNumber
 	   *
@@ -574,12 +794,12 @@ public class mysqlConnection {
 		    rs.close();
 			preparedStatement.close();
 			// Prepare a statement with a placeholder
-			preparedStatement = conn.prepareStatement("SELECT Capacity FROM g13.parks WHERE ParkName = ?");
+			preparedStatement = conn.prepareStatement("SELECT ReservedCapacity FROM g13.parks WHERE ParkName = ?");
 			preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
 			// Execute the query
 			rs = preparedStatement.executeQuery();
 			rs.next();
-			int maxCapacity = Integer.parseInt(rs.getString("Capacity"));
+			int maxCapacity = Integer.parseInt(rs.getString("ReservedCapacity"));
 			rs.close();
 			preparedStatement.close();
 			
@@ -641,12 +861,12 @@ public class mysqlConnection {
 		    rs.close();
 			preparedStatement.close();
 			// Prepare a statement with a placeholder
-			preparedStatement = conn.prepareStatement("SELECT Capacity FROM g13.parks WHERE ParkName = ?");
+			preparedStatement = conn.prepareStatement("SELECT ReservedCapacity FROM g13.parks WHERE ParkName = ?");
 			preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
 			// Execute the query
 			rs = preparedStatement.executeQuery();
 			rs.next();
-			int maxCapacity = Integer.parseInt(rs.getString("Capacity"));
+			int maxCapacity = Integer.parseInt(rs.getString("ReservedCapacity"));
 			rs.close();
 			preparedStatement.close();
 			if (currentAmountOfVisitors>maxCapacity)
@@ -688,7 +908,8 @@ public class mysqlConnection {
 			// Execute the query
 			ResultSet rs = preparedStatement.executeQuery();
 			rs.next();
-			park.setCapacity(rs.getString("Capacity"));
+			park.setReservedCapacity(rs.getString("ReservedCapacity"));
+			park.setTotalCapacity(rs.getString("TotalCapacity"));
 			park.setMaxStay(rs.getString("MaxStay"));
 			rs.close();
 			preparedStatement.close();
@@ -705,10 +926,11 @@ public class mysqlConnection {
 		PreparedStatement ps;
 		try {
 
-			 	ps = conn.prepareStatement("UPDATE g13.parks SET Capacity=?,MaxStay=? WHERE ParkName = ?");
-			 	ps.setString(1,request.getCapacity());
-	            ps.setString(2,request.getMaxStay());
-	            ps.setString(3,request.getParkName());
+			 	ps = conn.prepareStatement("UPDATE g13.parks SET ReservedCapacity=?,TotalCapacity=?,MaxStay=? WHERE ParkName = ?");
+			 	ps.setString(1,request.getReservedCapacity());
+			 	ps.setString(2,request.getTotalCapacity());
+	            ps.setString(3,request.getMaxStay());
+	            ps.setString(4,request.getParkName());
 
 	            ps.executeUpdate();
 	            ps.close();
@@ -774,15 +996,16 @@ public class mysqlConnection {
 	{
 		try {
     		// SQL INSERT statement
-            String sql = "INSERT INTO g13.requests (ParkName, Capacity, MaxStay, Status) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO g13.requests (ParkName, ReservedCapacity, TotalCapacity, MaxStay, Status) VALUES (?, ?, ?, ?, ?)";
           
             PreparedStatement pstmt = conn.prepareStatement(sql);
           
            // Set values for placeholders (?, ?, ?)
            pstmt.setString(1,park.getParkName() );
-           pstmt.setString(2, park.getCapacity());
-           pstmt.setString(3, park.getMaxStay());
-           pstmt.setString(4, "waiting for approval");
+           pstmt.setString(2, park.getReservedCapacity());
+           pstmt.setString(3, park.getTotalCapacity());
+           pstmt.setString(4, park.getMaxStay());
+           pstmt.setString(5, "waiting for approval");
 
                      
 
@@ -803,11 +1026,12 @@ public class mysqlConnection {
 		Message msg = new Message (Message.ActionType.ERROR,"");
 		PreparedStatement ps;
 		try {
-			 	ps = conn.prepareStatement("UPDATE g13.requests SET Status=? WHERE ParkName = ? AND Capacity = ? AND MaxStay = ?");
+			 	ps = conn.prepareStatement("UPDATE g13.requests SET Status=? WHERE ParkName = ? AND ReservedCapacity = ? AND TotalCapacity = ? AND MaxStay = ?");
 			 	ps.setString(1,request.getStatus());
 	            ps.setString(2,request.getParkName());
-	            ps.setString(3,request.getCapacity());
-	            ps.setString(4,request.getMaxStay());
+	            ps.setString(3,request.getReservedCapacity());
+	            ps.setString(4,request.getTotalCapacity());
+	            ps.setString(5,request.getMaxStay());
 
 	            // Execute the update and get the number of rows affected
 	            int rowsAffected = ps.executeUpdate();
@@ -839,7 +1063,8 @@ public class mysqlConnection {
             while (rs.next()) {
             	requests.add(new Request(
             		    rs.getString("ParkName"),
-            		    rs.getString("Capacity"),
+            		    rs.getString("ReservedCapacity"),
+            		    rs.getString("TotalCapacity"),
             		    rs.getString("MaxStay")
             		    ));
 

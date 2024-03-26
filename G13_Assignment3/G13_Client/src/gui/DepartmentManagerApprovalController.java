@@ -50,7 +50,7 @@ public class DepartmentManagerApprovalController implements Initializable  {
 	private TableView requestsTable;
 	 
 	@FXML
-	private TableColumn<Request, String> columnParkName,columnCapacity,columnMaxStay;
+	private TableColumn<Request, String> columnParkName,columnReservedCapacity,columnTotalCapacity,columnMaxStay;
 	
 	/**
 	   * This method loads the current order into the fx
@@ -108,42 +108,22 @@ public class DepartmentManagerApprovalController implements Initializable  {
         requestsTable.setItems(data);
 		// Assuming your TableColumn objects are named placeColumn, timeColumn, numberOfVisitorsColumn, exitTimeColumn, and dateColumn
         columnParkName.setCellValueFactory(new PropertyValueFactory<>("parkName"));
-        columnCapacity.setCellValueFactory(new PropertyValueFactory<>("capacity"));
+        columnReservedCapacity.setCellValueFactory(new PropertyValueFactory<>("reservedCapacity"));
+        columnTotalCapacity.setCellValueFactory(new PropertyValueFactory<>("totalCapacity"));
         columnMaxStay.setCellValueFactory(new PropertyValueFactory<>("maxStay"));
 
 		
 	}
 	public void goBackBtn(ActionEvent event) throws Exception {
-			String fxml="",css="",title="";
-			if (event.getSource()==btnBack) {
-				fxml="/gui/DepartmentManagerHomePage.fxml";
-				css="/gui/DepartmentManagerHomePage.fxml";
-				title="Department Manager home page";
 			
-			}
-			else if (event.getSource()==btnAccept) {
-				fxml="/gui/DepartmentManagerHomePage.fxml";
-				css="/gui/DepartmentManagerHomePage.fxml";
-				title="Department Manager home page";
-	
-			}
-			FXMLLoader loader = new FXMLLoader();
-			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-			Stage primaryStage = new Stage();
-			Pane root = loader.load(getClass().getResource(fxml).openStream());		
-			
-		
-			Scene scene = new Scene(root);			
-			scene.getStylesheets().add(getClass().getResource(css).toExternalForm());
-			primaryStage.setTitle(title);
-	
-			primaryStage.setScene(scene);		
-			primaryStage.show();
+			ChatClient.openGUI.goToGUI(event, "/gui/DepartmentManagerHomePage.fxml","/gui/DepartmentManagerHomePage.fxml","Department Manager home page");
+
 	}
 	
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {	
+
 		updateWaitingListTable(ChatClient.requests);
 		
 	}

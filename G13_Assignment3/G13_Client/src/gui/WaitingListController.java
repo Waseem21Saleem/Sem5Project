@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import client.ChatClient;
@@ -22,11 +23,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -78,6 +83,61 @@ public  class WaitingListController  implements Initializable  {
 
 			
 		}
+	
+	public void getAlternativeDate(ActionEvent event) throws Exception {
+			order=ChatClient.order;
+			Message msg=new Message (Message.ActionType.ALTERNATIVEDATE,order);
+			ClientUI.chat.accept(msg);
+			
+			ArrayList<Order> alt = ChatClient.alternativeOrders;
+			String altOrders="";
+			for (int i=0;i<5;i++)
+				altOrders+=(i+1)+". Time- " + alt.get(i).getTime() + " Date- " + alt.get(i).getDate()+"\n";
+			// Create the alert
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alternative dates");
+			alert.setHeaderText("Please choose the time that suits you:");
+			alert.setContentText(altOrders);
+			
+			// Add buttons
+			ButtonType buttonOption1 = new ButtonType("1");
+			ButtonType buttonOption2 = new ButtonType("2");
+			ButtonType buttonOption3 = new ButtonType("3");
+			ButtonType buttonOption4 = new ButtonType("4");
+			ButtonType buttonOption5 = new ButtonType("5");
+			ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().setAll(buttonOption1,buttonOption2,buttonOption3,buttonOption4,buttonOption5, buttonTypeCancel);
+	
+			// Show the alert and wait for user response
+			Optional<ButtonType> result = alert.showAndWait();
+	
+			// Check which button was clicked
+			if (result.isPresent() && result.get() == buttonTypeCancel) {
+				
+			} else {
+				order=alt.get(Integer.parseInt(result.get().getText())-1);
+				msg = new Message (Message.ActionType.RESERVATION,order);
+				ClientUI.chat.accept(msg);
+                alert.close();
+				Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+		        alert2.setTitle("Order Reservation");
+		        alert2.setHeaderText("Reservation success");
+		        alert2.setContentText("Thank you for reserving, can't wait to see you!");
+
+		        // Add close button
+		        ButtonType closeButton = new ButtonType("Close");
+		        alert2.getButtonTypes().setAll(closeButton);
+
+		        // Handle button action
+		        alert2.showAndWait().ifPresent(response -> {
+		            if (response == closeButton) {
+		                alert2.close();
+		    			ChatClient.openGUI.goToGUI(event, "/gui/VisitorHomePage.fxml","","Visitor Home page");
+		                
+		            }
+		        });
+			}
+	}
 	
 	public void updateWaitingListTable(ArrayList<WaitingListEntry> entries) {
         ObservableList<WaitingListEntry> data = FXCollections.observableArrayList(entries);

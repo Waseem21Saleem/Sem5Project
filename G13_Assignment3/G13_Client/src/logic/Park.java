@@ -5,16 +5,18 @@ import java.io.Serializable;
 public class Park implements Serializable{
 
 	private String parkName;
-	private String capacity;
+	private String reservedCapacity;
+	private String totalCapacity;
 	private String maxStay;
 
 
 	
 	// Constructor
-    public Park( String parkName, String capacity, String maxStay) {
+    public Park( String parkName, String reservedCapacity,String totalCapacity, String maxStay) {
 
         this.parkName = parkName;
-        this.capacity = capacity;
+        this.reservedCapacity = reservedCapacity;
+        this.totalCapacity=totalCapacity;
         this.maxStay = maxStay;
     }
 	// Constructor
@@ -32,10 +34,14 @@ public class Park implements Serializable{
         return parkName;
     }
 
-    public String getCapacity() {
-        return capacity;
+    public String getReservedCapacity() {
+        return reservedCapacity;
     }
 
+    public String getTotalCapacity() {
+        return totalCapacity;
+    }
+    
     public String getMaxStay() {
         return maxStay;
     }
@@ -45,8 +51,12 @@ public class Park implements Serializable{
         this.parkName = parkName;
     }
 
-    public void setCapacity(String capacity) {
-        this.capacity = capacity;
+    public void setReservedCapacity(String reservedCapacity) {
+        this.reservedCapacity = reservedCapacity;
+    }
+    
+    public void setTotalCapacity(String totalCapacity) {
+        this.totalCapacity = totalCapacity;
     }
 
     public void setMaxStay(String maxStay) {

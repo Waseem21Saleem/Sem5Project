@@ -82,6 +82,24 @@ public class Order implements Serializable {
         this.email = email;
         this.exitTime=exitTime;
     }
+ // Constructor with parameters
+    public Order(String parkName, String orderNum, String visitorId, String visitorType, String date, String time,
+            String amountOfVisitors, String telephone, String email, String exitTime, String totalCost,
+            String payStatus, String orderStatus) {
+        this.parkName = parkName;
+        this.orderNum = orderNum;
+        this.visitorId = visitorId;
+        this.visitorType = visitorType;
+        this.date = date;
+        this.time = time;
+        this.amountOfVisitors = amountOfVisitors;
+        this.telephone = telephone;
+        this.email = email;
+        this.exitTime = exitTime;
+        this.totalCost = totalCost;
+        this.payStatus = payStatus;
+        this.orderStatus = orderStatus;
+    }
 
     public Order() {
     	this.parkName="";

@@ -77,6 +77,10 @@ public  class LoginController   {
 			else {
 				String openPage="",pageTitle="";
 				switch (ChatClient.user.getUserPermission()){
+				case "WORKER":
+					openPage="/gui/WorkerHomePage.fxml";
+					pageTitle="Worker home page";
+					break;
 				case "PARK MANAGER":
 					openPage="/gui/ParkManagerHomePage.fxml";
 					pageTitle="Park Manager home page";

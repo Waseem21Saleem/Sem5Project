@@ -21,8 +21,8 @@
       <TableView id="listApprove" fx:id="requestsTable" layoutX="68.0" layoutY="133.0" prefHeight="298.0" prefWidth="467.0" style="-fx-background-color: skyblue;">
         <columns>
           <TableColumn fx:id="columnParkName" prefWidth="129.0" text="Park Name" />
-          <TableColumn fx:id="columnCapacity" prefWidth="138.0" text="Reserved Capacity" />
-            <TableColumn prefWidth="107.99993896484375" text="Total Capacity" />
+          <TableColumn fx:id="columnReservedCapacity" prefWidth="138.0" text="Reserved Capacity" />
+            <TableColumn fx:id="columnTotalCapacity" prefWidth="107.99993896484375" text="Total Capacity" />
             <TableColumn fx:id="columnMaxStay" prefWidth="88.79998168945315" text="Max Stay" />
         </columns>
       </TableView>

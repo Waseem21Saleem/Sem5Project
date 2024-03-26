@@ -115,7 +115,7 @@ public  class VisitorHomePageController implements Initializable   {
 		else {
 			if (Integer.parseInt(amountOfVisitors)>1)
 				if (Integer.parseInt(amountOfVisitors)<6&& (!user.getUserPermission().equals("GUIDE")))
-					visitorType="small group";
+					visitorType="family group";
 				else
 					visitorType="organized group";
 			Order order = new Order (selectedPark,user.getId(),visitorType,date,txtTime.getText(),amountOfVisitors,txtPhone.getText(),txtEmail.getText());
@@ -233,15 +233,9 @@ public  class VisitorHomePageController implements Initializable   {
     }
 	
 	public static boolean isValidTime(String date,String timeStr) {
-		LocalTime currentTime = LocalTime.now();
-		LocalDate today = LocalDate.now();
-		int minHour = 8;
-		int minMinute = 0;
-		if (date.equals(today.toString())) {
-		// Get hour and minute components as integers
-			minHour= currentTime.getHour();
-			minMinute= currentTime.getMinute();
-		}
+
+
+		
         String timeRegex = "^(?:[01]\\d|2[0-3]):(?:[0-5]\\d)$";
         Pattern pattern = Pattern.compile(timeRegex);
         Matcher matcher = pattern.matcher(timeStr);
@@ -256,22 +250,19 @@ public  class VisitorHomePageController implements Initializable   {
         int minute = Integer.parseInt(parts[1]);
 
         // Check if time falls between 08:00 and 16:00
-        return (hour >= minHour && hour <= 16 && minute >= minMinute && minute <= 59 );
+        return (hour >= 8 && hour <= 16 && minute >= 0 && minute <= 59 );
     }
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {	
 
 		setParkComboBox(); 
-		// Set the minimum date based on the current time
-        LocalDate today = LocalDate.now();
-        LocalTime currentTime = LocalTime.now();
-        LocalDate minDate = currentTime.isBefore(LocalTime.of(16, 0)) ? today : today.plusDays(1);
-		// Set the minimum date to today's date and Set the maximum date to 1 year from today's date
+		// Set the minimum date to tomorrow and maximum to next year
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
         datepickDate.setDayCellFactory(picker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                setDisable(empty || date.compareTo(minDate) < 0 || date.compareTo(LocalDate.now().plusYears(1)) > 0);
+                setDisable(empty || date.compareTo(tomorrow) < 0 || date.compareTo(tomorrow.plusYears(1)) > 0);
             }
         });
 

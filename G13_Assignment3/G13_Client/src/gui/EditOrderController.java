@@ -186,7 +186,7 @@ public class EditOrderController implements Initializable {
 		if (checkInput()) {
 			if (Integer.parseInt(amountOfVisitors)>1)
 				if (Integer.parseInt(amountOfVisitors)<6&& (!user.getUserPermission().equals("GUIDE")))
-					visitorType="small group";
+					visitorType="family group";
 				else
 					visitorType="organized group";
 			Order order = new Order (selectedPark,selectedOrder,user.getId(),visitorType,date,txtTime.getText(),amountOfVisitors,txtPhone.getText(),txtEmail.getText());
@@ -272,15 +272,12 @@ public class EditOrderController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {	
 
 		setOrderComboBox();
-		// Set the minimum date based on the current time
-        LocalDate today = LocalDate.now();
-        LocalTime currentTime = LocalTime.now();
-        LocalDate minDate = currentTime.isBefore(LocalTime.of(16, 0)) ? today : today.plusDays(1);
-		// Set the minimum date to today's date and Set the maximum date to 1 year from today's date
+		// Set the minimum date to tomorrow and maximum to next year
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
 		datepickerDate.setDayCellFactory(picker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                setDisable(empty || date.compareTo(minDate) < 0 || date.compareTo(LocalDate.now().plusYears(1)) > 0);
+                setDisable(empty || date.compareTo(tomorrow) < 0 || date.compareTo(tomorrow.plusYears(1)) > 0);
             }
         });
 		

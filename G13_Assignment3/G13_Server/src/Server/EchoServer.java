@@ -145,6 +145,21 @@ public class EchoServer extends AbstractServer
     	    	msg=mysql.getWaitingListTable((Order) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
                 break; 
+    	    case ALTERNATIVEDATE:
+	    	    msg=mysql.getAlternativeDate((Order) ((Message) msg).getContent());
+		    	sendMsgToClient(msg,client);
+	            break; 
+    	    case AVAILABLEPLACES:
+    	    	msg=mysql.getAvailablePlaces((String) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
+                break;
+    	    case ADDUNPLANNED:
+    	    	mysql.addUnplannedOrder((Order) ((Message) msg).getContent());
+    	    	break;
+    	    case APPROVEEXIT:
+    	    	msg=mysql.approveExit((String) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
+    	    	break;
     	    case PARKINFO:
     	    	msg=mysql.getParkInfo((String) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);

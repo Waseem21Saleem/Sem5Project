@@ -46,10 +46,13 @@ public  class ParkManagerChangeCapacityController  implements Initializable {
 	private Label lblError,lblParkName;
 	
 	@FXML
-	private TextField txtParkCapacity,txtMaxStay,txtTotalCapacity;
+	private TextField txtReservedCapacity,txtMaxStay,txtTotalCapacity;
 	
-	private String getCapacity() {
-		return txtParkCapacity.getText();
+	private String getReservedCapacity() {
+		return txtReservedCapacity.getText();
+	}
+	private String getTotalCapacity() {
+		return txtTotalCapacity.getText();
 	}
 	private String getMaxTime() {
 		return txtMaxStay.getText();
@@ -62,12 +65,16 @@ public  class ParkManagerChangeCapacityController  implements Initializable {
 	
 
 	public void Confirm(ActionEvent event) throws Exception {
-		if (!getCapacity().matches("[0-9]+") || getCapacity().length()>3 )
-			lblError.setText("Capacity must contain only digits and max is 999.\n");
+		if (!getReservedCapacity().matches("[0-9]+") || getReservedCapacity().length()>3 )
+			lblError.setText("Reserved capacity must contain only digits and max is 999.\n");
+		else if (!getTotalCapacity().matches("[0-9]+") || getTotalCapacity().length()>3 )
+			lblError.setText("Total capacity must contain only digits and max is 999.\n");
+		else if (Integer.parseInt(getTotalCapacity())<Integer.parseInt(getReservedCapacity()))
+			lblError.setText("Total capacity must be equal or higher than reserved capacity.\n");
 		else if (!getMaxTime().matches("[0-9]+") || getMaxTime().length()!=1 || getMaxTime().equals("0"))
 			lblError.setText("MaxTime must contain only digits in range 1-9 hours.\n");
 		else {
-			Park park = new Park (lblParkName.getText(),getCapacity(),getMaxTime());
+			Park park = new Park (lblParkName.getText(),getReservedCapacity(),getTotalCapacity(),getMaxTime());
 			Message msg = new Message (Message.ActionType.NEWREQUEST,park);
 			ClientUI.chat.accept(msg);
 			lblError.setTextFill(Color.GREEN);
@@ -81,7 +88,8 @@ public  class ParkManagerChangeCapacityController  implements Initializable {
 		Park park=ChatClient.park;
 		lblParkName.setText(user.getParkName());
 		txtMaxStay.setText(park.getMaxStay());
-		txtParkCapacity.setText(park.getCapacity());
+		txtReservedCapacity.setText(park.getReservedCapacity());
+		txtTotalCapacity.setText(park.getTotalCapacity());
 		
 		
 	}

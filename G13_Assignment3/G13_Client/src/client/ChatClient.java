@@ -51,6 +51,7 @@ public class ChatClient extends AbstractClient
   public static List<String> years= new ArrayList<>(Arrays.asList("23", "24"));
   public static List<String> months;
   public static ArrayList<WaitingListEntry> waitingListEntries;
+  public static ArrayList<Order> alternativeOrders;
   public static ArrayList<Request> requests;
   public static User user;
   public static Order order;
@@ -81,6 +82,7 @@ public class ChatClient extends AbstractClient
 	for ( int i=0;i<12;i++)
 		months.add(""+(i+1));
 	waitingListEntries = new ArrayList<>();
+	alternativeOrders = new ArrayList<Order>();
 	requests= new ArrayList<>();
 	user=new User();
 	order=new Order();
@@ -140,6 +142,10 @@ public void handleMessageFromServer(Object msg)
 	        	  break;
 	          case WAITINGLISTTABLE:
 	        	  waitingListEntries=(ArrayList<WaitingListEntry>)((Message) msg).getContent();
+	        	  error="";
+	        	  break;
+	          case ALTERNATIVEDATE:
+	        	  alternativeOrders=(ArrayList<Order>)((Message) msg).getContent();
 	        	  error="";
 	        	  break;
 	          case ORDERSNUMBERS:

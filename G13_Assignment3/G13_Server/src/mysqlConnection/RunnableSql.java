@@ -1,5 +1,7 @@
 package mysqlConnection;
 
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,6 +12,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Properties;
+
+import javax.mail.*;
+import javax.mail.internet.*;
+import com.mysql.cj.Session;
+
+import emailController.EmailReciever;
+import emailController.EmailSender;
 import logic.Notification;
 
 public class RunnableSql implements Runnable  {
@@ -42,7 +52,7 @@ public class RunnableSql implements Runnable  {
 	    
 	}
 	//returns 
-	private String getCurrentTimeMinusX(long x) {
+	public static String getCurrentTimeMinusX(long x) {
 		// Get the current time
         LocalTime currentTime = LocalTime.now();
         // Subtract 2 hours from the current time
@@ -56,7 +66,7 @@ public class RunnableSql implements Runnable  {
 	}
 	
 	//returns current date plus x days
-	private String getCurrentDatePlusX(long x) {
+	public static String getCurrentDatePlusX(long x) {
 		
 		LocalDate today = LocalDate.now().plusDays(x);
         // Define a formatter for "dd-MM-yy" format
@@ -83,8 +93,16 @@ public class RunnableSql implements Runnable  {
 
 	            try (ResultSet resultSet = statement.executeQuery()) {
 	                while (resultSet.next()) {
+	                	String result=EmailReciever.checkResponse(resultSet.getString("OrderNumber"));
 	                	deleteNotification(resultSet.getString("OrderNumber"));
-	                	cancelOrder(resultSet.getString("OrderNumber"));
+	                	if (result.equals("NoResponse"))
+	                		changeOrderStatus(resultSet.getString("OrderNumber"),"cancelled automatically");
+	                	else if (result.equals("Cancellation"))
+	                		changeOrderStatus(resultSet.getString("OrderNumber"),"cancelled manually");
+	                	else
+	                		changeOrderStatus(resultSet.getString("OrderNumber"),"confirmed");
+
+
 	                }
 	            }
 	            Thread.sleep(60000);  // Sleep for 1 minute (adjust as needed)
@@ -133,11 +151,11 @@ public class RunnableSql implements Runnable  {
 	}
 	 
 	//updates order status to cancelled automatically
-	private void cancelOrder(String orderNumber) {
+	private void changeOrderStatus(String orderNumber,String orderStatus) {
 		PreparedStatement ps;
 		try {
 			 	ps = connection.prepareStatement("UPDATE g13.orders SET OrderStatus=? WHERE OrderNumber = ?");
-	            ps.setString(1,"cancelled automatically");
+	            ps.setString(1,orderStatus);
 	            ps.setString(2,orderNumber);
 	            ps.executeUpdate();
 	            ps.close();
@@ -207,7 +225,7 @@ public class RunnableSql implements Runnable  {
 	                    notification.setDate(resultSet.getString("Date"));
 	                    notification.setTime(resultSet.getString("Time"));
 	                    notification.setAmountOfVisitors(resultSet.getString("NumberOfVisitors"));
-
+	                    EmailSender.sendMessage(resultSet.getString("Email"),resultSet.getString("OrderNumber"),resultSet.getString("ParkName"),resultSet.getString("Date"),resultSet.getString("Time"),resultSet.getString("NumberOfVisitors"));
 	                    insertNotification( notification);
 	                }
 	            }
@@ -230,6 +248,8 @@ public class RunnableSql implements Runnable  {
             statement.executeUpdate();
         }
     }
+    
+    
 
 }
 
