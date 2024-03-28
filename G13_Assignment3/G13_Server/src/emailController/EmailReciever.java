@@ -38,11 +38,9 @@ public class EmailReciever {
       for (int i = 0, n = messages.length; i < n; i++) {
          Message message = messages[i];
          if (message.getSubject().equals("Confirmation #"+orderNumber)) {
-        	 message.setFlag(Flags.Flag.DELETED, true);
         	 return "Confirmation";
          }
          if (message.getSubject().equals("Cancellation #"+orderNumber)) {
-        	 message.setFlag(Flags.Flag.DELETED, true);
         	return "Cancellation";
          }
          

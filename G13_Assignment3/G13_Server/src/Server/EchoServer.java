@@ -118,7 +118,7 @@ public class EchoServer extends AbstractServer
     	    	sendMsgToClient(msg,client);
                 break;
     	    case RESERVATION:
-    	    	msg=mysql.checkReservation((Order) ((Message) msg).getContent());
+    	    	msg=mysql.insertReservation((Order) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
                 break;
     	    case ORDERSNUMBERS:
@@ -131,7 +131,7 @@ public class EchoServer extends AbstractServer
     	    	sendMsgToClient(msg,client);
                 break; 
     	    case UPDATEORDER:
-    	    	msg=mysql.checkUpdatedReservation((Order) ((Message) msg).getContent());
+    	    	msg=mysql.updateReservation((Order) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
                 break; 
     	    case DELETEORDER:
@@ -185,6 +185,9 @@ public class EchoServer extends AbstractServer
     	    	break;
     	    case TOTALVISITORSREPORT:
     	    	mysql.CreateTotalVisitorsReport((Report) ((Message) msg).getContent());
+    	    	break;
+    	    case USAGEREPORT:
+    	    	mysql.createUsageReport((Report) ((Message) msg).getContent());
     	    	break;
     	    case REPORTINFO:
     	    	Report report = (Report) ((Message) msg).getContent();

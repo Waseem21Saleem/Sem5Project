@@ -6,10 +6,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
- 
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="708.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CancellationReportController">
    <children>
-      <Label id="lblParkName" fx:id="lblParkName" layoutX="297.0" layoutY="41.0" style="-fx-font-weight: bold;" text="Park Name">
+      <Label id="lblParkName" fx:id="lblParkName" layoutX="298.0" layoutY="25.0" style="-fx-font-weight: bold;" text="Park Name">
          <font>
             <Font size="24.0" />
          </font>
@@ -56,18 +56,38 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Label id="lblFirstType" fx:id="lblFirstType"  layoutX="78.0" layoutY="269.0" style="-fx-font-weight: bold;" text="Cancelled manually">
+      <Label id="lblFirstType" fx:id="lblFirstType" layoutX="78.0" layoutY="269.0" style="-fx-font-weight: bold;" text="Cancelled manually">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label id="lblFirstAnswer" fx:id="lblFirstAnswer"  alignment="CENTER" layoutX="446.0" layoutY="265.0" prefHeight="27.0" prefWidth="39.0" text="Label" />
+      <Label id="lblFirstAnswer" fx:id="lblFirstAnswer" alignment="CENTER" layoutX="446.0" layoutY="265.0" prefHeight="27.0" prefWidth="39.0" text="Label" />
       <Label id="lblSecondType" fx:id="lblSecondType" layoutX="77.0" layoutY="314.0" style="-fx-font-weight: bold;" text="Cancelled automatically">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
       <Label id="lblSecondAnswer" fx:id="lblSecondAnswer" alignment="CENTER" layoutX="446.0" layoutY="310.0" prefHeight="27.0" prefWidth="39.0" text="Label" />
-      <PieChart id="pieChart" fx:id="pieChart" layoutX="96.0" layoutY="355.0" prefHeight="301.0" prefWidth="577.0" style="-fx-background-color: skyblue; -fx-font-weight: BOLD;" title="Chart" />
+      <PieChart id="pieChart" fx:id="pieChart" layoutX="277.0" layoutY="355.0" prefHeight="301.0" prefWidth="396.0" style="-fx-background-color: silver; -fx-font-weight: BOLD;" />
+      <Label id="lblTotal" fx:id="lblTotal" layoutX="78.0" layoutY="402.0" text="Total:">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label id="lblAverage" fx:id="lblAverage" layoutX="78.0" layoutY="472.0" text="Average:">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label id="lblTotalAnswer" fx:id="lblTotalAnswer" layoutX="163.0" layoutY="402.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label id="lblAverageAnswer" fx:id="lblAverageAnswer" layoutX="163.0" layoutY="472.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -15,7 +15,7 @@
             <TableColumn fx:id="placeColumn" prefWidth="75.0" text="Place" />
           <TableColumn fx:id="timeColumn" prefWidth="106.0" text="Time" />
             <TableColumn fx:id="numberOfVisitorsColumn" prefWidth="119.0" text="Number of visitors" />
-            <TableColumn fx:id="exitTimeColumn" prefWidth="90.0" text="Exst Time" />
+            <TableColumn fx:id="exitTimeColumn" prefWidth="90.0" text="Exit Time" />
           <TableColumn fx:id="dateColumn" prefWidth="106.0" text="Date" />
         </columns>
       </TableView>

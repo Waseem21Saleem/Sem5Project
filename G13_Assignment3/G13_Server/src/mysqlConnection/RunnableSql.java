@@ -21,6 +21,7 @@ import com.mysql.cj.Session;
 import emailController.EmailReciever;
 import emailController.EmailSender;
 import logic.Notification;
+import logic.Order;
 
 public class RunnableSql implements Runnable  {
 	private Connection connection;
@@ -65,6 +66,19 @@ public class RunnableSql implements Runnable  {
         return formattedTime;
 	}
 	
+	public static String getCurrentTimePlusX (long x) {
+		// Get the current time
+        LocalTime currentTime = LocalTime.now();
+        // Subtract 2 hours from the current time
+        LocalTime modifiedTime = currentTime.plusHours(x);
+        // Define the format for hh:mm
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        // Format the modified time
+        String formattedTime = modifiedTime.format(formatter);
+        
+        return formattedTime;
+	}
+	
 	//returns current date plus x days
 	public static String getCurrentDatePlusX(long x) {
 		
@@ -93,14 +107,22 @@ public class RunnableSql implements Runnable  {
 
 	            try (ResultSet resultSet = statement.executeQuery()) {
 	                while (resultSet.next()) {
-	                	String result=EmailReciever.checkResponse(resultSet.getString("OrderNumber"));
-	                	deleteNotification(resultSet.getString("OrderNumber"));
-	                	if (result.equals("NoResponse"))
-	                		changeOrderStatus(resultSet.getString("OrderNumber"),"cancelled automatically");
-	                	else if (result.equals("Cancellation"))
-	                		changeOrderStatus(resultSet.getString("OrderNumber"),"cancelled manually");
+	                	String orderNumber=resultSet.getString("OrderNumber");
+	                	String result=EmailReciever.checkResponse(orderNumber);
+	                	deleteNotification(orderNumber);
+	                	Order order = new Order(orderNumber);
+                		logic.Message msg = mysqlConnection.getOrderInfo(order);
+                		order=(Order)msg.getContent();
+	                	if (result.equals("NoResponse")) {
+	                		mysqlConnection.checkWaitingList(order);
+	                		changeOrderStatus(orderNumber,"cancelled automatically");
+	                	}
+	                	else if (result.equals("Cancellation")) {
+	                		mysqlConnection.checkWaitingList(order);
+	                		changeOrderStatus(orderNumber,"cancelled manually");
+	                	}
 	                	else
-	                		changeOrderStatus(resultSet.getString("OrderNumber"),"confirmed");
+	                		changeOrderStatus(orderNumber,"confirmed");
 
 
 	                }
@@ -130,16 +152,20 @@ public class RunnableSql implements Runnable  {
                e.printStackTrace();
            }
 	}
-	//this function deletes row from waitinglist if time equals current time
+	//this function deletes row from waitinglist if date equals yesterday
 	private void deleteWaitingList() {
 		while (true) {
        String sql = "DELETE FROM g13.waitinglist WHERE Time = ? AND Date = ?";
-       String todayDateString = getCurrentDatePlusX(0);
+       LocalDate yesterday = LocalDate.now().minusDays(1);
+       // Define a formatter for "dd-MM-yy" format
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy");
+       // Format the date using the formatter
+       String yesterdayDateString = yesterday.format(formatter);
        String formattedTime=getCurrentTimeMinusX(0);
        try {
                PreparedStatement pstmt = connection.prepareStatement(sql) ;
                pstmt.setString(1, formattedTime);
-               pstmt.setString(2, todayDateString);
+               pstmt.setString(2, yesterdayDateString);
 
               // Execute the DELETE statement
               pstmt.executeUpdate();
@@ -150,7 +176,7 @@ public class RunnableSql implements Runnable  {
 		}
 	}
 	 
-	//updates order status to cancelled automatically
+	//updates order status to the given orderStatus
 	private void changeOrderStatus(String orderNumber,String orderStatus) {
 		PreparedStatement ps;
 		try {
@@ -225,7 +251,7 @@ public class RunnableSql implements Runnable  {
 	                    notification.setDate(resultSet.getString("Date"));
 	                    notification.setTime(resultSet.getString("Time"));
 	                    notification.setAmountOfVisitors(resultSet.getString("NumberOfVisitors"));
-	                    EmailSender.sendMessage(resultSet.getString("Email"),resultSet.getString("OrderNumber"),resultSet.getString("ParkName"),resultSet.getString("Date"),resultSet.getString("Time"),resultSet.getString("NumberOfVisitors"));
+	                    EmailSender.sendMessage(resultSet.getString("Email"),resultSet.getString("OrderNumber"),resultSet.getString("ParkName"),resultSet.getString("Date"),resultSet.getString("Time"),resultSet.getString("NumberOfVisitors"),"Confirmation");
 	                    insertNotification( notification);
 	                }
 	            }
