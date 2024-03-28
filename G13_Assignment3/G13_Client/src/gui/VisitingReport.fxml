@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="1039.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VisitingReportController">
+   <children>
+      <Label id="lblParkName" fx:id="lblParkName" layoutX="439.0" layoutY="33.0" style="-fx-font-weight: bold;" text="Park Name">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label id="lblReportType" fx:id="lblReportType" layoutX="444.0" layoutY="93.0" style="-fx-font-weight: bold;" text="Usage Report">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label id="labelMonth" layoutX="210.0" layoutY="139.0" style="-fx-font-weight: bold;" text="Month:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label id="lblInputMonth" fx:id="labelInputMonth" alignment="CENTER" layoutX="278.0" layoutY="139.0" prefHeight="27.0" prefWidth="58.0" text="Label">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label id="labelYear" layoutX="796.0" layoutY="139.0" style="-fx-font-weight: bold;" text="Year:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label id="lblInputYear" fx:id="labelInputYear" alignment="CENTER" layoutX="845.0" layoutY="139.0" prefHeight="27.0" prefWidth="58.0" text="Label">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Line endX="610.0" layoutX="336.0" layoutY="188.0" startX="-274.0" />
+      <Button id="btnBack" layoutX="26.0" layoutY="645.0" mnemonicParsing="false" onAction="#goBack" style="-fx-background-color: skyblue; -fx-font-weight: bold;" text="Back">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <StackedBarChart id="stackedBarChart1" fx:id="stackedBarChart1" layoutX="26.0" layoutY="211.0" prefHeight="434.0" prefWidth="479.0" style="-fx-font-weight: bold;" title="Individuals and families">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" fx:id="xAxis1" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis fx:id="yAxis1" side="LEFT" style="-fx-font-weight: bold;" />
+        </yAxis>
+      </StackedBarChart>
+      <StackedBarChart id="stackedBarChart2" fx:id="stackedBarChart2" layoutX="534.0" layoutY="211.0" prefHeight="434.0" prefWidth="479.0" style="-fx-font-weight: bold;" title="organized groups">
+         <xAxis>
+            <CategoryAxis side="BOTTOM" fx:id="xAxis2" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="yAxis2" side="LEFT" style="-fx-font-weight: bold;" />
+         </yAxis>
+      </StackedBarChart>
+   </children>
+</AnchorPane>

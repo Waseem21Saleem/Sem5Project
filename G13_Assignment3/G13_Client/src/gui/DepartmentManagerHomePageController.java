@@ -42,6 +42,7 @@ public  class DepartmentManagerHomePageController  implements Initializable {
 	public static ClientController chat;
 	private static int itemIndex = 3;
 	public static User user;
+	public static Report report;
 
 
 	@FXML
@@ -88,10 +89,18 @@ public  class DepartmentManagerHomePageController  implements Initializable {
 		Message msg;
 		String reportType = cmbReportType.getValue().toString();
 		Report report = new Report (reportType,cmbSelectPark.getValue().toString(),cmbReportMonth.getValue().toString(),cmbReportYear.getValue().toString());
+		setReport(report);
 		msg = new Message (Message.ActionType.REPORTINFO,report);
 		ClientUI.chat.accept(msg);
 		if (ChatClient.error.equals(""))
-			ChatClient.openGUI.goToGUI(event, "/gui/CancellationReport.fxml","","Report view page");
+			if (reportType.contains("Total visitors")||reportType.contains("Cancellation"))
+				ChatClient.openGUI.goToGUI(event, "/gui/CancellationReport.fxml","","Report view page");
+			else if (reportType.contains("Usage"))
+				ChatClient.openGUI.goToGUI(event, "/gui/UsageVisitingReport.fxml","","Report view page");
+			else
+				ChatClient.openGUI.goToGUI(event, "/gui/VisitingReport.fxml","","Report view page");
+
+
 		else {
 			lblError.setText(ChatClient.error);
 			lblError.setTextFill(Color.RED);
@@ -99,6 +108,12 @@ public  class DepartmentManagerHomePageController  implements Initializable {
 		}
 	 
 
+	public void setReport(Report report) {
+		this.report=report;
+	}
+	public static Report getReport() {
+		return report;
+	}
 	public void Logout(ActionEvent event) throws Exception {
 		Message msg = new Message (Message.ActionType.LOGOUT,user);
 		ClientUI.chat.accept(msg);

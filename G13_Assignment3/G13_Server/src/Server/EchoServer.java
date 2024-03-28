@@ -189,6 +189,9 @@ public class EchoServer extends AbstractServer
     	    case USAGEREPORT: 
     	    	mysql.createUsageReport((Report) ((Message) msg).getContent());
     	    	break;
+    	    case VISITINGREPORT:
+    	    	mysql.createVisitingReport((Report) ((Message) msg).getContent());
+    	    	break;
     	    case REPORTINFO:
     	    	Report report = (Report) ((Message) msg).getContent();
     	    	System.out.println(report.getReportType());
@@ -197,10 +200,10 @@ public class EchoServer extends AbstractServer
     	    		msg=mysql.getCancellationReport(report);
     	    	else if (report.getReportType().equals("Total visitors report"))
     	    		msg=mysql.getTotalVisitorsReport(report);
-    	    	/*else if (report.getReportType().equals("Usage report"))
-    	    		msg=mysql.getTotalVisitorsReport(report);
+    	    	else if (report.getReportType().equals("Usage report"))
+    	    		msg=mysql.getUsageReport(report);
     	    	else 
-    	    		msg=mysql.getTotalVisitorsReport(report);*/
+    	    		msg=mysql.getVisitingReport(report);
     	    	sendMsgToClient(msg,client);
                 break; 
     	    case CHANGEROLE:

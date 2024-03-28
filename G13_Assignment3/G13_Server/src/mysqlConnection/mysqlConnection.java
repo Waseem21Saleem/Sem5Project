@@ -22,6 +22,7 @@ import logic.Order;
 import logic.Park;
 import logic.Report;
 import logic.Request;
+import logic.UsageVisitingReport;
 import logic.User;
 import logic.WaitingListEntry;
 
@@ -1271,68 +1272,334 @@ public class mysqlConnection {
 		
 	}
 	
-	public void createUsageReport(Report report) {
+	public void createVisitingReportForVisitorType(Report report,String visitorType) {
 		try {
-		String date = report.getMonth()+"-"+report.getYear();
-		PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.orders WHERE ParkName = ? AND Date LIKE ?");
-		
-		preparedStatement.setString(1, report.getParkName());
-		 // 1-indexed parameter position
-		preparedStatement.setString(2, "%" + date); // Use "%" to match any characters before the date pattern
-		// Query orders for the specified month, year, and park name
-		ResultSet ordersResultSet = preparedStatement.executeQuery();
-        
 
-		Message parkInfoMsg= getParkInfo(report.getParkName());
-        Park park = (Park) ((Message) parkInfoMsg).getContent();
-        // Number of hours to add
-        int reservedCapacity=Integer.parseInt(park.getReservedCapacity());
 
-		// Step 3: Calculate total visitors for each hour
-		Map<Integer, Integer> hourVisitorCountMap = new HashMap<>();
-		while (ordersResultSet.next()) {
-		    String orderTime = ordersResultSet.getString("Time");
-		    int hour = extractHour(orderTime);
-		    int currentVisitorCount = hourVisitorCountMap.getOrDefault(hour, 0);
-		    int orderNumberOfVisitors = Integer.parseInt(ordersResultSet.getString("NumberOfVisitors"));
-		    hourVisitorCountMap.put(hour, currentVisitorCount + orderNumberOfVisitors);
-		}
+			// Step 1: Query orders for the specified month, year, and park name
+	        String date = report.getMonth()+"-"+report.getYear();
+	        String query;
+	        if (visitorType.contains("organized")) {
+	            query = "SELECT * FROM g13.orders WHERE ParkName = ? AND Date LIKE ? AND OrderStatus != ? AND OrderStatus != ? AND VisitorType = ?";
+	        } else {
+	            query = "SELECT * FROM g13.orders WHERE ParkName = ? AND Date LIKE ? AND OrderStatus != ? AND OrderStatus != ? AND VisitorType != ?";
+	        }
+	        PreparedStatement preparedStatement = conn.prepareStatement(query);
 
-		// Step 4: Determine if the park is full or not full for each hour
-		Map<Integer, Boolean> hourFullStatusMap = new HashMap<>();
-		for (int hour : hourVisitorCountMap.keySet()) {
-		    int totalVisitors = hourVisitorCountMap.get(hour);
-		    boolean isFull = totalVisitors >= reservedCapacity;
-		    hourFullStatusMap.put(hour, isFull);
-		}
+			preparedStatement.setString(1, report.getParkName());
+			 // 1-indexed parameter position
+			preparedStatement.setString(2, "%" + date); // Use "%" to match any characters before the date pattern
+			preparedStatement.setString(3, "cancelled automatically");
+			preparedStatement.setString(4, "cancelled manually");
+			preparedStatement.setString(5, "organized group");
+		     
+			// Query orders for the specified month, year, and park name
+			ResultSet ordersResultSet = preparedStatement.executeQuery();
+			ArrayList<UsageVisitingReport> usageList = new ArrayList<UsageVisitingReport>();
+			// Step 2: Group orders by time range
+			Map<String, List<Order>> ordersByTimeRange = new HashMap<>();
+			for (int hour = 8; hour < 20; hour+=3) {
+			    String startTime = String.format("%02d:00", hour);
+			    String endTime = String.format("%02d:00", hour + 3);
+			    String timeRange = startTime + "-" + endTime;
+			    ordersByTimeRange.put(timeRange, null);
+			 // Create UsageReport object and add it to the list
+			    UsageVisitingReport usageReport = new UsageVisitingReport(timeRange, 0, 0);
+			    usageList.add(usageReport);
+			}
 
-		// Step 5: Insert the statistical report into the g13.usagereports table
-		for (int hour : hourFullStatusMap.keySet()) {
-		    boolean isFull = hourFullStatusMap.get(hour);
-		    String fullStatus = isFull ? "Full" : "Not Full";
-		 // SQL INSERT statement
-	        String sql = "INSERT INTO g13.usagereport (ParkName,Month,Year, Hour, FullStatus) VALUES (?,?,?, ?, ?)";
-	        PreparedStatement pstmt = conn.prepareStatement(sql);
-	        pstmt.setString(1, report.getParkName());
-	        pstmt.setString(2, report.getMonth());
-	        pstmt.setString(3, report.getYear());
-	        pstmt.setString(4, String.valueOf(hour));
-	        pstmt.setString(5, fullStatus);
-            // Execute the INSERT statement
-            pstmt.executeUpdate();
-		}} catch (SQLException e) {
+			while (ordersResultSet.next()) {
+			    String time = ordersResultSet.getString("Time");
+			    String timeRange = calculateTimeRangeVisitingReport(time); // Implement this method to calculate time range
+			    Order order = createOrderFromResultSet(ordersResultSet); // Implement this method to create an Order object from the ResultSet
+			    ordersByTimeRange.computeIfAbsent(timeRange, k -> new ArrayList<>()).add(order);
+			}
+			// Step 4-6: Calculate full and not full counts for each time range
+			int j=0;
+
+			for (String timeRange : ordersByTimeRange.keySet()) {
+
+			    if (ordersByTimeRange.get(timeRange)!=null) {
+				    List<Order> ordersInTimeRange = ordersByTimeRange.get(timeRange);
+				    for (Order order : ordersInTimeRange) {
+				    	usageList.get(j).setFullOrEnterCounter(usageList.get(j).getFullOrEnterCounter()+Integer.parseInt(order.getAmountOfVisitors()));
+				    	String exitRange = calculateTimeRangeVisitingReport(order.getExitTime());
+				    	System.out.println(exitRange);
+				    	int index=getIndexOfStringInArrayList(exitRange,usageList);
+				    	if (index!=-1)
+				    		usageList.get(index).setNotFullOrExitCounter(usageList.get(index).getNotFullOrExitCounter()+Integer.parseInt(order.getAmountOfVisitors()));
+				    System.out.println(order.getTime()+" "+order.getExitTime()+" "+ usageList.get(j).getFullOrEnterCounter()+" "+ usageList.get(j).getNotFullOrExitCounter()+" "+visitorType+" "+index);
+				    }
+				    
+			    }
+			    j++;			    
+			}
+
+
+			int i=0;
+
+			// Step 7: Insert usage report data into g13.usagereport table
+			for (String timeRange : ordersByTimeRange.keySet()) {
+				String reportId=generateReportId(report.getReportType());
+			    // SQL INSERT statement
+			    String sql = "INSERT INTO g13.visitingreport (ReportId,ParkName,Month,Year, TimeRange, EnterCount,ExitCount,VisitorType) VALUES (?,?,?,?,?, ?, ?,?)";
+			    PreparedStatement pstmt = conn.prepareStatement(sql);
+			    pstmt.setString(1, reportId);
+			    pstmt.setString(2, report.getParkName());
+			    pstmt.setString(3, report.getMonth());
+			    pstmt.setString(4, report.getYear());
+			    pstmt.setString(5, timeRange);
+			    pstmt.setString(6, String.valueOf(usageList.get(i).getFullOrEnterCounter()));
+			    pstmt.setString(7, String.valueOf(usageList.get(i).getNotFullOrExitCounter() ));
+			    pstmt.setString(8,  visitorType);
+
+
+			    // Execute the INSERT statement
+			    pstmt.executeUpdate();
+			    i++;
+			}
+
+			// Step 7: Insert usage report data into g13.usagereport table
+			for (i=0;i<usageList.size();i++){
+			    // SQL INSERT statement
+			    String sql = "UPDATE g13.visitingreport SET ExitCount=? WHERE ParkName=? AND Month=? AND Year=? AND TimeRange=? AND VisitorType=?";
+			    PreparedStatement pstmt = conn.prepareStatement(sql);
+			    pstmt.setString(1, String.valueOf(usageList.get(i).getNotFullOrExitCounter() ));
+			    pstmt.setString(2, report.getParkName());
+			    pstmt.setString(3, report.getMonth());
+			    pstmt.setString(4, report.getYear());
+			    pstmt.setString(5, usageList.get(i).getTimeRange());
+			    pstmt.setString(6, visitorType);
+
+
+			    // Execute the INSERT statement
+			    pstmt.executeUpdate();
+			}
+
+		 
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
-	public int extractHour(String orderTime) {
-	    // Split the time string into hours and minutes
-	    String[] parts = orderTime.split(":");
-	    // Parse the hour part
-	    int hour = Integer.parseInt(parts[0]);
-	    return hour;
+	public void createVisitingReport(Report report) {
+		createVisitingReportForVisitorType(report,"individuals and families");
+		createVisitingReportForVisitorType(report,"organized group");
+
 	}
+	public void createUsageReport(Report report) {
+		try {
+			// Step 1: Retrieve reserved capacity for the park
+			Message parkInfoMsg = getParkInfo(report.getParkName());
+	        Park park = (Park) ((Message) parkInfoMsg).getContent();
+	        int reservedCapacity=Integer.parseInt(park.getReservedCapacity());
+
+			// Step 2: Query orders for the specified month, year, and park name
+	        String date = report.getMonth()+"-"+report.getYear();
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.orders WHERE ParkName = ? AND Date LIKE ? AND OrderStatus!=? AND OrderStatus!=?");
+			
+			preparedStatement.setString(1, report.getParkName());
+			 // 1-indexed parameter position
+			preparedStatement.setString(2, "%" + date); // Use "%" to match any characters before the date pattern
+			preparedStatement.setString(3, "cancelled automatically");
+			preparedStatement.setString(4, "cancelled manually");
+			// Query orders for the specified month, year, and park name
+			ResultSet ordersResultSet = preparedStatement.executeQuery();
+			ArrayList<UsageVisitingReport> usageList = new ArrayList<UsageVisitingReport>();
+			// Step 3: Group orders by time range
+			Map<String, List<Order>> ordersByTimeRange = new HashMap<>();
+			for (int hour = 8; hour < 16; hour++) {
+			    String startTime = String.format("%02d:00", hour);
+			    String endTime = String.format("%02d:00", hour + 1);
+			    String timeRange = startTime + "-" + endTime;
+			    ordersByTimeRange.put(timeRange, null);
+			}
+			while (ordersResultSet.next()) {
+			    String time = ordersResultSet.getString("Time");
+			    String timeRange = calculateTimeRange(time); // Implement this method to calculate time range
+			    Order order = createOrderFromResultSet(ordersResultSet); // Implement this method to create an Order object from the ResultSet
+			    ordersByTimeRange.computeIfAbsent(timeRange, k -> new ArrayList<>()).add(order);
+			}
+
+			// Step 4-6: Calculate full and not full counts for each time range
+			for (String timeRange : ordersByTimeRange.keySet()) {
+			    int fullCounter = 0;
+			    int notFullCounter = 0;
+			    if (ordersByTimeRange.get(timeRange)!=null) {
+				    List<Order> ordersInTimeRange = ordersByTimeRange.get(timeRange);
+				    for (Order order : ordersInTimeRange) {
+				        int totalVisitors = calculateTotalVisitors(order);
+				        if (totalVisitors >= reservedCapacity) {
+				            fullCounter++;
+				        } else {
+				            notFullCounter++;
+				        }
+				    }
+			    }
+			    // Create UsageReport object and add it to the list
+			    UsageVisitingReport usageReport = new UsageVisitingReport(timeRange, fullCounter, notFullCounter);
+			    usageList.add(usageReport);
+			}
+			
+
+			int i=0;
+			// Step 7: Insert usage report data into g13.usagereport table
+			for (String timeRange : ordersByTimeRange.keySet()) {
+				String reportId=generateReportId(report.getReportType());
+			    // SQL INSERT statement
+			    String sql = "INSERT INTO g13.usagereport (ReportId,ParkName,Month,Year, TimeRange, FullCounter,NotFullCounter) VALUES (?,?,?,?,?, ?, ?)";
+			    PreparedStatement pstmt = conn.prepareStatement(sql);
+			    pstmt.setString(1, reportId);
+			    pstmt.setString(2, report.getParkName());
+			    pstmt.setString(3, report.getMonth());
+			    pstmt.setString(4, report.getYear());
+			    pstmt.setString(5, timeRange);
+			    pstmt.setString(6, String.valueOf(usageList.get(i).getFullOrEnterCounter() ));
+			    pstmt.setString(7, String.valueOf(usageList.get(i).getNotFullOrExitCounter() ));
+
+			    // Execute the INSERT statement
+			    pstmt.executeUpdate();
+			    i++;
+			}
+		 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static int getIndexOfStringInArrayList(String timeRange,ArrayList<UsageVisitingReport> usageList) {
+		// Iterate over the ArrayList to find the index of the object with the specified timeRange
+        int index = -1; // Initialize index to -1 (not found)
+        for (int i = 0; i < usageList.size(); i++) {
+            if (usageList.get(i).getTimeRange().equals(timeRange)) {
+                index = i; // Set the index when the target timeRange is found
+                break; // Exit the loop since we found the index
+            }
+        }
+        return index;
+	}
+	public String generateReportId(String reportType) {
+	    String table;
+	    if (reportType.contains("Usage"))
+	        table = "g13.usagereport";
+	    else
+	        table = "g13.visitingreport";
+	    
+	    Random random = new Random();
+	    int randomNumber = random.nextInt(90000000) + 10000000;
+	    
+	    try {
+	        PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM " + table + " WHERE ReportId = ?");
+	        preparedStatement.setString(1, Integer.toString(randomNumber));
+	        ResultSet rs = preparedStatement.executeQuery();
+	        
+	        while (rs.next()) {
+	            rs.close();
+	            preparedStatement.close();
+	            randomNumber = random.nextInt(90000000) + 10000000;
+	            preparedStatement = conn.prepareStatement("SELECT * FROM " + table + " WHERE ReportId = ?");
+	            preparedStatement.setString(1, Integer.toString(randomNumber));
+	            rs = preparedStatement.executeQuery();
+	        }
+	        
+	        rs.close();
+	        preparedStatement.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return String.valueOf(randomNumber);
+	}
+	// Method to calculate total visitors for each time range
+    public int calculateTotalVisitors(Order order) {
+        int totalVisitors = Integer.parseInt(order.getAmountOfVisitors());
+        try {
+	     // Prepare a statement with a placeholder
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND Time <= ? AND ExitTime >= ? AND Date = ? AND OrderStatus!=? AND OrderStatus!=?");
+			preparedStatement.setString(1, order.getParkName()); // 1-indexed parameter position
+			preparedStatement.setString(2, order.getTime());
+			preparedStatement.setString(3, order.getTime());
+			preparedStatement.setString(4, order.getDate());
+			preparedStatement.setString(5, "cancelled automatically");
+			preparedStatement.setString(6, "cancelled manually");
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+	        while (rs.next())
+	            totalVisitors += Integer.parseInt(rs.getString("NumberOfVisitors"));
+	        rs.close();
+	        preparedStatement.close(); 
+        }
+        catch (Exception e) {
+        	
+        }
+       
+        return totalVisitors;
+    }
+	// Method to calculate time range based on the order time
+	public static String calculateTimeRange(String orderTime) {
+	    String[] timeParts = orderTime.split(":");
+	    int hour = Integer.parseInt(timeParts[0]);
+	    // Determine the time range based on the hour
+	    if (hour >= 8 && hour < 9) {
+	        return "08:00-09:00";
+	    } else if (hour >= 9 && hour < 10) {
+	        return "09:00-10:00";
+	    } else if (hour >= 10 && hour < 11) {
+	        return "10:00-11:00";
+	    } else if (hour >= 11 && hour < 12) {
+	        return "11:00-12:00";
+	    } else if (hour >= 12 && hour < 13) {
+	        return "12:00-13:00";
+	    } else if (hour >= 13 && hour < 14) {
+	        return "13:00-14:00";
+	    } else if (hour >= 14 && hour < 15) {
+	        return "14:00-15:00";
+	    } else
+	        return "15:00-16:00";
+	  
+
+	    
+	}
+	// Method to calculate time range based on the order time
+		public static String calculateTimeRangeVisitingReport(String orderTime) {
+		    String[] timeParts = orderTime.split(":");
+		    int hour = Integer.parseInt(timeParts[0]);
+		    // Determine the time range based on the hour
+		    if (hour >= 8 && hour < 11) {
+		        return "08:00-11:00";
+		    } else if (hour >= 11 && hour < 14) {
+		        return "11:00-14:00";
+		    } else if (hour >= 14 && hour < 17) {
+		        return "14:00-17:00";
+		    } else 
+		        return "17:00-20:00";
+		    
+
+		    
+		}
+
+	// Method to create an Order object from the ResultSet
+	public Order createOrderFromResultSet(ResultSet resultSet) throws SQLException {
+	    Order order = new Order();
+	    order.setOrderNum(resultSet.getString("OrderNumber"));
+	    order.setParkName(resultSet.getString("ParkName"));
+	    order.setVisitorId(resultSet.getString("VisitorId"));
+	    order.setDate(resultSet.getString("Date"));
+	    order.setTime(resultSet.getString("Time"));
+	    order.setAmountOfVisitors(resultSet.getString("NumberOfVisitors"));
+	    order.setTelephone(resultSet.getString("PhoneNumber"));
+	    order.setEmail(resultSet.getString("Email"));
+	    order.setVisitorType(resultSet.getString("VisitorType"));
+	    order.setExitTime(resultSet.getString("ExitTime"));
+	    order.setOrderStatus(resultSet.getString("OrderStatus"));
+	    order.setPayStatus(resultSet.getString("PayStatus"));
+	    order.setTotalCost(resultSet.getString("TotalCost"));
+	    return order;
+	}
+	
 	public Message getCancellationReport(Report report)
 	{
 		Message msg;
@@ -1366,6 +1633,95 @@ public class mysqlConnection {
 			
 		} catch (SQLException e) {e.printStackTrace();}
 		msg = new Message (Message.ActionType.REPORTINFO,report);
+		return msg;
+	}
+	
+	public Message getUsageReport(Report report)
+	{
+		Message msg;
+		ArrayList<UsageVisitingReport> usageList = new ArrayList<UsageVisitingReport>();
+
+		try 
+		{	
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.usagereport WHERE ParkName = ? AND Month = ? AND Year = ? ORDER BY TimeRange ASC");
+			preparedStatement.setString(1, report.getParkName()); // 1-indexed parameter position
+			preparedStatement.setString(2, report.getMonth()); 
+			preparedStatement.setString(3, report.getYear()); 
+
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+			 // Process the result set
+			if (rs.next()) {
+				UsageVisitingReport usageReport=new UsageVisitingReport(rs.getString("TimeRange"),Integer.parseInt(rs.getString("FullCounter")),Integer.parseInt(rs.getString("NotFullCounter")));
+				usageList.add(usageReport);
+			}
+			else {
+				msg = new Message (Message.ActionType.ERROR,"Report not found!");
+				return msg;
+			}
+			while (rs.next()) {
+				UsageVisitingReport usageReport=new UsageVisitingReport(rs.getString("TimeRange"),Integer.parseInt(rs.getString("FullCounter")),Integer.parseInt(rs.getString("NotFullCounter")));
+				usageList.add(usageReport);
+			}
+	            
+          
+			rs.close();
+			preparedStatement.close();
+			
+			
+			
+		} catch (SQLException e) {e.printStackTrace();}
+		msg = new Message (Message.ActionType.REPORTINFO,usageList);
+		return msg;
+	}
+	
+	public Message getVisitingReport(Report report)
+	{
+		Message msg;
+		ArrayList<UsageVisitingReport> individualsList = new ArrayList<UsageVisitingReport>();
+		ArrayList<UsageVisitingReport> organizedList = new ArrayList<UsageVisitingReport>();
+		ArrayList<ArrayList<UsageVisitingReport>> visitingArrayList= new ArrayList<ArrayList<UsageVisitingReport>>();
+
+
+		try 
+		{	
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.visitingreport WHERE ParkName = ? AND Month = ? AND Year = ? ORDER BY TimeRange ASC");
+			preparedStatement.setString(1, report.getParkName()); // 1-indexed parameter position
+			preparedStatement.setString(2, report.getMonth()); 
+			preparedStatement.setString(3, report.getYear()); 
+
+			// Execute the query
+			ResultSet rs = preparedStatement.executeQuery();
+			 // Process the result set
+			if (rs.next()) {
+				UsageVisitingReport usageReport=new UsageVisitingReport(rs.getString("TimeRange"),Integer.parseInt(rs.getString("EnterCount")),Integer.parseInt(rs.getString("ExitCount")));
+				if (rs.getString("VisitorType").contains("organized"))
+					organizedList.add(usageReport);
+				else
+					individualsList.add(usageReport);
+			}
+			else {
+				msg = new Message (Message.ActionType.ERROR,"Report not found!");
+				return msg;
+			}
+			while (rs.next()) {
+				UsageVisitingReport usageReport=new UsageVisitingReport(rs.getString("TimeRange"),Integer.parseInt(rs.getString("EnterCount")),Integer.parseInt(rs.getString("ExitCount")));
+				if (rs.getString("VisitorType").contains("organized"))
+					organizedList.add(usageReport);
+				else
+					individualsList.add(usageReport);
+			}
+	            
+          
+			rs.close();
+			preparedStatement.close();
+			
+			
+			
+		} catch (SQLException e) {e.printStackTrace();}
+		visitingArrayList.add(individualsList);
+		visitingArrayList.add(organizedList);
+		msg = new Message (Message.ActionType.VISITINGREPORT,visitingArrayList);
 		return msg;
 	}
 	

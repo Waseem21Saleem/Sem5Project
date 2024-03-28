@@ -79,6 +79,8 @@ public  class ParkManagerHomePageController implements Initializable  {
 	}
 	
 	public void createReportPage(ActionEvent event) throws Exception {
+		lblError.setText("Creating report...");
+		lblError.setTextFill(Color.WHITE);
 		Message msg=getMessage();
 		ClientUI.chat.accept(msg);
 		lblError.setText("Report created successfully");
@@ -102,7 +104,7 @@ public  class ParkManagerHomePageController implements Initializable  {
 		else if (reportType.equals("Cancellation report"))
 			msg = new Message (Message.ActionType.CANCELLATIONREPORT,report);
 		else
-			msg = new Message (Message.ActionType.VISITSREPORT,report);
+			msg = new Message (Message.ActionType.VISITINGREPORT,report);
 		return msg;
 	}
 

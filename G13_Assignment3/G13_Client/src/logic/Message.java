@@ -26,7 +26,7 @@ public class Message implements Serializable  {
 	    CANCELLATIONREPORT,
 	    USAGEREPORT,
 	    TOTALVISITORSREPORT,
-	    VISITSREPORT,
+	    VISITINGREPORT,
 	    REPORTINFO,
 	    RESERVATION,
 	    WAITINGLIST,

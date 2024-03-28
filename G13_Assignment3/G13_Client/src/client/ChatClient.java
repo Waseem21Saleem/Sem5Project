@@ -16,6 +16,7 @@ import logic.Order;
 import logic.Park;
 import logic.Report;
 import logic.Request;
+import logic.UsageVisitingReport;
 import logic.User;
 import logic.WaitingListEntry;
 import javafx.collections.FXCollections;
@@ -53,6 +54,8 @@ public class ChatClient extends AbstractClient
   public static ArrayList<WaitingListEntry> waitingListEntries;
   public static ArrayList<Order> alternativeOrders;
   public static ArrayList<Request> requests;
+  public static ArrayList<UsageVisitingReport> usageVisitingList;
+  public static ArrayList<ArrayList<UsageVisitingReport>> visitingArrayList;
   public static User user;
   public static Order order;
   public static String error;
@@ -84,6 +87,8 @@ public class ChatClient extends AbstractClient
 		months.add(""+(i+1));
 	waitingListEntries = new ArrayList<>();
 	alternativeOrders = new ArrayList<Order>();
+	usageVisitingList = new ArrayList<UsageVisitingReport>();
+	visitingArrayList = new ArrayList<ArrayList<UsageVisitingReport>>();
 	requests= new ArrayList<>();
 	user=new User();
 	order=new Order();
@@ -166,7 +171,14 @@ public void handleMessageFromServer(Object msg)
 	        	  error="";
 	        	  break;
 	          case REPORTINFO:
-	        	  report=(Report)((Message) msg).getContent();
+	        	  if (((Message) msg).getContent() instanceof Report)
+	        		  report=(Report)((Message) msg).getContent();
+	        	  else
+	        		  usageVisitingList=(ArrayList<UsageVisitingReport>)((Message) msg).getContent();
+	        	  error="";
+	        	  break;
+	          case VISITINGREPORT:
+	        	  visitingArrayList=(ArrayList<ArrayList<UsageVisitingReport>>)((Message) msg).getContent();
 	        	  error="";
 	        	  break;
 	          default:
