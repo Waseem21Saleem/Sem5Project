@@ -47,7 +47,7 @@ public  class MainFrameController   {
 	}
 	private String getPort() {
 		return txtPort.getText();
-	}
+	} 
 	/**
 	   * This method runs the order form fx 
 	   * and adds the client info into the database when "open order manager" button pressed

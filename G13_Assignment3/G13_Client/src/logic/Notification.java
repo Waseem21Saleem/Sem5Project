@@ -60,7 +60,7 @@ public class Notification implements Serializable{
 
     public void setDate(String date) {
         this.date = date;
-    }
+    } 
 
     // Getter and Setter methods for time
     public String getTime() {

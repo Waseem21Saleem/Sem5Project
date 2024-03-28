@@ -11,7 +11,7 @@
    <children>
       <Label id="labelReportType" layoutX="59.0" layoutY="146.0" style="-fx-font-weight: bold;" text="Report Type:">
          <font>
-            <Font size="16.0" />
+            <Font size="16.0" /> 
          </font>
       </Label>
       <Label id="labelReportMonth" layoutX="59.0" layoutY="220.0" style="-fx-font-weight: bold;" text="Report Month: ">

@@ -51,7 +51,7 @@ public class NotificationPageController implements Initializable  {
 	
 	@FXML
 	private TableColumn<Request, String> columnParkName,columnCapacity,columnMaxStay;
-	
+	 
 	/**
 	   * This method loads the current order into the fx
 	   *

@@ -35,7 +35,7 @@ public class ServerUI extends Application {
 			if (sv!=null)
 				sv.close();
 			 
-		}
+		} 
 		catch(Exception ex) 
         {
           System.out.println("ERROR - Could not listen for clients!");

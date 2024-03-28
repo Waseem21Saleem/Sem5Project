@@ -16,7 +16,7 @@ public class WaitingListEntry implements Serializable {
         this.date = date;
         this.numberOfVisitors = numberOfVisitors;
     }
-
+ 
     
     
     // Getters and Setters

@@ -127,7 +127,7 @@ public  class WaitingListController  implements Initializable  {
 		        // Add close button
 		        ButtonType closeButton = new ButtonType("Close");
 		        alert2.getButtonTypes().setAll(closeButton);
-
+ 
 		        // Handle button action
 		        alert2.showAndWait().ifPresent(response -> {
 		            if (response == closeButton) {

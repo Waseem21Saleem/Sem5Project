@@ -12,7 +12,7 @@ public class Report implements Serializable{
 	private ArrayList<String> details;	
 	// Constructor without parameters
     public Report() {
-    }
+    } 
     // Constructor with parameters
     public Report(String reportType,String parkName, String month, String year) {
     	this.reportType=reportType;

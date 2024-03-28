@@ -26,6 +26,7 @@ public class ClientController implements ChatIF
   //Class variables *************************************************
   
 	
+	
   /**
    * The default port to connect on.
    */

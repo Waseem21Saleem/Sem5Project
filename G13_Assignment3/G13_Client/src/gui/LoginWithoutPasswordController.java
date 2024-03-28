@@ -41,7 +41,7 @@ public  class LoginWithoutPasswordController   {
 	private Button btnLogin = null;
 	@FXML
 	private Label lblError;
-	
+	 
 	@FXML
 	private TextField txtId;
 	

@@ -58,7 +58,7 @@ public  class VisitorHomePageController implements Initializable   {
 	
 	@FXML
 	private DatePicker datepickDate;
-	
+	 
 	@FXML
 	private TextField txtInputAmountVisitors,txtEmail,txtPhone,txtTime;
 	

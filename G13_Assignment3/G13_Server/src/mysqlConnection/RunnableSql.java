@@ -102,7 +102,7 @@ public class RunnableSql implements Runnable  {
 		String formattedTime=getCurrentTimeMinusX(2);
 	        try (PreparedStatement statement = connection.prepareStatement(query)) {
 	        	
-
+ 
 	            statement.setString(1, formattedTime);
 
 	            try (ResultSet resultSet = statement.executeQuery()) {

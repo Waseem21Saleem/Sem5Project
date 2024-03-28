@@ -47,7 +47,7 @@ public class EmailSender {
 	        	message.setSubject("Order update #" + orderNumber);
 		        htmlContent=WaitingListEmail( orderNumber,  parkName,  date,  time,  numberOfVisitors);
 		        message.setContent(htmlContent, "text/html");
-	        	
+	        	 
 	        }
 	        // Send the email
 	        Transport.send(message);

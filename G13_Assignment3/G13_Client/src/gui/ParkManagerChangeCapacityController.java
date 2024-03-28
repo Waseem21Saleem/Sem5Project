@@ -92,7 +92,7 @@ public  class ParkManagerChangeCapacityController  implements Initializable {
 		txtTotalCapacity.setText(park.getTotalCapacity());
 		
 		
-	}
+	} 
 	
 	
 	

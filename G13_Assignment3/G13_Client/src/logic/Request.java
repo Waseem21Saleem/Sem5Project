@@ -10,7 +10,7 @@ public class Request implements Serializable{
 	private String maxStay;
 	private String status;
 
-
+ 
 	// Constructor
     public Request( String parkName, String reservedCapacity,String totalCapacity, String maxStay) {
 

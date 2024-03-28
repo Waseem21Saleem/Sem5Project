@@ -558,7 +558,7 @@ public class mysqlConnection {
                     EmailSender.sendMessage(checkOrder.getEmail(),checkOrder.getOrderNum(),checkOrder.getParkName(),checkOrder.getDate(),checkOrder.getTime(),checkOrder.getAmountOfVisitors(),"WaitingList");
 
 				}
-	        }
+	        } 
 			rs.close();
 			preparedStatement.close();
 			// Prepare a statement with a placeholder

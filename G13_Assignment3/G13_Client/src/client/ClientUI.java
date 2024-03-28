@@ -27,7 +27,8 @@ public class ClientUI extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		MainFrameController aFrame = new MainFrameController();
 		aFrame.start(primaryStage);
-			  		
+			
+		
 		
 		
 		

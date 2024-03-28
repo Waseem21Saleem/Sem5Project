@@ -186,7 +186,7 @@ public class EchoServer extends AbstractServer
     	    case TOTALVISITORSREPORT:
     	    	mysql.CreateTotalVisitorsReport((Report) ((Message) msg).getContent());
     	    	break;
-    	    case USAGEREPORT:
+    	    case USAGEREPORT: 
     	    	mysql.createUsageReport((Report) ((Message) msg).getContent());
     	    	break;
     	    case REPORTINFO:

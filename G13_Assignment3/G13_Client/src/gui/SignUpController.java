@@ -45,7 +45,7 @@ public  class SignUpController   {
 	
 	private String getUsername() {
 		return txtUsername.getText();
-	}
+	} 
 	private String getPassword() {
 		return txtPassword.getText();
 	}

@@ -97,7 +97,7 @@ public  class LoginController   {
 					pageTitle="Services home page";
 					break;
 				}
-					
+					 
 				
 				ChatClient.openGUI.goToGUI(event, openPage,"",pageTitle);
 

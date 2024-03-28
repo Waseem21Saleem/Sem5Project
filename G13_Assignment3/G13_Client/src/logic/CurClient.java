@@ -11,7 +11,7 @@ public class CurClient {
 		this.connected=false;
 	}
 	public CurClient(String ip,String host, boolean connected) {
-		
+		 
 		this.ip=ip;
 		this.host=host;
 		this.connected=connected;

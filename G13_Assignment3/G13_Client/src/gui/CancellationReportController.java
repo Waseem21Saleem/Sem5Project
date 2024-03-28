@@ -71,6 +71,7 @@ public class CancellationReportController implements Initializable {
 	        slice1 = new PieChart.Data("Non-organised", Integer.parseInt(lblFirstAnswer.getText()));
 	        slice2 = new PieChart.Data("Organised", Integer.parseInt(lblSecondAnswer.getText()));
 
+	        
 	    }
         pieChart.getData().add(slice1);
         pieChart.getData().add(slice2);

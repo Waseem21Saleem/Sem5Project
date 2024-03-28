@@ -46,7 +46,7 @@ public class EditOrderController implements Initializable {
 	private Order order;	
 	public static User user=ChatClient.user;
 
-	 
+	  
 	@FXML
 	private Label lblOrderNum,lblSave,lblError;
 	

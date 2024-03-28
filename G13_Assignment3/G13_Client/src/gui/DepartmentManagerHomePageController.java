@@ -97,7 +97,7 @@ public  class DepartmentManagerHomePageController  implements Initializable {
 			lblError.setTextFill(Color.RED);
 			}
 		}
-	
+	 
 
 	public void Logout(ActionEvent event) throws Exception {
 		Message msg = new Message (Message.ActionType.LOGOUT,user);

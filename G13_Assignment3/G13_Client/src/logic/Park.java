@@ -9,7 +9,7 @@ public class Park implements Serializable{
 	private String totalCapacity;
 	private String maxStay;
 
-
+ 
 	
 	// Constructor
     public Park( String parkName, String reservedCapacity,String totalCapacity, String maxStay) {

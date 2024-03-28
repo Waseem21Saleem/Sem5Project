@@ -31,7 +31,7 @@ public class Message implements Serializable  {
 	    RESERVATION,
 	    WAITINGLIST,
 	    WAITINGLISTTABLE,
-	    ALTERNATIVEDATE,
+	    ALTERNATIVEDATE, 
 	    CHANGEROLE,
 	    EXECUTEERROR,
 	    LOGOUT

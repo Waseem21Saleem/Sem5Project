@@ -152,7 +152,7 @@ public  class WorkerHomePageController  implements Initializable    {
 					lblUnplannedVisitors.setTextFill(Color.GREEN);
 					getAvailablePlaces( event);
 	
-					}
+					} 
 				
 			}
 					

@@ -148,7 +148,7 @@ public  class ParkManagerHomePageController implements Initializable  {
 		}
 	  	this.cmbReportType.setItems(FXCollections.observableArrayList(reportTypes));
 		
-	}
+	} 
 
 	
 }

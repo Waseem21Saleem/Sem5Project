@@ -118,7 +118,7 @@ public class DepartmentManagerApprovalController implements Initializable  {
 			
 			ChatClient.openGUI.goToGUI(event, "/gui/DepartmentManagerHomePage.fxml","/gui/DepartmentManagerHomePage.fxml","Department Manager home page");
 
-	}
+	} 
 	
 	
 	@Override
