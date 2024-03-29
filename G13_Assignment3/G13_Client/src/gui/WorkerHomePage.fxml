@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
- 
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="659.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.WorkerHomePageController">
    <children>
       <Button id="btnCheckPlaces" layoutX="65.0" layoutY="91.0" mnemonicParsing="false" onAction="#getAvailablePlaces" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="Check available places" />
@@ -30,9 +30,10 @@
       <TextField id="txtOrderNumber" fx:id="txtOrderNumber" layoutX="251.0" layoutY="280.0" />
       <Button id="btnApproveExit" layoutX="274.0" layoutY="334.0" mnemonicParsing="false" onAction="#approveExit" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="Approve Exit" />
       <Label fx:id="lblUnplannedVisitors" layoutX="181.0" layoutY="233.0" prefHeight="26.0" prefWidth="328.0" style="-fx-font-weight: bold;" textFill="RED" />
-      <Label fx:id="lblApproveExit" alignment="CENTER" layoutX="261.0" layoutY="381.0" prefHeight="26.0" prefWidth="142.0" style="-fx-font-weight: bold;" textFill="RED" />
+      <Label fx:id="lblApproveExit" alignment="CENTER" layoutX="132.0" layoutY="381.0" prefHeight="26.0" prefWidth="424.0" style="-fx-font-weight: bold;" textAlignment="CENTER" textFill="RED" />
       <Line endX="289.0" layoutX="357.0" layoutY="140.0" startX="-315.0" />
       <Line endX="289.0" layoutX="357.0" layoutY="259.0" startX="-315.0" />
       <Line endX="289.0" layoutX="345.0" layoutY="407.0" startX="-315.0" />
+      <Button id="btnGetBill" layoutX="480.0" layoutY="280.0" mnemonicParsing="false" onAction="#getBill" prefHeight="31.0" prefWidth="142.0" style="-fx-background-color: skyblue; -fx-font-weight: bold; -fx-text-fill: black;" text="Generate Invoice" />
    </children>
 </AnchorPane>

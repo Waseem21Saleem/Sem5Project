@@ -23,13 +23,12 @@ DROP TABLE IF EXISTS `cancellationreport`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cancellationreport` (
-  `ReportId` varchar(45) NOT NULL,
   `ParkName` varchar(45) NOT NULL,
   `Month` varchar(45) NOT NULL,
   `Year` varchar(45) NOT NULL,
   `CancelledManually` varchar(45) NOT NULL,
   `CancelledAutomatically` varchar(45) NOT NULL,
-  PRIMARY KEY (`ReportId`)
+  PRIMARY KEY (`Year`,`Month`,`ParkName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -39,6 +38,7 @@ CREATE TABLE `cancellationreport` (
 
 LOCK TABLES `cancellationreport` WRITE;
 /*!40000 ALTER TABLE `cancellationreport` DISABLE KEYS */;
+INSERT INTO `cancellationreport` VALUES ('Central Park','3','24','1','0'),('Hyde Park','3','24','7','5');
 /*!40000 ALTER TABLE `cancellationreport` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-18 14:51:28
+-- Dump completed on 2024-03-28 17:44:52

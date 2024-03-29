@@ -31,11 +31,20 @@ import ocsf.server.ConnectionToClient;
 
 
 
- 
+/**
+ * This class controls the functionality of the Services Home Page GUI.
+ * It allows Services to change roles from visitor to guide, and log out.
+ * <p>Author: Mohammed Khateeb</p>
+ */
 public  class ServicesHomePageController   {
-	public static ClientController chat;
-	private static int itemIndex = 3;
-	public static User user=ChatClient.user;
+	/** Static ClientController for chat functionality. */
+    public static ClientController chat;
+
+    /** Static integer representing an item index. */
+    private static int itemIndex = 3;
+
+    /** Static User object representing the user. */
+    public static User user = ChatClient.user;
 
 	@FXML
 	private Label lblError;
@@ -43,12 +52,21 @@ public  class ServicesHomePageController   {
 	@FXML
 	private TextField txtEnterID;
 	
-	
+	   /**
+     * Retrieves the entered ID from the text field.
+     *
+     * @return The entered ID.
+     */
 	private String getID() {
 		return txtEnterID.getText();
 	}
 	 
-	
+    /**
+     * Changes the role of a user based on the entered ID.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during role change.
+     */
 	public void changeRole(ActionEvent event) throws Exception {
 		if (!getID().matches("[0-9]+") || getID().length()!=9)
 			lblError.setText("ID must contain only 9 digits");
@@ -69,7 +87,12 @@ public  class ServicesHomePageController   {
 	}
 	
 	
-
+	  /**
+     * Logs out the user and redirects to the login page.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during logout.
+     */
 	public void Logout(ActionEvent event) throws Exception {
 		Message msg = new Message (Message.ActionType.LOGOUT,user);
 		ClientUI.chat.accept(msg);

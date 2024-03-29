@@ -24,7 +24,8 @@ DROP TABLE IF EXISTS `parks`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `parks` (
   `ParkName` varchar(45) NOT NULL,
-  `Capacity` varchar(45) NOT NULL,
+  `ReservedCapacity` varchar(45) NOT NULL,
+  `TotalCapacity` varchar(45) NOT NULL,
   `MaxStay` varchar(45) NOT NULL,
   PRIMARY KEY (`ParkName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -36,6 +37,7 @@ CREATE TABLE `parks` (
 
 LOCK TABLES `parks` WRITE;
 /*!40000 ALTER TABLE `parks` DISABLE KEYS */;
+INSERT INTO `parks` VALUES ('Central Park','30','40','5'),('Hyde Park','50','50','2'),('Yellowstone National Park','20','30','3');
 /*!40000 ALTER TABLE `parks` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-18 14:51:27
+-- Dump completed on 2024-03-28 17:44:53

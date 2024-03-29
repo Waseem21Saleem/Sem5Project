@@ -26,8 +26,13 @@ import ocsf.server.ConnectionToClient;
 
 
 
-
+/**
+ * This class controls the main frame of the application.
+ * It provides functionality to connect to the server and exit the application.
+ * <p>Author: Waseem Saleem</p>
+ */
 public  class MainFrameController   {
+    /** The client controller instance for client-server communication. */
 	public static ClientController chat;
 	private static int itemIndex = 3;
 	
@@ -42,18 +47,31 @@ public  class MainFrameController   {
 	@FXML
 	private TextField txtIP,txtPort;
 	
+    /**
+     * Gets the server IP entered by the user.
+     *
+     * @return The server IP.
+     */
 	private String getIP() {
 		return txtIP.getText();
 	}
+	
+    /**
+     * Gets the server port entered by the user.
+     *
+     * @return The server port.
+     */
 	private String getPort() {
 		return txtPort.getText();
 	} 
-	/**
-	   * This method runs the order form fx 
-	   * and adds the client info into the database when "open order manager" button pressed
-	   *@param event , the "open order manager" button
-	   
-	   */
+
+
+	 /**
+     * Connects to the server.
+     *
+     * @param event The action event triggered by the connect button.
+     * @throws Exception If an error occurs during connection.
+     */
 	public void Connect(ActionEvent event) throws Exception {
 
 		try {
@@ -63,20 +81,7 @@ public  class MainFrameController   {
 		catch (Exception exception){
 			lblError.setText("There is no running server on the entered parameters");
 		}
-		
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/LoginWithoutPassword.fxml").openStream());		
-		
-	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/LoginWithoutPassword.css").toExternalForm());
-		primaryStage.setTitle("Login page");
-
-		primaryStage.setScene(scene);		
-		primaryStage.show();
-
+		ChatClient.openGUI.goToGUI(event, "/gui/LoginWithoutPassword.fxml","/gui/LoginWithoutPassword.css","Login page");
 		ClientUI.chat.accept("refresh");
 
         
@@ -84,18 +89,15 @@ public  class MainFrameController   {
 		
 	}
 	
-	/**
-	   * This method starts the fx
-	   *
-	   *@param primaryStage
-	   
-	   */	
+    /**
+     * Starts the application.
+     *
+     * @param primaryStage The primary stage of the application.
+     * @throws Exception If an error occurs during application startup.
+     */
 	public void start(Stage primaryStage) throws Exception {	
-		InetAddress localHost = InetAddress.getLocalHost();
-        String clientIP = localHost.getHostAddress();
-        String clientHostName = localHost.getHostName();
 
-        //ClientUI.chat.accept("ClientConnected "+clientIP+" "+clientHostName);	
+		
 		Parent root = FXMLLoader.load(getClass().getResource("/gui/MainFrame.fxml"));
 				
 		Scene scene = new Scene(root);
@@ -111,8 +113,8 @@ public  class MainFrameController   {
 	/**
 	   * This method exits the client when exit button pressed
 	   *
-	   *@param event
-	   
+	   *@param event The ActionEvent triggered by the exit button press.
+	   *@throws Exception If an error occurs during the exit process
 	   */	
 	public void getExitBtn(ActionEvent event) throws Exception {
 		

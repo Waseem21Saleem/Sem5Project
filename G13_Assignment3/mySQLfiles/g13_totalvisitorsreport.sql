@@ -23,13 +23,12 @@ DROP TABLE IF EXISTS `totalvisitorsreport`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `totalvisitorsreport` (
-  `ReportId` varchar(45) NOT NULL,
   `ParkName` varchar(45) NOT NULL,
   `Month` varchar(45) NOT NULL,
   `Year` varchar(45) NOT NULL,
   `TotalIndividuals` varchar(45) NOT NULL,
   `TotalGroups` varchar(45) NOT NULL,
-  PRIMARY KEY (`ReportId`)
+  PRIMARY KEY (`ParkName`,`Month`,`Year`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -39,6 +38,7 @@ CREATE TABLE `totalvisitorsreport` (
 
 LOCK TABLES `totalvisitorsreport` WRITE;
 /*!40000 ALTER TABLE `totalvisitorsreport` DISABLE KEYS */;
+INSERT INTO `totalvisitorsreport` VALUES ('Hyde Park','1','24','0','0'),('Hyde Park','2','24','0','0'),('Hyde Park','3','24','28','10'),('Hyde Park','7','24','0','0');
 /*!40000 ALTER TABLE `totalvisitorsreport` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-18 14:51:27
+-- Dump completed on 2024-03-28 17:44:52

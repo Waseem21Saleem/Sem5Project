@@ -22,6 +22,11 @@ import javafx.scene.control.Label;
 import logic.Report;
 import logic.UsageVisitingReport;
 
+/**
+ * This class controls the functionality of the Usage Visiting Report GUI.
+ * It displays a stacked bar chart representing fully booked and not-fully booked time ranges.
+ * <p>Author: Mohammed Dukhi</p>
+ */
 public class UsageVisitingReportController implements Initializable {
 	@FXML
 	private Label lblParkName,lblReportType,labelInputMonth,labelInputYear;
@@ -33,14 +38,24 @@ public class UsageVisitingReportController implements Initializable {
 	@FXML
 	NumberAxis yAxis;
 	
-	
+    /**
+     * Redirects to the Department Manager Home Page.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during redirection.
+     */
 	public void goBack(ActionEvent event) throws Exception {
 		
 		ChatClient.openGUI.goToGUI(event, "/gui/DepartmentManagerHomePage.fxml","","Department manager home page");
 		 
 	}
 	
-	
+    /**
+     * Initializes the Usage Visiting Report GUI with data.
+     *
+     * @param arg0       The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param arg1       The resources used to localize the root object, or null if the root object was not localized.
+     */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {    
 	    Report report = DepartmentManagerHomePageController.report;
@@ -58,21 +73,13 @@ public class UsageVisitingReportController implements Initializable {
         series1.setName("Fully booked");
         series2.setName("Not-Fully booked");
 
-        // Add series to the chart
-      /*  if (report.getReportType().equals("Usage report")) {
-        	 // Populate series with data
-        	*/for (int i=0;i<8;i++) {
+     // Populate series with data
+        for (int i=0;i<8;i++) {
         		series1.getData().add(new XYChart.Data<>(list.get(i).getTimeRange(), list.get(i).getFullOrEnterCounter()));
         		series2.getData().add(new XYChart.Data<>(list.get(i).getTimeRange(), list.get(i).getNotFullOrExitCounter()));
         	}
-            
-         
-	  /*  } else {
-	       
 
-	        
-	    }*/
-        
+        	// Add series to the chart
         stackedBarChart.getData().addAll(series1, series2);
 
 

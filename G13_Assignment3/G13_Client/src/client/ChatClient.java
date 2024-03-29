@@ -7,6 +7,7 @@ package client;
 import ocsf.client.*;
 import client.*;
 import common.ChatIF;
+import common.MyFile;
 import common.OpenGUI;
 import gui.EditOrderController;
 import gui.VisitorHomePageController;
@@ -23,6 +24,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,24 +48,59 @@ public class ChatClient extends AbstractClient
    * The interface type variable.  It allows the implementation of 
    * the display method in the client.
    */
-  ChatIF clientUI; 
-  public static boolean awaitResponse = false;
-  public static ArrayList<String> Orderslist;
-  public static ArrayList<String> OrderInfo;
-  public static ArrayList<String> parkNames;
-  public static List<String> years= new ArrayList<>(Arrays.asList("23", "24"));
-  public static List<String> months;
-  public static ArrayList<WaitingListEntry> waitingListEntries;
-  public static ArrayList<Order> alternativeOrders;
-  public static ArrayList<Request> requests;
-  public static ArrayList<UsageVisitingReport> usageVisitingList;
-  public static ArrayList<ArrayList<UsageVisitingReport>> visitingArrayList;
-  public static User user;
-  public static Order order;
-  public static String error;
-  public static OpenGUI openGUI;
-  public static Park park;
-  public static Report report;
+	 /** The interface type variable for client UI. */
+	  ChatIF clientUI;
+	  
+	  /** Flag indicating if a response is awaited. */
+	  public static boolean awaitResponse = false;
+	  
+	  /** List of orders. */
+	  public static ArrayList<String> Orderslist;
+	  
+	  /** List of order information. */
+	  public static ArrayList<String> OrderInfo;
+	  
+	  /** List of park names. */
+	  public static ArrayList<String> parkNames;
+	  
+	  /** List of years. */
+	  public static List<String> years;
+	  
+	  /** List of months. */
+	  public static List<String> months;
+	  
+	  /** List of waiting list entries. */
+	  public static ArrayList<WaitingListEntry> waitingListEntries;
+	  
+	  /** List of alternative orders. */
+	  public static ArrayList<Order> alternativeOrders;
+	  
+	  /** List of requests. */
+	  public static ArrayList<Request> requests;
+	  
+	  /** List of usage visiting reports. */
+	  public static ArrayList<UsageVisitingReport> usageVisitingList;
+	  
+	  /** List of visiting reports. */
+	  public static ArrayList<ArrayList<UsageVisitingReport>> visitingArrayList;
+	  
+	  /** The user object. */
+	  public static User user;
+	  
+	  /** The order object. */
+	  public static Order order;
+	  
+	  /** Error message. */
+	  public static String error;
+	  
+	  /** Instance of OpenGUI. */
+	  public static OpenGUI openGUI;
+	  
+	  /** The park object. */
+	  public static Park park;
+	  
+	  /** The report object. */
+	  public static Report report;
 
   //Constructors ****************************************************
   
@@ -72,6 +111,7 @@ public class ChatClient extends AbstractClient
    * @param host The server to connect to.
    * @param port The port number to connect on.
    * @param clientUI The interface type variable.
+   * @throws IOException If an I/O error occurs.
    */
 	 
   public ChatClient(String host, int port, ChatIF clientUI) 
@@ -166,6 +206,10 @@ public void handleMessageFromServer(Object msg)
 	        	  park=(Park)((Message) msg).getContent();
 	        	  error="";
 	        	  break;
+	          case GETINVOICE:
+	        	  saveFileOnClient((MyFile)((Message) msg).getContent());
+	        	  error="";
+	        	  break;
 	          case REQUESTSTABLE:
 	        	  requests=(ArrayList<Request>)((Message) msg).getContent();
 	        	  error="";
@@ -191,6 +235,60 @@ public void handleMessageFromServer(Object msg)
   
 
   
+  /**
+   * This method saves a file recieved from the server to the client
+   *
+   * @param file The file from the server.
+   */
+  private void saveFileOnClient(MyFile file) {
+		try {
+			String name=file.getFileName();
+			int i = file.getFileName().lastIndexOf("\\");
+			if (i > 0) {
+				name = file.getFileName().substring(i + 1);
+			}
+	        String path = getFolderPath().toString()+"\\" + name; 
+	        FileOutputStream fileOutputStream = new FileOutputStream(path);
+	        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+
+
+	        bufferedOutputStream.write(file.getMybytearray(), 0, file.getSize());
+	        bufferedOutputStream.flush();
+	        bufferedOutputStream.close();
+
+	        System.out.println("File saved successfully: " + file.getFileName());
+	    } catch (IOException e) {
+	        System.out.println("Error saving the file: " + file.getFileName());
+	        e.printStackTrace();
+	    }
+
+	}
+  
+
+  /**
+   * This method creates a folder called Invoices in the desktop then returns the path of it
+   *
+   * @return The path of the folder.
+   */
+  private Path getFolderPath() {
+	// Get the path to the desktop directory
+      String desktopPath = System.getProperty("user.home") + File.separator + "Desktop";
+      // Create a folder name
+      String folderName = "Invoices";
+
+      // Create a Path object for the new folder
+      Path folderPath = Paths.get(desktopPath, folderName);
+
+      try {
+          // Create the folder
+          Files.createDirectories(folderPath);
+          System.out.println("Folder created successfully at: " + folderPath.toString());
+      } catch (Exception e) {
+          System.err.println("Failed to create folder: " + e.getMessage());
+      }
+      
+      return folderPath;
+  }
   /**
    * This method handles all data coming from the UI            
    *
@@ -252,11 +350,10 @@ public void handleMessageFromServer(Object msg)
   }
   
   /**
-   * This method handles all data coming from the UI            
+   * This method handles all data coming from the UI.
    *
-   * @param message The message from the UI.    
+   * @param message The message from the UI.
    */
-  
   public void handleMessageFromClientUI(ArrayList<String> message)  
   {
     try
@@ -280,10 +377,7 @@ public void handleMessageFromServer(Object msg)
       quit();
     }
   }
-  /*public void start(Stage primaryStage) throws Exception {
-	  this.orderForm = new OrderFormController(); // create OrderForm
-	  this.orderForm.start(primaryStage);
-  }*/
+  
   /**
    * This method terminates the client.
    */
@@ -297,6 +391,11 @@ public void handleMessageFromServer(Object msg)
     System.exit(0);
   }
 
+  /**
+   * This method handles all data coming from the UI.
+   *
+   * @param text The text from the UI.
+   */
 public void handleMessageFromClientUI(String[] text) {
 	try
     {

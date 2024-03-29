@@ -41,12 +41,21 @@ import logic.Order;
 import logic.User;
 import ocsf.server.ConnectionToClient;
 
-
+/**
+ * WorkerHomePageController is a controller class responsible for controlling the worker's home page UI.
+ * It implements the Initializable interface to initialize the controller's UI components.
+ * This class also contains a static ClientController for chat functionality and a static User object representing the worker.
+ * */
 
 public  class WorkerHomePageController  implements Initializable    {
-	public static ClientController chat;
-	private static int itemIndex = 3;
-	public static User user;
+	/** Static ClientController for chat functionality. */
+    public static ClientController chat;
+
+    /** Static integer representing the item index. */
+    private static int itemIndex = 3;
+
+    /** Static User object representing the worker. */
+    public static User user;
 
 
  
@@ -59,15 +68,41 @@ public  class WorkerHomePageController  implements Initializable    {
 	@FXML
 	private TextField txtEnterID,txtAmount,txtOrderNumber;
 	
+    /**
+     * Retrieves the entered visitor ID.
+     *
+     * @return The entered visitor ID.
+     */
 	private String getID() {
 		return txtEnterID.getText();
 	}
+	
+
+    /**
+     * Retrieves the entered amount of visitors.
+     *
+     * @return The entered amount of visitors.
+     */
 	private String getAmount() {
 		return txtAmount.getText();
 	}
+	
+    /**
+     * Retrieves the entered order number.
+     *
+     * @return The entered order number.
+     */
 	private String getOrderNum() {
 		return txtOrderNumber.getText();
 	}
+	
+	
+    /**
+     * Initializes the Worker Home Page GUI.
+     *
+     * @param arg0 The URL location to resolve relative paths.
+     * @param arg1 The resource bundle.
+     */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {	
 		user=ChatClient.user;
@@ -75,6 +110,12 @@ public  class WorkerHomePageController  implements Initializable    {
 		
 	}
 	
+	   /**
+     * Logs out the user from the system.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during the logout process.
+     */
 	public void Logout(ActionEvent event) throws Exception {
 		
 
@@ -85,6 +126,12 @@ public  class WorkerHomePageController  implements Initializable    {
 		
 	}
 	
+    /**
+     * Approves the exit of visitors with the provided order number.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during the approval process.
+     */
 	public void approveExit(ActionEvent event) throws Exception  {
 		if (getOrderNum().isEmpty() ||!getOrderNum().matches("[0-9]+") || getOrderNum().length()!=8)
 			lblApproveExit.setText("Order number must contain only 8 digits");
@@ -100,19 +147,49 @@ public  class WorkerHomePageController  implements Initializable    {
 		
 
 	}
+	
+    /**
+     * Retrieves the bill for the order with the provided order number.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during the retrieval process.
+     */
+	public void getBill(ActionEvent event) throws Exception  {
+		Message msg = new Message (Message.ActionType.GETINVOICE,getOrderNum());
+		ClientUI.chat.accept(msg);
+		lblApproveExit.setText(ChatClient.error);
+		if (ChatClient.error.contains("")) {
+			lblApproveExit.setText("Invoice saved in C:/Users/{YourUser}/Desktop/Invoices/"+getOrderNum());
+			lblApproveExit.setTextFill(Color.GREEN);
+		}
+		
+	}
+	
+    /**
+     * Retrieves the available places in the park.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during the retrieval process.
+     */
 	public void getAvailablePlaces(ActionEvent event) throws Exception  {
 		Message msg = new Message (Message.ActionType.AVAILABLEPLACES,user.getParkName());
 		ClientUI.chat.accept(msg);
 		lblViewCurrCapacity.setText("There are " + ChatClient.error + " available spots right now.");
 
 	}
+	
+    /**
+     * Handles the entry of unplanned visitors into the park.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during the entry process.
+     */
 	public void enterUnplanned(ActionEvent event) throws Exception  {
 		lblUnplannedVisitors.setTextFill(Color.RED);
 		Message msg;
 		if (lblViewCurrCapacity.getText().isEmpty())
 		{
 			lblUnplannedVisitors.setText("Please check available places first. " );
-			//lblUnplannedVisitors.setTextFill(Color.RED);
 		}
 		else
 		{

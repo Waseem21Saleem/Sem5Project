@@ -6,8 +6,17 @@ import java.util.Properties;
 import javax.mail.*;
 
 
+/**
+ * This class provides methods to check email responses for order confirmations or cancellations.
+ */
 public class EmailReciever {
 
+	 /**
+     * Checks the email response for the given order number.
+     *
+     * @param orderNumber The order number to check for confirmation or cancellation.
+     * @return A string indicating the type of response: "Confirmation", "Cancellation", or "NoResponse".
+     */
    public static String checkResponse(String orderNumber) 
    {
 	  String host = "pop.gmail.com";// change accordingly

@@ -24,13 +24,20 @@ DROP TABLE IF EXISTS `waitinglist`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `waitinglist` (
   `Placement` varchar(45) NOT NULL,
-  `VisitorId` varchar(45) NOT NULL,
+  `OrderNumber` varchar(45) NOT NULL,
   `ParkName` varchar(45) NOT NULL,
-  `Day` varchar(45) NOT NULL,
-  `Month` varchar(45) NOT NULL,
+  `VisitorId` varchar(45) NOT NULL,
+  `Date` varchar(45) NOT NULL,
   `Time` varchar(45) NOT NULL,
-  PRIMARY KEY (`VisitorId`),
-  UNIQUE KEY `Placement_UNIQUE` (`Placement`)
+  `NumberOfVisitors` varchar(45) NOT NULL,
+  `PhoneNumber` varchar(45) NOT NULL,
+  `Email` varchar(45) NOT NULL,
+  `VisitorType` varchar(45) NOT NULL,
+  `ExitTime` varchar(45) NOT NULL,
+  `OrderStatus` varchar(45) NOT NULL,
+  `PayStatus` varchar(45) NOT NULL,
+  `TotalCost` varchar(45) NOT NULL,
+  PRIMARY KEY (`OrderNumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -52,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-18 14:51:28
+-- Dump completed on 2024-03-28 17:44:52

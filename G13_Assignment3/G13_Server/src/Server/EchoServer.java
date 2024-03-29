@@ -50,13 +50,36 @@ public class EchoServer extends AbstractServer
    * @param port The port number to connect on.
    * 
    */
+	 /** List of hosts connected to the server */
 	public static ArrayList<String> hostList = new  ArrayList<String>();
-
+	
+	/** Runnable SQL instance */
 	private RunnableSql runnableSql;
+	
+	 /** MySQL connection */
 	public mysqlConnection mysql;
+	
+	/** Server information controller */
 	private ServerInfoController serv;
-	private String dbPath,dbUsername,dbPassword;
+	
+	/** Database path */
+	private String dbPath;
+	
+	 /** Database username */
+    private String dbUsername;
 
+    /** Database password */
+    private String dbPassword;
+
+	 /**
+	   * Constructs an instance of the EchoServer.
+	   *
+	   * @param port The port number to connect on.
+	   * @param serv The ServerInfoController object associated with the server.
+	   * @param dbPath The path to the database.
+	   * @param dbUsername The username for accessing the database.
+	   * @param dbPassword The password for accessing the database.
+	   */
   public EchoServer(int port,ServerInfoController serv,String dbPath,String dbUsername,String dbPassword) 
   {
     super(port);
@@ -66,12 +89,29 @@ public class EchoServer extends AbstractServer
     this.dbPassword=dbPassword;
   }
   
+  /**
+   * Retrieves the path to the database.
+   *
+   * @return The database path.
+   */
 	private String getDbPath() {
 		return dbPath;			
 	}
+	
+	/**
+	 * Retrieves the username for accessing the database.
+	 *
+	 * @return The database username.
+	 */
 	private String getDbUsername() {
 		return dbUsername;			
 	}
+	
+	/**
+	 * Retrieves the password for accessing the database.
+	 *
+	 * @return The database password.
+	 */
 	private String getDbPassword() {
 		return dbPassword;			
 	}
@@ -84,7 +124,6 @@ public class EchoServer extends AbstractServer
    *
    * @param msg The message received from the client.
    * @param client The connection from which the message originated.
-   * @param 
    */
   public void handleMessageFromClient  (Object msg, ConnectionToClient client)
   {
@@ -103,96 +142,104 @@ public class EchoServer extends AbstractServer
 
 	    else if (msg instanceof Message) {
     	    switch (((Message) msg).getActionType()) {
-    	    case USERLOGIN:
+    	    case USERLOGIN: //visitor or guide login
     	    	user = (User) ((Message) msg).getContent();
     	    	msg=mysql.verifyVisitorLogin(user);
     	    	sendMsgToClient(msg,client);
                 break;
-    	    case WORKERLOGIN:
+    	    case WORKERLOGIN: //worker login
     	    	user = (User) ((Message) msg).getContent();
     	    	msg=mysql.verifyWorkerLogin(user);
     	    	sendMsgToClient(msg,client);
                 break;
-    	    case PARKNAMES:
+    	    case PARKNAMES:  //returns park names
     	    	msg=mysql.getParks();
     	    	sendMsgToClient(msg,client);
                 break;
-    	    case RESERVATION:
+    	    case RESERVATION:  //checks reservation
     	    	msg=mysql.insertReservation((Order) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
                 break;
-    	    case ORDERSNUMBERS:
+    	    case ORDERSNUMBERS: //returns the orders numbers to the specific user
     	    	msg=mysql.getOrdersNumbers((User) ((Message) msg).getContent());    	    	
     	    	sendMsgToClient(msg,client);
                 break; 
-    	    case ORDERINFO:
+    	    case ORDERINFO:  //returns order info
     	    	msg=mysql.getOrderInfo((Order) ((Message) msg).getContent());
     	    	
     	    	sendMsgToClient(msg,client);
                 break; 
-    	    case UPDATEORDER:
+    	    case UPDATEORDER: //updates order
     	    	msg=mysql.updateReservation((Order) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
                 break; 
-    	    case DELETEORDER:
+    	    case DELETEORDER: //cancels order as a "cancelled manually"
     	    	msg=mysql.deleteOrder((Order) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
                 break; 
-    	    case WAITINGLIST:
+    	    case WAITINGLIST: //adds order to waiting list
     	    	mysql.addOrderToWaitingList((Order) ((Message) msg).getContent());
                 break; 
-    	    case WAITINGLISTTABLE:
+    	    case WAITINGLISTTABLE:  //returns waiting list table
     	    	msg=mysql.getWaitingListTable((Order) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
                 break; 
-    	    case ALTERNATIVEDATE:
+    	    case ALTERNATIVEDATE:  //returns 5 alternative dates for available orders
 	    	    msg=mysql.getAlternativeDate((Order) ((Message) msg).getContent());
 		    	sendMsgToClient(msg,client);
 	            break; 
-    	    case AVAILABLEPLACES:
+    	    case AVAILABLEPLACES: //returns available places at the current time
     	    	msg=mysql.getAvailablePlaces((String) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
                 break;
-    	    case ADDUNPLANNED:
+    	    case ADDUNPLANNED: //adds unplanned visitors to the park
     	    	mysql.addUnplannedOrder((Order) ((Message) msg).getContent());
     	    	break;
-    	    case APPROVEEXIT:
+    	    case GETINVOICE: //creates pdf invoice
+    	    	msg=mysql.generateInvoice((String) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
+    	    	break;
+    	    case APPROVEEXIT:  //approve exit of a specific order number
     	    	msg=mysql.approveExit((String) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
     	    	break;
-    	    case PARKINFO:
+    	    case PARKINFO:  //returns park info to client
     	    	msg=mysql.getParkInfo((String) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
     	    	break;
-    	    case NEWREQUEST:
+    	    case NEWREQUEST:  //park manager created new request
     	    	mysql.insertRequest((Park) ((Message) msg).getContent());
     	    	break;
-    	    case REQUESTSTABLE:
+    	    case REQUESTSTABLE: //gets the requests table to the department manager
     	    	msg=mysql.getRequestsTable();
     	    	sendMsgToClient(msg,client);
                 break; 
-    	    case APPROVEREQUEST:
+    	    case APPROVEREQUEST: //department approved park manager request
     	    	mysql.updateParkInfo((Request) ((Message) msg).getContent());
     	    	msg=mysql.updateRequest((Request) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
     	    	break;
-    	    case REJECTREQUEST:
+    	    case REJECTREQUEST: //department rejected park manager request
     	    	msg=mysql.updateRequest((Request) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
     	    	break;
-    	    case CANCELLATIONREPORT:
-    	    	mysql.CreateCancellationReport((Report) ((Message) msg).getContent());
+    	    case CANCELLATIONREPORT: //creates cancellation report
+    	    	msg=mysql.CreateCancellationReport((Report) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
     	    	break;
-    	    case TOTALVISITORSREPORT:
-    	    	mysql.CreateTotalVisitorsReport((Report) ((Message) msg).getContent());
+    	    case TOTALVISITORSREPORT://creates total visitor report
+    	    	msg=mysql.CreateTotalVisitorsReport((Report) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
     	    	break;
-    	    case USAGEREPORT: 
-    	    	mysql.createUsageReport((Report) ((Message) msg).getContent());
+    	    case USAGEREPORT: //creates usage report
+    	    	msg=mysql.createUsageReport((Report) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
     	    	break;
-    	    case VISITINGREPORT:
-    	    	mysql.createVisitingReport((Report) ((Message) msg).getContent());
+    	    case VISITINGREPORT: //creates visiting report
+    	    	msg=mysql.createVisitingReport((Report) ((Message) msg).getContent());
+    	    	sendMsgToClient(msg,client);
     	    	break;
-    	    case REPORTINFO:
+    	    case REPORTINFO:  //sends report info to client
     	    	Report report = (Report) ((Message) msg).getContent();
     	    	System.out.println(report.getReportType());
     	    	System.out.println(report.getParkName());
@@ -206,14 +253,18 @@ public class EchoServer extends AbstractServer
     	    		msg=mysql.getVisitingReport(report);
     	    	sendMsgToClient(msg,client);
                 break; 
-    	    case CHANGEROLE:
+    	    case CHANGEROLE: //change role from visitor to guide
     	    	msg=mysql.updateRoleToGuide((User) ((Message) msg).getContent());
     	    	sendMsgToClient(msg,client);
                 break; 
-            case LOGOUT:
+            case LOGOUT: //user logout
             	user = (User) ((Message) msg).getContent();
     	    	mysql.flipIsLogged(user);
                 break;
+            case CLIENTDISCONNECTED:  //client disconnects
+            	mysql.deleteHostInfo(client.getInetAddress().getHostAddress());
+        		serv.updateWaitingListTable(mysql.getClients());
+        		break;
             default:
                 System.out.println("Unknown action");
                 break;
@@ -234,6 +285,12 @@ public class EchoServer extends AbstractServer
 		} 
   }
    
+  /**
+   * Sends a message to a connected client.
+   *
+   * @param msg The message to send.
+   * @param client The connection to the client.
+   */
   public void sendMsgToClient (Object msg,ConnectionToClient client) {
 	  
 	  try {
@@ -265,25 +322,20 @@ public class EchoServer extends AbstractServer
 	
 	@Override
 	protected void clientConnected(ConnectionToClient client) {
+	    // Handle client connection
 
 		mysql.insertClientInfo(client.getInetAddress().getHostAddress(), client.getInetAddress().getHostName());
+		serv.updateWaitingListTable(mysql.getClients());
 	}
 	
 	@Override
-	synchronized protected void clientDisconnected(ConnectionToClient client) {
-		
-		
-	}
-	
-	
-	public void refreshHostList () {
-		hostList = mysql.getHostNames(hostList);
-	}
-	
-	public void getHostInfo (String selectedValue, CurClient curClient) {
-		mysql.getHostInfo(selectedValue,curClient);
+	protected void clientDisconnected(ConnectionToClient client) {
+	    // Handle client disconnection
 
+		
 	}
+	
+	
 
   /**
    * This method overrides the one in the superclass.  Called

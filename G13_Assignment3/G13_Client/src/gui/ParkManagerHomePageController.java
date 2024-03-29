@@ -39,11 +39,20 @@ import ocsf.server.ConnectionToClient;
 
 
 
-
+/**
+ * This class controls the functionality of the Park Manager Home Page GUI.
+ * It allows park managers to view reports and change park capacities.
+ * <p>Author: Noor Khateeb</p>
+ */
 public  class ParkManagerHomePageController implements Initializable  {
-	public static ClientController chat;
-	private static int itemIndex = 3;
-	public static User user;
+	 /** Static ClientController for chat functionality. */
+    public static ClientController chat;
+
+    /** Static integer representing an item index. */
+    private static int itemIndex = 3;
+
+    /** Static User object representing the user. */
+    public static User user;
 
  
 	@FXML
@@ -57,16 +66,14 @@ public  class ParkManagerHomePageController implements Initializable  {
 	private Button btnLogOut;
 	
 	
-	/**
-	   * This method runs the order form fx 
-	   * and adds the client info into the database when "open order manager" button pressed
-	   *@param event , the "open order manager" button
-	   
-	   */
+    /**
+     * Redirects to the page for changing park capacity.
+     *
+     * @param event The action event triggered by the hyperlink.
+     * @throws Exception If an error occurs during navigation.
+     */
 	public void goChangeCapacity(ActionEvent event) throws Exception {
-		/* Send a message to server to check username and password then check Role and open next window 
-		 * according to the role
-		 */
+
 		Message msg = new Message (Message.ActionType.PARKINFO,user.getParkName());
 		ClientUI.chat.accept(msg);
 		ChatClient.openGUI.goToGUI(event, "/gui/ParkManagerChangeCapacity.fxml","","Change capacity Tool");
@@ -78,15 +85,26 @@ public  class ParkManagerHomePageController implements Initializable  {
 		
 	}
 	
+    /**
+     * Creates a report based on the selected options.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during report generation.
+     */
 	public void createReportPage(ActionEvent event) throws Exception {
-		lblError.setText("Creating report...");
-		lblError.setTextFill(Color.WHITE);
+		lblError.setTextFill(Color.RED);
 		Message msg=getMessage();
 		ClientUI.chat.accept(msg);
-		lblError.setText("Report created successfully");
-		lblError.setTextFill(Color.GREEN);
+		lblError.setText(ChatClient.error);
+		if (lblError.getText().contains("successfully"))
+			lblError.setTextFill(Color.GREEN);
 	}
 	
+    /**
+     * Constructs the message to request a report based on user selections.
+     *
+     * @return The message containing the report request.
+     */
 	public Message getMessage() {
 		Message msg;
 		Report report;
@@ -108,7 +126,12 @@ public  class ParkManagerHomePageController implements Initializable  {
 		return msg;
 	}
 
-	
+    /**
+     * Logs out the user and redirects to the appropriate page.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during logout.
+     */
 	public void Logout(ActionEvent event) throws Exception {
 		if (btnLogOut.getText().equals("Back"))
 			ChatClient.openGUI.goToGUI(event, "/gui/DepartmentManagerHomePage.fxml","","Department manager home page");
@@ -121,7 +144,12 @@ public  class ParkManagerHomePageController implements Initializable  {
 		}
 	}
 	
-	
+	   /**
+     * Initializes the controller with the current user and sets up combo box options.
+     *
+     * @param arg0 The URL location of the FXML file.
+     * @param arg1 The resource bundle.
+     */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {	
 		user=ChatClient.user;

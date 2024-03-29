@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 
 import client.ChatClient;
@@ -29,8 +30,13 @@ import ocsf.server.ConnectionToClient;
 
 
 
-
+/**
+ * This class controls the login process without password (For visitor and guide) in the GUI.
+ * It handles actions such as logging in, navigating back, and switching to the login page.
+ * <p>Author: Mohammed Khateeb</p>
+ */
 public  class LoginWithoutPasswordController   {
+    /** The chat controller instance for client-server communication. */
 	public static ClientController chat;
 	private static int itemIndex = 3;
 	
@@ -45,17 +51,22 @@ public  class LoginWithoutPasswordController   {
 	@FXML
 	private TextField txtId;
 	
+	 /**
+     * Gets the user ID from the text field.
+     *
+     * @return The user ID entered by the user.
+     */
 	private String getId() {
 		return txtId.getText();
 	}
 
 	
-	/**
-	   * This method runs the order form fx 
-	   * and adds the client info into the database when "open order manager" button pressed
-	   *@param event , the "open order manager" button
-	   
-	   */
+	 /**
+     * Performs the login action.
+     *
+     * @param event The action event triggered by the login button.
+     * @throws Exception If an error occurs during login process.
+     */
 	
 	public void Login(ActionEvent event) throws Exception {
 		/* Check if this id has editable order then open this window
@@ -79,9 +90,15 @@ public  class LoginWithoutPasswordController   {
 			}
 		
 	}
+	
+	/**
+     * Redirects to the login page.
+     *
+     * @param event The action event triggered by the button click.
+     * @throws Exception If an error occurs during navigation.
+     */
 	public void GoToLoginPage(ActionEvent event) throws Exception {
-		/* Check if this id has editable order then open this window
-		 */
+
 		ChatClient.openGUI.goToGUI(event, "/gui/Login.fxml","/gui/Login.css","Worker login page");		
 	}
 	
@@ -89,13 +106,17 @@ public  class LoginWithoutPasswordController   {
 
 	
 	/**
-	   * This method exits the client when exit button pressed
-	   *
-	   *@param event
-	   
-	   */	
+     * Navigates back to the main frame.
+     *
+     * @param event The action event triggered by the button click.
+     * @throws Exception If an error occurs during navigation.
+     */	
 	public void goBackBtn(ActionEvent event) throws Exception {
-		ChatClient.openGUI.goToGUI(event, "/gui/MainFrame.fxml","/gui/MainFrame.css","Home page");		
+		ChatClient.openGUI.goToGUI(event, "/gui/MainFrame.fxml","/gui/MainFrame.css","Home page");
+		Message msg = new Message (Message.ActionType.CLIENTDISCONNECTED,"");
+		ClientUI.chat.accept(msg);
+
+		
 		
 	}
 	

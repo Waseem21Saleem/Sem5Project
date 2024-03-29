@@ -4,8 +4,22 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+/**
+ * This class provides methods to send confirmation or waiting list update emails to visitors.
+ */
 public class EmailSender {
 
+	 /**
+     * Sends an email message with reservation confirmation or waiting list update.
+     *
+     * @param recipientEmail The recipient's email address.
+     * @param orderNumber    The order number associated with the reservation.
+     * @param parkName       The name of the park.
+     * @param date           The date of the reservation.
+     * @param time           The time of the reservation.
+     * @param numberOfVisitors The number of visitors included in the reservation.
+     * @param msgType        The type of message to be sent: "Confirmation" or "WaitingListUpdate".
+     */
 	public static void sendMessage(String recipientEmail, String orderNumber, String parkName, String date, String time, String numberOfVisitors, String msgType) {
 	    // Sender's email credentials
 	    String senderEmail = "go13nature@gmail.com";
@@ -58,7 +72,16 @@ public class EmailSender {
 	    }
 	}
 	
-	
+	/**
+     * Generates HTML content for a reservation confirmation email.
+     *
+     * @param orderNumber     The order number associated with the reservation.
+     * @param parkName        The name of the park.
+     * @param date            The date of the reservation.
+     * @param time            The time of the reservation.
+     * @param numberOfVisitors The number of visitors included in the reservation.
+     * @return HTML content for the reservation confirmation email.
+     */
 	public static String confirmationEmail(String orderNumber, String parkName, String date, String time, String numberOfVisitors) {
 		
         // Set the email content as HTML
@@ -77,6 +100,17 @@ public class EmailSender {
         return htmlContent;
 	}
 	
+	
+    /**
+     * Generates HTML content for a waiting list update email.
+     *
+     * @param orderNumber     The order number associated with the reservation.
+     * @param parkName        The name of the park.
+     * @param date            The date of the reservation.
+     * @param time            The time of the reservation.
+     * @param numberOfVisitors The number of visitors included in the reservation.
+     * @return HTML content for the waiting list update email.
+     */
 	public static String WaitingListEmail(String orderNumber, String parkName, String date, String time, String numberOfVisitors) {
 			
 	        // Set the email content as HTML

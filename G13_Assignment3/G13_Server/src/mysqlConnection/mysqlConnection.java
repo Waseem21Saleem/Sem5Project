@@ -12,10 +12,17 @@ import java.io.*;
 import java.lang.*; 
 import java.util.*;
 
+import org.apache.pdfbox.pdmodel.*;
+import org.apache.pdfbox.pdmodel.font.*;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.PDPage;
+
+import common.MyFile;
 import emailController.EmailSender;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import java.io.Serializable;
 import logic.CurClient;
 import logic.Message;
 import logic.Order;
@@ -26,17 +33,22 @@ import logic.UsageVisitingReport;
 import logic.User;
 import logic.WaitingListEntry;
 
-
+/**
+ * The mysqlConnection class establishes a connection to a MySQL database and provides methods for verifying user logins
+ * and other functions.
+ */
 public class mysqlConnection {
 	
 	
 	private static Connection conn;
 
 	/**
-	   * This Constructor connects to DataBase with Connection conn
-	   *
-	   
-	   */
+     * Constructs a mysqlConnection object and connects to the specified database.
+     *
+     * @param dbPath      the path to the database
+     * @param dbUsername  the database username
+     * @param dbPassword  the database password
+     */
 	public mysqlConnection(String dbPath,String dbUsername, String dbPassword)
 	{
 		try 
@@ -62,14 +74,23 @@ public class mysqlConnection {
 
    	}
 	
+	
+	 /**
+     * Returns the connection to the MySQL database.
+     *
+     * @return the database connection
+     */
 	public Connection getConn() {
 		return conn;
 	}
+
+
 	/**
-	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
-	   *
-	   * @param ordersList, an empty ArrayList
-	   */
+     * Verifies the login credentials of a worker.
+     *
+     * @param user the User object containing login details
+     * @return a Message object indicating login success or failure
+     */
 	public Message verifyWorkerLogin(User user)
 	{
 		Message msg;
@@ -117,11 +138,14 @@ public class mysqlConnection {
 		} catch (SQLException e) { }
 		msg = new Message (Message.ActionType.LOGINSUCCESS,user);
         return msg;	}
+
+
 	/**
-	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
-	   *
-	   * @param ordersList, an empty ArrayList
-	   */
+     * Verifies the login credentials of a visitor and creates a new user record if not already present.
+     *
+     * @param user the User object containing login details
+     * @return a Message object indicating login success or failure
+     */
 	public Message verifyVisitorLogin(User user)
 	{
 		Message msg;
@@ -202,11 +226,13 @@ public class mysqlConnection {
         return msg;
 	}
 	
+
 	/**
-	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
-	   *
-	   * @param ordersList, an empty ArrayList
-	   */
+ * This method flips the IsLogged status of a user in the database
+ *
+ *
+ * @param user the User object whose IsLogged status is to be updated
+ */
 	public void flipIsLogged(User user)
 	{
 		PreparedStatement ps;
@@ -222,31 +248,13 @@ public class mysqlConnection {
 	            
 		} catch (SQLException e) {	}
 	}
+	
+	
 	/**
-	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
-	   *
-	   * @param ordersList, an empty ArrayList
-	   */
-/*	public void updatePark(Park park)
-	{
-		PreparedStatement ps;
-		try {
-			 	ps = conn.prepareStatement("UPDATE g13.parks SET ReservedCapacity=?,TotalCapacity=?,MaxStay=? WHERE ParkName = ?");
-			 	ps.setString(1,park.getReservedCapacity());
-			 	ps.setString(2,park.getTotalCapacity());
-	            ps.setString(3,park.getMaxStay());
-	            ps.setString(4,park.getParkName());
-	            ps.executeUpdate();
-	            ps.close();
-	            
-		} catch (SQLException e) {	}
-	}
-	*/
-	/**
-	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
-	   *
-	   * @param ordersList, an empty ArrayList
-	   */
+	 * Retrieves the list of park names from the database.
+	 *
+	 * @return a Message object containing the list of park names
+	 */
 	public Message getParks()
 	{
 		Message msg;
@@ -272,10 +280,11 @@ public class mysqlConnection {
 	}
 	
 	/**
-	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
-	   *
-	   * @param ordersList, an empty ArrayList
-	   */
+	 * Retrieves the list of order numbers for a specific user from the database.
+	 *
+	 * @param user the User object for whom the order numbers are retrieved
+	 * @return a Message object containing the list of order numbers
+	 */
 	public Message getOrdersNumbers(User user)
 	{	
 		Message msg;
@@ -302,12 +311,14 @@ public class mysqlConnection {
 		
 	}
 	
+
+
 	/**
-	   * This method sets the order details from the database according to the OrderNumber
-	   *
-	   * @param OrderNumber, an ordernumber that the client selected
-	   * @param order, a new order that has no info in it
-	   */
+ * Retrieves order details from the database based on the provided order number.
+ *
+ * @param order the Order object containing the order number
+ * @return a Message object containing the order details
+ */
 	public static Message getOrderInfo(Order order)
 	{
 		Message msg;
@@ -347,10 +358,10 @@ public class mysqlConnection {
 	
 	
 	/**
-	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
-	   *
-	   * @param ordersList, an empty ArrayList
-	   */
+ * Updates order information in the database based on the provided Order object.
+ *
+ * @param order the Order object containing updated information
+ */
 	public void updateOrderInfo(Order order)
 	{
 		PreparedStatement ps;
@@ -373,11 +384,14 @@ public class mysqlConnection {
 		} catch (SQLException e) {System.out.println("Error");	}
 	}
 	
+
+
 	/**
-	   * This method deletes the client details from the database according to the ip
-	   *
-	   * @param ip, the client's ip
-	   */
+ * Cancels an order in the database and updates its status to "cancelled manually".
+ *
+ * @param order the Order object to be cancelled
+ * @return a Message object indicating the cancellation status
+ */
 	public Message deleteOrder(Order order) {
 		Message msg ;
 		PreparedStatement ps;
@@ -399,7 +413,11 @@ public class mysqlConnection {
 		
 	}
 	
-	
+	/**
+ * Inserts a new order into the database based on the provided Order object.
+ *
+ * @param order the Order object containing the new order details
+ */
 	public static void insertOrder(Order order) {
 		try {
     		// SQL INSERT statement
@@ -431,6 +449,12 @@ public class mysqlConnection {
        } catch (SQLException e) {
        }
 	}
+	
+	/**
+	 * Adds an order to the waiting list in the database based on the provided Order object.
+	 *
+	 * @param order the Order object to be added to the waiting list
+	 */
 	public void addOrderToWaitingList(Order order) {
 		try {
 			
@@ -483,6 +507,13 @@ public class mysqlConnection {
        }
 	}
 	
+	
+	/**
+	 * Calculates the placement of an order in the waiting list based on park, date, and time criteria.
+	 *
+	 * @param order the Order object for which placement is calculated
+	 * @return the placement position of the order in the waiting list
+	 */
 	public int getPlacement(Order order) {
 		int placement=1;
 		
@@ -528,6 +559,13 @@ public class mysqlConnection {
 		
 	}
 	
+	/**
+	 * This method checks the waiting list for any orders matching the given order's park, time, exit time, and date. 
+	 * If any matching orders are found, they are processed to make reservations and removed from the waiting list. 
+	 * Additionally, notification emails are sent to the respective visitors.
+	 *
+	 * @param order The order for which the waiting list needs to be checked.
+	 */
 	public static void checkWaitingList (Order order) {
 		Message msg;
 		try 
@@ -598,6 +636,12 @@ public class mysqlConnection {
 		
 	}
 	
+	
+	/**
+	 * Deletes the specified order from the waiting list in the database.
+	 *
+	 * @param order The order to be deleted from the waiting list.
+	 */
 	public static void deleteOrderFromWaitingList(Order order) {
 		 // SQL DELETE statement
         String sql = "DELETE FROM g13.waitinglist WHERE OrderNumber = ?";
@@ -614,6 +658,14 @@ public class mysqlConnection {
            }
 	}
 	
+	
+	/**
+	 * Retrieves the waiting list entries from the database matching the specified order's park, time, exit time, and date.
+	 * Constructs a Message object containing the waiting list table entries.
+	 *
+	 * @param order The order for which the waiting list entries need to be retrieved.
+	 * @return A Message object containing the waiting list table entries.
+	 */
 	public Message getWaitingListTable(Order order) {
 		Message msg;
 		 // Create an ArrayList to store WaitingListEntry objects
@@ -659,21 +711,32 @@ public class mysqlConnection {
             } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
-
+	    // Create and return a Message object containing the waiting list table entries
 		msg = new Message (Message.ActionType.WAITINGLISTTABLE,waitingListEntries);
 		return msg;
 		
 		
 	}
 	
+	
+	/**
+	 * Retrieves alternative dates for reservation based on the provided order's park, time, exit time, and date.
+	 * The function attempts to find alternative dates within a range of 5 iterations.
+	 * If a suitable alternative date is found, it is added to the list of alternatives.
+	 *
+	 * @param order The order for which alternative dates need to be determined.
+	 * @return A Message object containing the list of alternative Order objects.
+	 */
 	public Message getAlternativeDate (Order order) {
 		//this function to make reservation
 		Order tempOrder = order;
+		// Store the current time from the order
 		String curTime= order.getTime();
 		Message msg;
+		// ArrayList to store alternative orders
 		ArrayList<Order> alternative = new ArrayList<Order>();
 		int i=0;
-		while (i<5)
+		while (i<5)// Iterating over 5 alternatives
 		{
 			try 
 			{	
@@ -771,9 +834,7 @@ public class mysqlConnection {
 						if (checkAlternativeOrder(order,alternative)) {
 							alternative.add(order);
 							i++;
-							System.out.println(order.toString());
 							order=new Order(tempOrder.getParkName(),tempOrder.getOrderNum(),tempOrder.getVisitorId(),tempOrder.getVisitorType(),tempOrder.getDate(),curTime,tempOrder.getAmountOfVisitors(),tempOrder.getTelephone(),tempOrder.getEmail(),tempOrder.getExitTime(),tempOrder.getTotalCost(),tempOrder.getPayStatus(),tempOrder.getOrderStatus());
-							System.out.println(curTime);
 							}
 					}
 					
@@ -786,9 +847,19 @@ public class mysqlConnection {
 			catch (SQLException e) 
 				{e.printStackTrace();}
 		}
+	    // Create a Message object containing the list of alternative orders
 		msg = new Message (Message.ActionType.ALTERNATIVEDATE,alternative);
 		return msg;
 	}
+	
+	/**
+	 * Checks if the provided order's date and time already exist in the list of alternative orders.
+	 * This method ensures that duplicate alternative orders are not added.
+	 *
+	 * @param order      The order to be checked for duplication.
+	 * @param alternative The list of alternative orders to compare against.
+	 * @return true if the order does not exist in the list of alternative orders, otherwise false.
+	 */
 	private Boolean checkAlternativeOrder(Order order,ArrayList<Order> alternative) {
 		for (int i=0;i<alternative.size();i++)
 		{
@@ -797,6 +868,14 @@ public class mysqlConnection {
 		}
 		return true;
 	}
+	
+	/**
+	 * Retrieves the number of available places in the specified park.
+	 * The available places are calculated based on the current occupancy of the park.
+	 *
+	 * @param parkName The name of the park for which available places are to be determined.
+	 * @return A Message object containing the number of available places in the park.
+	 */
 	public Message getAvailablePlaces ( String parkName) {
 		Message msg;
 		String available="";
@@ -855,6 +934,14 @@ public class mysqlConnection {
 		return msg;
 	}
 	
+	
+	/**
+	 * Adds an unplanned order to the database.
+	 * This method inserts a new order into the database with the provided order details.
+	 * The order number, date, time, and exit time are automatically generated.
+	 * 
+	 * @param order The unplanned order to be added to the database.
+	 */
 	public void addUnplannedOrder(Order order) {
 		try {
     		// SQL INSERT statement
@@ -894,6 +981,16 @@ public class mysqlConnection {
        }
 	}
 	
+	
+	/**
+	 * Approves the exit of a visitor from the park based on the provided order number.
+	 * If the order number is correct and the visitor is currently inside the park, the exit time is updated
+	 * to the current time and the order status is set to 'completed'.
+	 * 
+	 * @param orderNumber The order number of the visitor whose exit is to be approved.
+	 * @return A Message object indicating the status of the exit approval process.
+	 *         If the order number is incorrect or the visitor is not currently inside the park, an error message is returned.
+	 */
 	public Message approveExit (String orderNumber) {
 		Message msg=new Message (Message.ActionType.ERROR,"Order number is incorrect or not currently inside the park");
 		PreparedStatement ps;
@@ -914,12 +1011,18 @@ public class mysqlConnection {
 		return msg;
 		
 	}
+
+
 	/**
-	   * This method sets the order details from the database according to the OrderNumber
-	   *
-	   * @param OrderNumber, an ordernumber that the client selected
-	   * @param order, a new order that has no info in it
-	   */
+	 * Checks if a reservation can be made for the provided order.
+	 * If the number of visitors for the specified park, date, and time exceeds the maximum capacity,
+	 * the order is added to the waiting list. Otherwise, the reservation is saved successfully.
+	 * 
+	 * @param order The order for which reservation availability is to be checked.
+	 * @return A Message object indicating the outcome of the reservation check.
+	 *         If the order needs to be added to the waiting list, a WAITINGLIST message is returned.
+	 *         If the reservation can be made successfully, a RESERVATION message is returned.
+	 */
 	public static Message checkReservation(Order order)
 	{	//this function to make reservation
 		Message msg;
@@ -982,8 +1085,11 @@ public class mysqlConnection {
             }
 		    rs.close();
 			preparedStatement.close();
+	        // Check if the number of visitors for the exit time exceeds the maximum capacity
+
 			if (exitTimeAmountOfVisitors>maxCapacity)
 			{
+				// Add the order to the waiting list
 				msg = new Message (Message.ActionType.WAITINGLIST,order);
 				return msg;
 			}
@@ -991,36 +1097,79 @@ public class mysqlConnection {
 			
 			
 		} catch (SQLException e) {e.printStackTrace();}
+		 // Reservation saved successfully
 		msg = new Message (Message.ActionType.RESERVATION,"Reservation saved successfully");
 		return msg;
 	}
 	
+	
+	/**
+	 * Inserts a reservation for the provided order if it meets the criteria.
+	 * 
+	 * This method first checks the reservation status for the order using the checkReservation method.
+	 * If the reservation is allowed (i.e., the order does not need to be added to the waiting list),
+	 * the order details are inserted into the database using the insertOrder method.
+	 * 
+	 * @param order The order for which the reservation is to be inserted.
+	 * @return A Message object indicating the outcome of the reservation insertion.
+	 *         If the reservation is successful, the returned message will be the same as the one returned by the checkReservation method.
+	 *         If the reservation is not allowed and the order needs to be added to the waiting list, the returned message will be from the checkReservation method.
+	 */
 	public static Message insertReservation(Order order) {
+		 // Check reservation status for the order
 		Message msg = checkReservation(order);
+		// If the reservation is allowed, insert the order
 		if (msg.getActionType().equals(Message.ActionType.RESERVATION))
 			insertOrder(order);
 		return msg;
 	}
 	
+	/**
+	 * Updates an existing reservation for the provided order if it meets the criteria.
+	 * 
+	 * This method first checks the reservation status for the order using the checkReservation method.
+	 * If the reservation is allowed (i.e., the order does not need to be added to the waiting list),
+	 * the order details are updated in the database using the updateOrderInfo method.
+	 * 
+	 * @param order The order for which the reservation is to be updated.
+	 * @return A Message object indicating the outcome of the reservation update.
+	 *         If the update is successful, the returned message will be the same as the one returned by the checkReservation method.
+	 *         If the update is not allowed and the order needs to be added to the waiting list, the returned message will be from the checkReservation method.
+	 */
 	public Message updateReservation(Order order) {
+	    // Check reservation status for the order
 		Message msg = checkReservation(order);
+	    // If the reservation is allowed, update the order
 		if (msg.getActionType().equals(Message.ActionType.RESERVATION))
 			updateOrderInfo(order);
 		return msg;
 	}
 	
 	
-	
+	/**
+	 * Retrieves information about a park from the database based on the provided park name.
+	 * 
+	 * This method queries the database to fetch details such as reserved capacity, total capacity,
+	 * and maximum stay duration for the specified park. It then encapsulates this information
+	 * into a Park object and returns it within a Message object with ActionType PARKINFO.
+	 * 
+	 * @param parkName The name of the park for which information is to be retrieved.
+	 * @return A Message object containing information about the specified park.
+	 *         If the park is found in the database, the returned message will contain the park details.
+	 *         If the park is not found or an error occurs during database access, an appropriate error message will be returned.
+	 */
 	public static Message getParkInfo(String parkName) {
 		Message msg;
 		Park park = new Park(parkName);
 		try {
+	        // Prepare SQL statement to retrieve park information
 			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.parks WHERE ParkName = ?");
 			preparedStatement.setString(1, park.getParkName());
 			 // 1-indexed parameter position
 			// Execute the query
 			ResultSet rs = preparedStatement.executeQuery();
 			rs.next();
+	        // Set park details from the result set
 			park.setReservedCapacity(rs.getString("ReservedCapacity"));
 			park.setTotalCapacity(rs.getString("TotalCapacity"));
 			park.setMaxStay(rs.getString("MaxStay"));
@@ -1030,10 +1179,23 @@ public class mysqlConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	    // Create a message containing park information and return it
 		msg = new Message (Message.ActionType.PARKINFO,park);
 		return msg;
 	}
 	
+	
+	/**
+	 * Updates park information in the database based on the provided request.
+	 * This method executes an SQL update statement to modify the reserved capacity,
+	 * total capacity, and maximum stay duration for a park identified by its name.
+	 * 
+	 * @param request the request containing updated park information
+	 *                including reserved capacity, total capacity, maximum stay duration,
+	 *                and the name of the park to be updated
+	 * 
+	 *        
+	 */
 	public void updateParkInfo(Request request)
 	{
 		PreparedStatement ps;
@@ -1044,13 +1206,25 @@ public class mysqlConnection {
 			 	ps.setString(2,request.getTotalCapacity());
 	            ps.setString(3,request.getMaxStay());
 	            ps.setString(4,request.getParkName());
-
+	            // Execute the update operation
 	            ps.executeUpdate();
+	            // Close the prepared statement to release resources
 	            ps.close();
 	            
-		} catch (SQLException e) {System.out.println("Error");	}
+		} catch (SQLException e) 
+        // Handle any SQL exceptions
+		{System.out.println("Error");	}
 	}
 	
+	
+	/**
+	 * Generates a random order number.
+	 * This method generates a random 8-digit order number and ensures uniqueness by
+	 * checking if the generated number already exists in the database. If the generated
+	 * number exists, it generates a new one until a unique number is found.
+	 * 
+	 * @return a random 8-digit order number
+	 */
 	public static int getRandomOrderNumber() {
 		// Create an instance of Random
         Random random = new Random();
@@ -1060,6 +1234,7 @@ public class mysqlConnection {
 			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.orders WHERE OrderNumber = ?");
 			preparedStatement.setString(1, Integer.toString(randomNumber));
 			ResultSet rs = preparedStatement.executeQuery();
+	        // Check if the generated number already exists, if yes, generate a new one
 			while (rs.next()) {
 				rs.close();
 				preparedStatement.close();
@@ -1078,10 +1253,12 @@ public class mysqlConnection {
 	}
 	
 	/**
-	   * This method adds all the orderNumbers from the database to the list it gets as a parameter.
-	   *
-	   * @param ordersList, an empty ArrayList
-	   */
+	 * Updates the role of a user to "GUIDE" in the database.
+	 * This method updates the user's role to "GUIDE" if the user's current role is "VISITOR".
+	 * 
+	 * @param user the user whose role is to be updated
+	 * @return a message indicating the success or failure of the role update operation
+	 */
 	public Message updateRoleToGuide(User user)
 	{	Message msg = new Message (Message.ActionType.ERROR,"ID is not found or his role is not visitor");
 		PreparedStatement ps;
@@ -1105,6 +1282,14 @@ public class mysqlConnection {
 		return msg;
 	}
 	
+	
+	/**
+	 * Inserts a new request for a park into the database.
+	 * This method inserts a new request into the 'requests' table in the database
+	 * with the provided park's information and sets the status of the request to "waiting for approval".
+	 * 
+	 * @param park the park for which the request is being made
+	 */
 	public void insertRequest(Park park)
 	{
 		try {
@@ -1130,11 +1315,16 @@ public class mysqlConnection {
        }
 		
 	}
+
+
 	/**
-	   * This method deletes the client details from the database according to the ip
-	   *
-	   * @param ip, the client's ip
-	   */
+	 * Updates the status of a request in the database.
+	 * This method updates the status of a request in the 'requests' table in the database
+	 * based on the provided request's information.
+	 * 
+	 * @param request the request whose status is to be updated
+	 * @return a message indicating the success or failure of the status update operation
+	 */
 	public Message updateRequest(Request request) {
 		Message msg = new Message (Message.ActionType.ERROR,"");
 		PreparedStatement ps;
@@ -1162,6 +1352,15 @@ public class mysqlConnection {
 		
 	}
 
+	
+	/**
+	 * Retrieves requests from the 'requests' table in the database with status "waiting for approval".
+	 * This method queries the 'requests' table in the database to retrieve requests
+	 * with the status "waiting for approval", and returns a message containing
+	 * the list of requests.
+	 * 
+	 * @return a message containing the list of requests with status "waiting for approval"
+	 */
 	public Message getRequestsTable() {
 		Message msg;
 		 // Create an ArrayList to store WaitingListEntry objects
@@ -1185,23 +1384,41 @@ public class mysqlConnection {
 	        }} catch (SQLException e) {
 	            e.printStackTrace();
 	        }
-
+	    // Create a message containing the list of requests
 		msg = new Message (Message.ActionType.REQUESTSTABLE,requests);
 		return msg;
 		
 		
 	}
 
-	public void CreateCancellationReport(Report report)
-	{	
+	
+	/**
+	 * Creates a cancellation report for a park.
+	 * This method creates a cancellation report for a park based on the provided report information.
+	 * 
+	 * @param report the report containing park name, month, and year
+	 * @return a message indicating the success or failure of the report creation operation
+	 */
+	public Message CreateCancellationReport(Report report)
+	{	Message msg=new Message(Message.ActionType.ERROR,"Report already exists");
 		int manually=0,automatically=0;
 		try {
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.cancellationreport WHERE ParkName = ? AND Month = ? AND Year=? ");
+			
+			preparedStatement.setString(1, report.getParkName());
+			preparedStatement.setString(2, report.getMonth()); // Use "%" to match any characters before the date pattern
+			preparedStatement.setString(3, report.getYear());
+			ResultSet rs  = preparedStatement.executeQuery();
+			if (rs.next())
+				return msg;
+			rs.close();
+			preparedStatement.close();
 			String date = report.getMonth()+"-"+report.getYear();
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT OrderStatus FROM g13.orders WHERE ParkName = ? AND Date LIKE ?");
+			preparedStatement = conn.prepareStatement("SELECT OrderStatus FROM g13.orders WHERE ParkName = ? AND Date LIKE ?");
 			preparedStatement.setString(1, report.getParkName()); // 1-indexed parameter position
 			preparedStatement.setString(2, "%" + date); // Use "%" to match any characters before the date pattern
 			// Execute the query
-			ResultSet rs = preparedStatement.executeQuery();
+			rs = preparedStatement.executeQuery();
             while (rs.next()) {
             	if (rs.getString("OrderStatus").equals("cancelled manually"))
             		manually++;
@@ -1228,19 +1445,39 @@ public class mysqlConnection {
           
        } catch (SQLException e) {
        }
+		msg=new Message(Message.ActionType.ERROR,"Report successfully created");
+		return msg;
 		
 	}
 	
-	public void CreateTotalVisitorsReport(Report report)
-	{	
+	
+	/**
+	 * Creates a total visitors report for a park.
+	 * This method creates a total visitors report for a park based on the provided report information.
+	 * 
+	 * @param report the report containing park name, month, and year
+	 * @return a message indicating the success or failure of the report creation operation
+	 */
+	public Message CreateTotalVisitorsReport(Report report)
+	{	Message msg=new Message(Message.ActionType.ERROR,"Report already exists");
 		int organized=0,others=0;
 		try {
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.totalvisitorsreport WHERE ParkName = ? AND Month = ? AND Year=? ");
+			
+			preparedStatement.setString(1, report.getParkName());
+			preparedStatement.setString(2, report.getMonth()); // Use "%" to match any characters before the date pattern
+			preparedStatement.setString(3, report.getYear());
+			ResultSet rs  = preparedStatement.executeQuery();
+			if (rs.next())
+				return msg;
+			rs.close();
+			preparedStatement.close();
 			String date = report.getMonth()+"-"+report.getYear();
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT VisitorType,OrderStatus,NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND Date LIKE ?");
+			preparedStatement = conn.prepareStatement("SELECT VisitorType,OrderStatus,NumberOfVisitors FROM g13.orders WHERE ParkName = ? AND Date LIKE ?");
 			preparedStatement.setString(1, report.getParkName()); // 1-indexed parameter position
 			preparedStatement.setString(2, "%" + date); // Use "%" to match any characters before the date pattern
 			// Execute the query
-			ResultSet rs = preparedStatement.executeQuery();
+			rs = preparedStatement.executeQuery();
             while (rs.next()) {
             	if (rs.getString("OrderStatus").equals("confirmed") || rs.getString("OrderStatus").equals("inside"))
             		if (rs.getString("VisitorType").equals("organized group"))
@@ -1269,9 +1506,20 @@ public class mysqlConnection {
           
        } catch (SQLException e) {
        }
+		msg=new Message(Message.ActionType.ERROR,"Report successfully created");
+		return msg;
 		
 	}
 	
+	
+	/**
+	 * Creates a visiting report for a specified visitor type and inserts it into the database.
+	 * This method generates a visiting report for a specified visitor type and inserts the report
+	 * data into the 'visitingreport' table in the database.
+	 * 
+	 * @param report the report containing park name, month, and year
+	 * @param visitorType the type of visitor for whom the report is being created
+	 */
 	public void createVisitingReportForVisitorType(Report report,String visitorType) {
 		try {
 
@@ -1324,11 +1572,9 @@ public class mysqlConnection {
 				    for (Order order : ordersInTimeRange) {
 				    	usageList.get(j).setFullOrEnterCounter(usageList.get(j).getFullOrEnterCounter()+Integer.parseInt(order.getAmountOfVisitors()));
 				    	String exitRange = calculateTimeRangeVisitingReport(order.getExitTime());
-				    	System.out.println(exitRange);
 				    	int index=getIndexOfStringInArrayList(exitRange,usageList);
 				    	if (index!=-1)
 				    		usageList.get(index).setNotFullOrExitCounter(usageList.get(index).getNotFullOrExitCounter()+Integer.parseInt(order.getAmountOfVisitors()));
-				    System.out.println(order.getTime()+" "+order.getExitTime()+" "+ usageList.get(j).getFullOrEnterCounter()+" "+ usageList.get(j).getNotFullOrExitCounter()+" "+visitorType+" "+index);
 				    }
 				    
 			    }
@@ -1359,8 +1605,8 @@ public class mysqlConnection {
 			    i++;
 			}
 
-			// Step 7: Insert usage report data into g13.usagereport table
-			for (i=0;i<usageList.size();i++){
+			 // Step 8: Update exit count in g13.visitingreport table
+				for (i=0;i<usageList.size();i++){
 			    // SQL INSERT statement
 			    String sql = "UPDATE g13.visitingreport SET ExitCount=? WHERE ParkName=? AND Month=? AND Year=? AND TimeRange=? AND VisitorType=?";
 			    PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -1383,13 +1629,59 @@ public class mysqlConnection {
 		}
 		
 	}
-	public void createVisitingReport(Report report) {
+	
+	/**
+	 * Creates a visiting report for a park for both individual/family visitors and organized groups.
+	 * This method creates a visiting report for a park based on the provided report information.
+	 * It generates separate reports for individual/family visitors and organized groups.
+	 * 
+	 * @param report the report containing park name, month, and year
+	 * @return a message indicating the success or failure of the report creation operation
+	 */
+	public Message createVisitingReport(Report report) {
+		Message msg=new Message(Message.ActionType.ERROR,"Report already exists");
+		try {
+		PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.visitingreport WHERE ParkName = ? AND Month = ? AND Year=? ");
+		
+		preparedStatement.setString(1, report.getParkName());
+		preparedStatement.setString(2, report.getMonth()); // Use "%" to match any characters before the date pattern
+		preparedStatement.setString(3, report.getYear());
+		ResultSet rs  = preparedStatement.executeQuery();
+		if (rs.next())
+			return msg;
+		rs.close();
+		preparedStatement.close();
+		}
+		catch (Exception e) {}
 		createVisitingReportForVisitorType(report,"individuals and families");
 		createVisitingReportForVisitorType(report,"organized group");
-
+		msg=new Message(Message.ActionType.ERROR,"Report successfully created");
+		return msg;
 	}
-	public void createUsageReport(Report report) {
+	
+	
+	/**
+	 * Creates a usage report for a park based on the provided report information.
+	 * This method generates a usage report for a park based on the provided report information,
+	 * calculating full and not full counts for each time range.
+	 * 
+	 * @param report the report containing park name, month, and year
+	 * @return a message indicating the success or failure of the report creation operation
+	 */
+	public Message createUsageReport(Report report) {
+		Message msg=new Message(Message.ActionType.ERROR,"Report already exists");
 		try {
+			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.usagereport WHERE ParkName = ? AND Month = ? AND Year=? ");
+			
+			preparedStatement.setString(1, report.getParkName());
+			preparedStatement.setString(2, report.getMonth()); // Use "%" to match any characters before the date pattern
+			preparedStatement.setString(3, report.getYear());
+			ResultSet rs  = preparedStatement.executeQuery();
+			if (rs.next())
+				return msg;
+			rs.close();
+			preparedStatement.close();
+				
 			// Step 1: Retrieve reserved capacity for the park
 			Message parkInfoMsg = getParkInfo(report.getParkName());
 	        Park park = (Park) ((Message) parkInfoMsg).getContent();
@@ -1397,7 +1689,7 @@ public class mysqlConnection {
 
 			// Step 2: Query orders for the specified month, year, and park name
 	        String date = report.getMonth()+"-"+report.getYear();
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.orders WHERE ParkName = ? AND Date LIKE ? AND OrderStatus!=? AND OrderStatus!=?");
+			preparedStatement = conn.prepareStatement("SELECT * FROM g13.orders WHERE ParkName = ? AND Date LIKE ? AND OrderStatus!=? AND OrderStatus!=?");
 			
 			preparedStatement.setString(1, report.getParkName());
 			 // 1-indexed parameter position
@@ -1467,9 +1759,19 @@ public class mysqlConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		msg=new Message(Message.ActionType.ERROR,"Report successfully created");
+		return msg;
 		
 	}
 	
+	
+	/**
+	 * Retrieves the index of a specified time range string in an ArrayList of UsageVisitingReport objects.
+	 * 
+	 * @param timeRange the time range string to search for
+	 * @param usageList the ArrayList of UsageVisitingReport objects to search within
+	 * @return the index of the specified time range string in the ArrayList; returns -1 if not found
+	 */
 	public static int getIndexOfStringInArrayList(String timeRange,ArrayList<UsageVisitingReport> usageList) {
 		// Iterate over the ArrayList to find the index of the object with the specified timeRange
         int index = -1; // Initialize index to -1 (not found)
@@ -1481,6 +1783,13 @@ public class mysqlConnection {
         }
         return index;
 	}
+	
+	/**
+	 * Generates a unique report ID for the given report type.
+	 * 
+	 * @param reportType the type of the report (e.g., "UsageReport" or "VisitingReport")
+	 * @return a unique report ID as a string
+	 */
 	public String generateReportId(String reportType) {
 	    String table;
 	    if (reportType.contains("Usage"))
@@ -1495,10 +1804,11 @@ public class mysqlConnection {
 	        PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM " + table + " WHERE ReportId = ?");
 	        preparedStatement.setString(1, Integer.toString(randomNumber));
 	        ResultSet rs = preparedStatement.executeQuery();
-	        
+	        // Check if the generated report ID already exists
 	        while (rs.next()) {
 	            rs.close();
 	            preparedStatement.close();
+	            // Generate a new random number
 	            randomNumber = random.nextInt(90000000) + 10000000;
 	            preparedStatement = conn.prepareStatement("SELECT * FROM " + table + " WHERE ReportId = ?");
 	            preparedStatement.setString(1, Integer.toString(randomNumber));
@@ -1513,8 +1823,15 @@ public class mysqlConnection {
 	    
 	    return String.valueOf(randomNumber);
 	}
-	// Method to calculate total visitors for each time range
-    public int calculateTotalVisitors(Order order) {
+
+
+	/**
+	 * Calculates the total number of visitors for each time range based on the provided order.
+	 * 
+	 * @param order the order containing information about the park, time, date, and number of visitors
+	 * @return the total number of visitors for the given order's time range
+	 */
+	public int calculateTotalVisitors(Order order) {
         int totalVisitors = Integer.parseInt(order.getAmountOfVisitors());
         try {
 	     // Prepare a statement with a placeholder
@@ -1538,8 +1855,15 @@ public class mysqlConnection {
        
         return totalVisitors;
     }
-	// Method to calculate time range based on the order time
-	public static String calculateTimeRange(String orderTime) {
+
+
+	 /**
+	  * Calculates the time range based on the provided order time.
+	  * 
+	  * @param orderTime the time of the order in HH:mm format
+	  * @return the calculated time range in HH:mm-HH:mm format
+	  */
+	 public static String calculateTimeRange(String orderTime) {
 	    String[] timeParts = orderTime.split(":");
 	    int hour = Integer.parseInt(timeParts[0]);
 	    // Determine the time range based on the hour
@@ -1563,8 +1887,14 @@ public class mysqlConnection {
 
 	    
 	}
-	// Method to calculate time range based on the order time
-		public static String calculateTimeRangeVisitingReport(String orderTime) {
+
+	 /**
+	  * Calculates the time range for visiting report based on the provided order time.
+	  * 
+	  * @param orderTime the time of the order in HH:mm format
+	  * @return the calculated time range in HH:mm-HH:mm format
+	  */
+	 public static String calculateTimeRangeVisitingReport(String orderTime) {
 		    String[] timeParts = orderTime.split(":");
 		    int hour = Integer.parseInt(timeParts[0]);
 		    // Determine the time range based on the hour
@@ -1581,8 +1911,14 @@ public class mysqlConnection {
 		    
 		}
 
-	// Method to create an Order object from the ResultSet
-	public Order createOrderFromResultSet(ResultSet resultSet) throws SQLException {
+	 /**
+	  * Creates an Order object from the provided ResultSet.
+	  * 
+	  * @param resultSet the ResultSet containing order information
+	  * @return the Order object created from the ResultSet
+	  * @throws SQLException if a SQL exception occurs while accessing the ResultSet
+	  */
+	 public Order createOrderFromResultSet(ResultSet resultSet) throws SQLException {
 	    Order order = new Order();
 	    order.setOrderNum(resultSet.getString("OrderNumber"));
 	    order.setParkName(resultSet.getString("ParkName"));
@@ -1600,6 +1936,13 @@ public class mysqlConnection {
 	    return order;
 	}
 	
+	 
+	 /**
+	  * Retrieves the cancellation report details for the specified park, month, and year.
+	  * 
+	  * @param report the report containing park name, month, and year
+	  * @return a Message object containing the cancellation report details, or an error message if the report is not found
+	  */
 	public Message getCancellationReport(Report report)
 	{
 		Message msg;
@@ -1636,6 +1979,13 @@ public class mysqlConnection {
 		return msg;
 	}
 	
+	
+	/**
+	 * Retrieves the usage report for the specified park, month, and year.
+	 * 
+	 * @param report the report containing park name, month, and year
+	 * @return a Message object containing the usage report details, or an error message if the report is not found
+	 */
 	public Message getUsageReport(Report report)
 	{
 		Message msg;
@@ -1675,6 +2025,13 @@ public class mysqlConnection {
 		return msg;
 	}
 	
+	
+	/**
+	 * Retrieves the visiting report for the specified park, month, and year.
+	 * 
+	 * @param report the report containing park name, month, and year
+	 * @return a Message object containing the visiting report details, or an error message if the report is not found
+	 */
 	public Message getVisitingReport(Report report)
 	{
 		Message msg;
@@ -1725,6 +2082,13 @@ public class mysqlConnection {
 		return msg;
 	}
 	
+	
+	/**
+	 * Retrieves the total visitors report for the specified park, month, and year.
+	 * 
+	 * @param report the report containing park name, month, and year
+	 * @return a Message object containing the total visitors report details, or an error message if the report is not found
+	 */
 	public Message getTotalVisitorsReport(Report report)
 	{ 
 		Message msg;
@@ -1759,12 +2123,170 @@ public class mysqlConnection {
 		msg = new Message (Message.ActionType.REPORTINFO,report);
 		return msg;
 	}
+	
+	
 	/**
-	   * This method adds the client info to the database
-	   *
-	   * @param ip, the client's ip
-	   * @param host, the client's host
-	   */
+	 * Generates an invoice in PDF format for the specified order number.
+	 * 
+	 * @param orderNumber the order number for which the invoice is generated
+	 * @return a Message object containing the invoice PDF file, or an error message if the order is not found or if an error occurs during generation
+	 */
+	public Message generateInvoice(String orderNumber) {
+	    Message msg;
+	    MyFile myFile = new MyFile(orderNumber + ".pdf");
+	    try {
+	        // Check if the order exists in the database
+	        PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.orders WHERE OrderNumber = ?");
+	        preparedStatement.setString(1, orderNumber);
+	        ResultSet rs = preparedStatement.executeQuery();
+
+	        if (rs.next()) {
+	            // Set description for the PDF file
+	            myFile.setDescription("Invoice for Order Number: " + orderNumber);
+
+	            PDDocument document = createPDF(rs);
+	            // Save the PDF file to a byte array
+	            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	            document.save(baos);
+	            document.close();
+	            byte[] pdfBytes = baos.toByteArray();
+
+	            // Set the byte array and size in the MyFile object
+	            myFile.initArray(pdfBytes.length);
+	            myFile.setSize(pdfBytes.length);
+	            myFile.setMybytearray(pdfBytes);
+
+	            // Close the result set and statement
+	            rs.close();
+	            preparedStatement.close();
+	        } else {
+	            // If order not found, return an error message
+	            msg = new Message(Message.ActionType.ERROR, "Order not found!");
+	            return msg;
+	        }
+	    } catch (SQLException | IOException e) {
+	        // Handle exceptions
+	        e.printStackTrace();
+	        msg = new Message(Message.ActionType.ERROR, "Error generating invoice: " + e.getMessage());
+	        return msg;
+	    }
+
+	    // Return the MyFile object containing the PDF data
+	    msg = new Message(Message.ActionType.GETINVOICE, myFile);
+	    return msg;
+	}
+	
+	
+	/**
+	 * Creates a PDF document for an invoice based on the data retrieved from a ResultSet.
+	 * 
+	 * @param rs the ResultSet containing the order details
+	 * @return a PDDocument representing the invoice PDF document
+	 * @throws IOException if an I/O error occurs
+	 * @throws SQLException if a SQL error occurs
+	 */
+	private PDDocument createPDF(ResultSet rs) throws IOException, SQLException {
+		// Create a new PDF document
+	    PDDocument document = new PDDocument();
+	    PDPage page = new PDPage();
+	    document.addPage(page);
+
+	    // Get the page dimensions
+	    PDRectangle pageSize = page.getMediaBox();
+	    float pageWidth = pageSize.getWidth();
+
+	    // Create content stream for adding text to the PDF
+	    PDPageContentStream contentStream = new PDPageContentStream(document, page);
+	    contentStream.beginText();
+
+	    // Set the font size and calculate the width of the title text
+	    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
+	    float titleWidth = PDType1Font.HELVETICA_BOLD.getStringWidth("Invoice #" + rs.getString("OrderNumber")) / 1000f * 16;
+
+	    // Calculate the x-coordinate to position the title at the center of the page
+	    float titleX = (pageWidth - titleWidth) / 2;
+
+	    // Position the text at the calculated coordinates
+	    contentStream.newLineAtOffset(titleX, 750); // Adjust the y-coordinate as needed
+
+	    // Add the title with orderNumber
+	    contentStream.showText("Invoice #" + rs.getString("OrderNumber"));
+
+	    // Reset font size for other fields
+	    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+	    contentStream.newLineAtOffset(0, -20); // Move down for the rest of the content
+
+	    // Set initial Y-coordinate
+	    float y = 730;
+
+	    y -= 30; // Move down by 15 points
+	    contentStream.newLineAtOffset(-150, -30);
+	    // Write each field with a manual adjustment to move to the next line
+	    contentStream.showText("Order Number: " + rs.getString("OrderNumber"));
+	    y -= 30; // Move down by 15 points
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Park Name: " + rs.getString("ParkName"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Visitor ID: " + rs.getString("VisitorId"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Date: " + rs.getString("Date"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Time: " + rs.getString("Time"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Number of Visitors: " + rs.getString("NumberOfVisitors"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Phone Number: " + rs.getString("PhoneNumber"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Email: " + rs.getString("Email"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Visitor Type: " + rs.getString("VisitorType"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Exit Time: " + rs.getString("ExitTime"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Order Status: " + rs.getString("OrderStatus"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Pay Status: " + rs.getString("PayStatus"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.showText("Total Cost: " + rs.getString("TotalCost"));
+	    y -= 30;
+	    contentStream.newLineAtOffset(0, -30);
+
+	    contentStream.endText();
+	    contentStream.close();
+
+	    return document;
+	}
+
+
+	/**
+	 * This method adds the client info to the database
+	 *
+	 * @param ip    The client's IP address
+	 * @param host  The client's host
+	 */
 	public void insertClientInfo(String ip,String host){
 		
 		 // SQL INSERT statement
@@ -1776,7 +2298,7 @@ public class mysqlConnection {
             // Set values for placeholders (?, ?, ?)
             pstmt.setString(1, ip);
             pstmt.setString(2, host);
-            pstmt.setBoolean(3, true);
+            pstmt.setString(3, "Connected");
 
 
             // Execute the INSERT statement
@@ -1789,74 +2311,47 @@ public class mysqlConnection {
 		 		
 	}
 	
+
 	/**
-	   * This method adds the HostNames to the hostList from the dataBase
-	   *
-	   * @param hostList, an empty ArrayList
-	   */
-	public ArrayList<String>  getHostNames(ArrayList<String> hostList)
+	 * This method retrieves client information from the database
+	 * and returns a list of CurClient objects.
+	 *
+	 * @return The list of CurClient objects representing clients
+	 */
+	public ArrayList<CurClient> getClients()
 	{
-		
+		ArrayList<CurClient> clients = new ArrayList<CurClient>();
+
 		try 
 		{	
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM g13.clientusers;");
 	 		while(rs.next())
 	 		{
-	 			
-	 		
-	 			hostList.add(rs.getString("Host"));
-	 			//StudentFormController.addValue(rs.getString("ParkName"));
+	            // Create a CurClient object with data from the result set
+	 			CurClient curClient = new CurClient(rs.getString("IP"),rs.getString("Host"),rs.getString("Connection"));
+	            // Add the CurClient object to the list of clients
+	 			clients.add(curClient);
 				
 			} 
 	 		
 			rs.close();
-			return hostList;
 			
 			
 			
 		} catch (SQLException e) {e.printStackTrace();}
-		return hostList;
+	    // Return the list of clients
+		return clients;
 	}
 	
-	/**
-	   * This method sets the client details to curClient from the database according to the host name
-	   *
-	   * @param host, the client's hostname
-	   * @param curClient, a new CurClient with no info in it
-	   */
-	public void getHostInfo(String host,CurClient curClient)
-	{
-		
-		try 
-		{	
-			// Prepare a statement with a placeholder
-			PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM g13.clientusers WHERE Host=?");
-			preparedStatement.setString(1, host); // 1-indexed parameter position
-
-			// Execute the query
-			ResultSet rs = preparedStatement.executeQuery();
-			 // Process the result set
-            rs.next();
-	        //order = new Order(rs.getString("ParkName"),rs.getString("OrderNumber"),rs.getString("TimeOfVisit"),rs.getString("NumberOfVisitors"),rs.getString("TelephoneNumber"),rs.getString("Email"))  ; 
-            curClient.setIp(rs.getString("IP"));
-            curClient.setHost(host);
-            curClient.setConnection(rs.getBoolean("Connection"));
-
-	            
-            
-			rs.close();
-			preparedStatement.close();
-			
-			
-		} catch (SQLException e) {e.printStackTrace();}
-	}
 	
+	
+
 	/**
-	   * This method deletes the client details from the database according to the ip
-	   *
-	   * @param ip, the client's ip
-	   */
+	 * This method deletes client details from the database based on the IP address.
+	 *
+	 * @param ip The IP address of the client to delete
+	 */
 	public void deleteHostInfo (String ip) {
 		 // SQL DELETE statement
         String sql = "DELETE FROM g13.clientusers WHERE IP = ?";

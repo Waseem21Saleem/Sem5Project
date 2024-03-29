@@ -29,7 +29,8 @@ CREATE TABLE `users` (
   `Email` varchar(100) DEFAULT '',
   `PhoneNumber` varchar(10) DEFAULT '',
   `IsLogged` tinyint NOT NULL DEFAULT '0',
-  `UserPermission` varchar(45) DEFAULT '',
+  `UserPermission` enum('VISITOR','GUIDE','WORKER','PARK MANAGER','DEPARTMENT MANAGER','SERVICE') DEFAULT 'VISITOR',
+  `ParkName` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`UserId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -40,6 +41,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES ('207405911','adham','','','',0,'WORKER','Hyde Park'),('207717109','','','','',0,'GUIDE',NULL),('211400122','julian','','','',0,'SERVICE',NULL),('212345136','noor','','','',0,'PARK MANAGER','Hyde Park'),('314934068','jabal','','','',0,'DEPARTMENT MANAGER',NULL),('322389446','dukhi','','','',0,'PARK MANAGER','Central Park');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-18 14:51:28
+-- Dump completed on 2024-03-28 17:44:52

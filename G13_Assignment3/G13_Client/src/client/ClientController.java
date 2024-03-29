@@ -12,7 +12,7 @@ import logic.Message;
 
 
 /**
- * This class constructs the UI for a chat client.  It implements the
+ * This class constructs the UI for a chat client. It implements the
  * chat interface in order to activate the display() method.
  * Warning: Some of the code here is cloned in ServerConsole 
  * 
@@ -23,86 +23,96 @@ import logic.Message;
  */
 public class ClientController implements ChatIF 
 {
-  //Class variables *************************************************
-  
-	
-	
-  /**
-   * The default port to connect on.
-   */
-   public static int DEFAULT_PORT ;
-  
-  //Instance variables **********************************************
-  
-  /**
-   * The instance of the client that created this ConsoleChat.
-   */
-  public ChatClient client;
+    //Class variables *************************************************
 
-  //Constructors ****************************************************
+    /**
+     * The default port to connect on.
+     */
+    public static int DEFAULT_PORT ;
 
-  /**
-   * Constructs an instance of the ClientConsole UI.
-   *
-   * @param host The host to connect to.
-   * @param port The port to connect on.
-   */
-  public ClientController(String host, int port) 
-  {
-    try 
+    //Instance variables **********************************************
+
+    /**
+     * The instance of the client that created this ConsoleChat.
+     */
+    public ChatClient client;
+
+    //Constructors ****************************************************
+
+    /**
+     * Constructs an instance of the ClientConsole UI.
+     *
+     * @param host The host to connect to.
+     * @param port The port to connect on.
+     */
+    public ClientController(String host, int port) 
     {
-      client= new ChatClient(host, port, this);
-    } 
-    catch(IOException exception) 
-    {
-      System.out.println("Error: Can't setup connection!"+ " Terminating client.");
-      System.exit(1);
+        try 
+        {
+            client = new ChatClient(host, port, this);
+        } 
+        catch(IOException exception) 
+        {
+            System.out.println("Error: Can't setup connection! Terminating client.");
+            System.exit(1);
+        }
     }
-  }
 
-  
-  //Instance methods ************************************************
-  
-  /**
-   * This method waits for input from the console.  Once it is 
-   * received, it sends it to the client's message handler.
-   */
-  public void accept(String str) 
-  {
-	  client.handleMessageFromClientUI(str);
-  }
-  /**
-   * This method waits for input from the console.  Once it is 
-   * received, it sends it to the client's message handler.
-   */
-  public void accept(ArrayList<String> str) 
-  {
-	  client.handleMessageFromClientUI(str);
-  }
-  /**
-   * This method waits for input from the console.  Once it is 
-   * received, it sends it to the client's message handler.
-   */
-  public void accept(Message str) 
-  {
-	  client.handleMessageFromClientUI(str);
-  }
-  /**
-   * This method overrides the method in the ChatIF interface.  It
-   * displays a message onto the screen.
-   *
-   * @param message The string to be displayed.
-   */
-  public void display(String message) 
-  {
-    System.out.println("> " + message);
-  }
+    //Instance methods ************************************************
 
+    /**
+     * This method waits for input from the console. Once it is 
+     * received, it sends it to the client's message handler.
+     *
+     * @param str The input string from the console.
+     */
+    public void accept(String str) 
+    {
+        client.handleMessageFromClientUI(str);
+    }
 
-public void accept(String[] text) {
-	client.handleMessageFromClientUI(text);
-	
-}
+    /**
+     * This method waits for input from the console. Once it is 
+     * received, it sends it to the client's message handler.
+     *
+     * @param str The input array list from the console.
+     */
+    public void accept(ArrayList<String> str) 
+    {
+        client.handleMessageFromClientUI(str);
+    }
 
+    /**
+     * This method waits for input from the console. Once it is 
+     * received, it sends it to the client's message handler.
+     *
+     * @param str The input message object from the console.
+     */
+    public void accept(Message str) 
+    {
+        client.handleMessageFromClientUI(str);
+    }
+
+    /**
+     * This method overrides the method in the ChatIF interface. It
+     * displays a message onto the screen.
+     *
+     * @param message The string to be displayed.
+     */
+    @Override
+    public void display(String message) 
+    {
+        System.out.println("> " + message);
+    }
+
+    /**
+     * This method waits for input from the console. Once it is 
+     * received, it sends it to the client's message handler.
+     *
+     * @param text The input string array from the console.
+     */
+    public void accept(String[] text) {
+        client.handleMessageFromClientUI(text);
+    }
 }
 //End of ConsoleChat class

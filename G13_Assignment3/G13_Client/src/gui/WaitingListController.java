@@ -43,11 +43,19 @@ import logic.WaitingListEntry;
 import ocsf.server.ConnectionToClient;
 
 
-
+/**
+ * This class controls the functionality of the Waiting List GUI.
+ * It allows users to view and enter the waiting list for a park.
+ * <p>Author: Julian Abdo</p>
+ */
 
 public  class WaitingListController  implements Initializable  {
-	public static ClientController chat;
-	public static Order order=ChatClient.order;
+	/** Static ClientController for chat functionality. */
+    public static ClientController chat;
+
+    /** Static Order object representing the order. */
+    public static Order order = ChatClient.order;
+
 
 	private static int itemIndex = 3;
 	 
@@ -63,12 +71,24 @@ public  class WaitingListController  implements Initializable  {
 	private TableColumn<WaitingListEntry, String> placeColumn,timeColumn,numberOfVisitorsColumn,exitTimeColumn,dateColumn;
 	
 	
+    /**
+     * Redirects the user back to the visitor home page.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during navigation.
+     */
 	public void goBackBtn(ActionEvent event) throws Exception {
 			
 			ChatClient.openGUI.goToGUI(event, "/gui/VisitorHomePage.fxml","","Visitor Home page");
 			
 		}
 	
+    /**
+     * Enters the waiting list for the selected park.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during the entry process.
+     */
 	public void enterWaitingList(ActionEvent event) throws Exception {
 			order=ChatClient.order;
 			Message msg=new Message (Message.ActionType.WAITINGLIST,order);
@@ -84,6 +104,12 @@ public  class WaitingListController  implements Initializable  {
 			
 		}
 	
+    /**
+     * Gets alternative dates for making a reservation.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during the process.
+     */
 	public void getAlternativeDate(ActionEvent event) throws Exception {
 			order=ChatClient.order;
 			Message msg=new Message (Message.ActionType.ALTERNATIVEDATE,order);
@@ -113,7 +139,7 @@ public  class WaitingListController  implements Initializable  {
 	
 			// Check which button was clicked
 			if (result.isPresent() && result.get() == buttonTypeCancel) {
-				
+				// User cancelled alternative date selection
 			} else {
 				order=alt.get(Integer.parseInt(result.get().getText())-1);
 				msg = new Message (Message.ActionType.RESERVATION,order);
@@ -139,6 +165,12 @@ public  class WaitingListController  implements Initializable  {
 			}
 	}
 	
+	
+	  /**
+     * Updates the waiting list table with the provided entries.
+     *
+     * @param entries The waiting list entries to display.
+     */
 	public void updateWaitingListTable(ArrayList<WaitingListEntry> entries) {
         ObservableList<WaitingListEntry> data = FXCollections.observableArrayList(entries);
         tableView.setItems(data);
@@ -150,6 +182,13 @@ public  class WaitingListController  implements Initializable  {
 		dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
 		
 	}
+	
+    /**
+     * Initializes the waiting list GUI.
+     *
+     * @param arg0 The URL location to resolve relative paths.
+     * @param arg1 The resource bundle.
+     */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {	
 

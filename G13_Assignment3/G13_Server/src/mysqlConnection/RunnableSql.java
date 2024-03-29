@@ -23,11 +23,20 @@ import emailController.EmailSender;
 import logic.Notification;
 import logic.Order;
 
+/**
+ * This class implements the Runnable interface to perform various database operations in separate threads.
+ */
 public class RunnableSql implements Runnable  {
 	private Connection connection;
+	
+	/**
+     * Run method to execute the database operations in separate threads.
+     */
 	@Override
 	public void run() {
-		 // Create a thread 
+
+        // Create threads for different database operations
+
         Thread orderThread = new Thread(() -> checkOrders());
         Thread notificationThread = new Thread(() -> checkNotifications());
         Thread orderInsideThread = new Thread(()-> updateOrderInside());
@@ -52,7 +61,13 @@ public class RunnableSql implements Runnable  {
         }
 	    
 	}
-	//returns 
+
+
+    /**
+     * Returns the current time minus X hours formatted as HH:mm.
+     * @param x The number of hours to subtract.
+     * @return The formatted time string.
+     */
 	public static String getCurrentTimeMinusX(long x) {
 		// Get the current time
         LocalTime currentTime = LocalTime.now();
@@ -66,6 +81,12 @@ public class RunnableSql implements Runnable  {
         return formattedTime;
 	}
 	
+	
+    /**
+     * Returns the current time plus X hours formatted as HH:mm.
+     * @param x The number of hours to add.
+     * @return The formatted time string.
+     */
 	public static String getCurrentTimePlusX (long x) {
 		// Get the current time
         LocalTime currentTime = LocalTime.now();
@@ -79,7 +100,12 @@ public class RunnableSql implements Runnable  {
         return formattedTime;
 	}
 	
-	//returns current date plus x days
+
+	   /**
+     * Returns the current date plus X days formatted as dd-MM-yy.
+     * @param x The number of days to add.
+     * @return The formatted date string.
+     */
 	public static String getCurrentDatePlusX(long x) {
 		
 		LocalDate today = LocalDate.now().plusDays(x);
@@ -91,11 +117,17 @@ public class RunnableSql implements Runnable  {
         return todayDateString;
 	}
 
+    /**
+     * Sets the connection to the database.
+     * @param connection The connection to the database.
+     */
 	public void setConnection(Connection connection) {
 		this.connection=connection;
 	}
 	
-	//This function checks notifications where 2 hours passed then delete and updated order
+    /**
+     * Checks notifications where 2 hours have passed, then deletes and updates orders accordingly.
+     */
 	private void checkNotifications() {
 		 while (true) {
 		String query = "SELECT * FROM g13.notifications WHERE Time = ?";
@@ -136,7 +168,10 @@ public class RunnableSql implements Runnable  {
 	    
 	}
 	
-	//deletes notification from notifications table
+    /**
+     * Deletes a notification from the notifications table.
+     * @param orderNumber The order number of the notification to be deleted.
+     */
 	private void deleteNotification(String orderNumber) {
 		 // SQL DELETE statement
         String sql = "DELETE FROM g13.notifications WHERE OrderNumber = ?";
@@ -152,7 +187,10 @@ public class RunnableSql implements Runnable  {
                e.printStackTrace();
            }
 	}
-	//this function deletes row from waitinglist if date equals yesterday
+
+	  /**
+     * Deletes rows from the waitinglist where the date equals yesterday.
+     */
 	private void deleteWaitingList() {
 		while (true) {
        String sql = "DELETE FROM g13.waitinglist WHERE Time = ? AND Date = ?";
@@ -176,7 +214,12 @@ public class RunnableSql implements Runnable  {
 		}
 	}
 	 
-	//updates order status to the given orderStatus
+
+	  /**
+     * Updates the order status to the given orderStatus.
+     * @param orderNumber The order number of the order to be updated.
+     * @param orderStatus The new status of the order.
+     */
 	private void changeOrderStatus(String orderNumber,String orderStatus) {
 		PreparedStatement ps;
 		try {
@@ -189,8 +232,10 @@ public class RunnableSql implements Runnable  {
 		} catch (SQLException e) {	}
 	}
 	
-	//This function updates the orderstatus to inside when start time occurs .
 
+	/**
+     * Updates the order status to "inside" when the start time occurs.
+     */
 	private void updateOrderInside() {
 		while (true) {
 		
@@ -211,7 +256,9 @@ public class RunnableSql implements Runnable  {
 		} catch (SQLException e) {	}
 		}
 	}
-	//This function updates the orderstatus to completed when exit time occurs .
+	  /**
+     * Updates the order status to "completed" when the exit time occurs.
+     */
 	private void updateOrderCompleted() {
 		while (true) {
 			String todayDateString = getCurrentDatePlusX(0);
@@ -229,6 +276,10 @@ public class RunnableSql implements Runnable  {
 		} catch (SQLException e) {	}
 		}
 	}
+	
+	 /**
+     * Checks orders for the next day and sends confirmation emails to visitors.
+     */
 	private void checkOrders() {
 		Notification notification;
 	    String query = "SELECT * FROM g13.orders WHERE Date = ? AND OrderStatus != ? AND Time = ?";
@@ -262,6 +313,12 @@ public class RunnableSql implements Runnable  {
 	        }
 	    }
 	}
+	
+    /**
+     * Inserts a notification into the notifications table.
+     * @param notification The notification to be inserted.
+     * @throws SQLException if a database access error occurs or this method is called on a closed connection.
+     */
     private void insertNotification( Notification notification) throws SQLException {
         String insertQuery = "INSERT INTO g13.notifications (OrderNumber, ParkName, VisitorId, Date, Time, NumberOfVisitors) VALUES (?,?,?,?,?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {

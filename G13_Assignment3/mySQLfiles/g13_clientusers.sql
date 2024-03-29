@@ -24,9 +24,9 @@ DROP TABLE IF EXISTS `clientusers`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `clientusers` (
   `IP` varchar(45) NOT NULL,
-  `Host` varchar(45) DEFAULT NULL,
+  `Host` varchar(45) NOT NULL,
   `Connection` tinyint DEFAULT NULL,
-  PRIMARY KEY (`IP`)
+  PRIMARY KEY (`IP`,`Host`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -36,7 +36,7 @@ CREATE TABLE `clientusers` (
 
 LOCK TABLES `clientusers` WRITE;
 /*!40000 ALTER TABLE `clientusers` DISABLE KEYS */;
-INSERT INTO `clientusers` VALUES ('10.10.3.119','10.10.3.119',1),('127.0.0.1','127.0.0.1',1),('192.168.1.13','192.168.1.13',1);
+INSERT INTO `clientusers` VALUES ('10.10.11.35','10.10.11.35',1),('10.10.13.103','10.10.13.103',1),('10.10.2.149','10.10.2.149',1),('127.0.0.1','127.0.0.1',1),('192.168.1.13','192.168.1.13',1),('192.168.43.108','HP-DESKTOP-I3',1),('192.168.43.16','MSI',1),('192.168.43.183','DESKTOP-JVQIJ8M',1);
 /*!40000 ALTER TABLE `clientusers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-18 14:51:27
+-- Dump completed on 2024-03-28 17:44:52

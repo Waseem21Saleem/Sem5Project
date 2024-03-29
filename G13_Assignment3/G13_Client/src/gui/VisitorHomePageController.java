@@ -45,11 +45,20 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 
-
+/**
+ * This class controls the functionality of the Visitor Home Page GUI.
+ * It allows visitors to make reservations for parks.
+ * <p>Author: Waseem Saleem</p>
+ */
 public  class VisitorHomePageController implements Initializable   {
-	public static ClientController chat;
-	private static int itemIndex = 3;
-	public static User user=ChatClient.user;
+	/** Static ClientController for chat functionality. */
+    public static ClientController chat;
+
+    /** Static integer representing an item index. */
+    private static int itemIndex = 3;
+
+    /** Static User object representing the user. */
+    public static User user = ChatClient.user;
 
 	
 
@@ -65,16 +74,21 @@ public  class VisitorHomePageController implements Initializable   {
 	@FXML
 	private ComboBox cmbSelectPark,cmbSelectDay,cmbSelectMonth,cmbTime;
 	
+    /**
+     * The method retrieves the amount of visitors from the text field.
+     *
+     * @return The amount of visitors inputted.
+     */
 	private String getAmountOfVisitors() {
 		return txtInputAmountVisitors.getText();
 	}
 	
-	/**
-	   * This method runs the order form fx 
-	   * and adds the client info into the database when "open order manager" button pressed
-	   *@param event , the "open order manager" button
-	   
-	   */
+    /**
+     * Redirects to the Edit Order GUI.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during redirection.
+     */
 	public void goEditOrder(ActionEvent event) throws Exception {
 		/* Send a message to server to check username and password then check Role and open next window 
 		 * according to the role
@@ -83,15 +97,16 @@ public  class VisitorHomePageController implements Initializable   {
 		ClientUI.chat.accept(msg);
 		ChatClient.openGUI.goToGUI(event, "/gui/EditOrder.fxml","/gui/EditOrder.css","Orders Managment Tool");		
 
-
-
-        
-
 		
 	}
 	
 	
-	
+    /**
+     * Makes a reservation based on the information provided.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during the reservation process.
+     */
 	public void makeReservation(ActionEvent event) throws Exception {
 		String visitorType="individual";
 		String selectedPark = cmbSelectPark.getValue().toString();
@@ -167,6 +182,12 @@ public  class VisitorHomePageController implements Initializable   {
 		}
 	}
 	
+    /**
+     * Calculates the price for the given order.
+     *
+     * @param order The order for which the price is calculated.
+     * @return An array containing the normal price, reservation price, and pay now price.
+     */
 	public static double [] calculatePrice ( Order order ) {
 		double normalPrice=100;
 		double reservationPrice=100;
@@ -193,7 +214,12 @@ public  class VisitorHomePageController implements Initializable   {
 	}
 	
 	
-
+    /**
+     * Logs out the current user.
+     *
+     * @param event The action event triggered by the button.
+     * @throws Exception If an error occurs during the logout process.
+     */
 	public void Logout(ActionEvent event) throws Exception {
 		Message msg = new Message (Message.ActionType.LOGOUT,user);
 		ClientUI.chat.accept(msg);
@@ -202,27 +228,21 @@ public  class VisitorHomePageController implements Initializable   {
 		
 	}
 	
+    /**
+     * Sets up the Park combo box.
+     */
 	public void setParkComboBox() {
 		  	this.cmbSelectPark.setValue("Select park");
 		    this.cmbSelectPark.setItems(FXCollections.observableArrayList(ChatClient.parkNames));
 			
-			// Add an event handler to the ComboBox
-		    /*cmbSelectPark.setOnAction(event -> {
-				
-				String selectedValue=(String) cmbPark.getValue();
-				ordersList = new ArrayList<String>();
-				ordersList.add(selectedValue);
-				ClientUI.chat.accept(ordersList);
-				loadOrder(ChatClient.OrderInfo);
-				
-
-
-	            
-	            lblSave.setText("");
-	            
-	        });*/
   }
 	
+	   /**
+     * Validates if the given email is in a correct format.
+     *
+     * @param email The email to be validated.
+     * @return True if the email is in a correct format, false otherwise.
+     */
 	public static boolean isValidEmail(String email) {
         // Regular expression for email validation
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
@@ -232,6 +252,14 @@ public  class VisitorHomePageController implements Initializable   {
         return matcher.matches();
     }
 	
+	
+    /**
+     * Validates if the given time is in the correct format and within the range of 08:00 to 16:00.
+     *
+     * @param timeStr The time to be validated.
+     * @param date The date to be validated
+     * @return True if the time is in the correct format and within the range, false otherwise.
+     */
 	public static boolean isValidTime(String date,String timeStr) {
 
 
@@ -253,6 +281,10 @@ public  class VisitorHomePageController implements Initializable   {
         return (hour >= 8 && hour <= 16 && minute >= 0 && minute <= 59 );
     }
 	
+    /**
+     * Initializes the Park combo box and sets the date picker's minimum date to tomorrow
+     *  and maximum date to next year
+     */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {	
 

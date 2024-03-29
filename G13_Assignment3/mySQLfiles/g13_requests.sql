@@ -24,9 +24,10 @@ DROP TABLE IF EXISTS `requests`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `requests` (
   `ParkName` varchar(45) NOT NULL,
-  `Capacity` varchar(45) NOT NULL,
+  `ReservedCapacity` varchar(45) NOT NULL,
+  `TotalCapacity` varchar(45) NOT NULL,
   `MaxStay` varchar(45) NOT NULL,
-  PRIMARY KEY (`ParkName`)
+  `Status` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -36,6 +37,7 @@ CREATE TABLE `requests` (
 
 LOCK TABLES `requests` WRITE;
 /*!40000 ALTER TABLE `requests` DISABLE KEYS */;
+INSERT INTO `requests` VALUES ('Central Park','50','','2','approved'),('Hyde Park','30','','2','rejected'),('Central Park','30','','5','approved'),('Central Park','60','','4','rejected'),('Hyde Park','60','','3','rejected'),('Hyde Park','30','','5','rejected'),('Hyde Park','50','50','2','approved'),('Hyde Park','40','60','2','rejected');
 /*!40000 ALTER TABLE `requests` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-18 14:51:28
+-- Dump completed on 2024-03-28 17:44:53
