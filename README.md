@@ -1,4 +1,4 @@
-# Park Management System
+# GoNature Park Management System
 
 ## Overview
 This Java application provides a comprehensive solution for managing a park, enabling visitors to reserve their spots, handling waiting lists when the park reaches capacity, and facilitating park workers, park managers, and department managers in their respective roles. It utilizes JavaFX for intuitive graphical user interfaces (GUIs) created in SceneBuilder, and is developed using JDK 17.
@@ -14,12 +14,24 @@ This Java application provides a comprehensive solution for managing a park, ena
 ## Technologies Used
 - **JavaFX**: Utilized for creating rich graphical user interfaces (GUIs) in conjunction with SceneBuilder.
 - **JDK 17**: Developed using the latest Java Development Kit for optimal performance and compatibility.
+- **MySQL Workbench**: Integrated with MySQL Workbench for database management and SQL operations.
+
+## Development Context
+This project was developed during our 5th semester in Braude College of Engineering as part of a course called Engineering Methods for Software Systems Development.
 
 ## How to Run
 1. Clone this repository to your local machine.
 2. Ensure JDK 17 is installed and properly configured.
 3. Open the project in your preferred IDE.
 4. Compile and run the application.
+
+## Contributors
+- Waseem Saleem ([Waseem21saleem@gmail.com](mailto:Waseem21saleem@gmail.com))
+- Jolian Abdo ([Jolianabdo@gmail.com](mailto:Jolianabdo@gmail.com))
+- Ahmad Abo Jabal ([Ahmad.aj.20@gmail.com](mailto:Ahmad.aj.20@gmail.com))
+- Mohamaed Khateeb ([M.h.kh.khateeb.2002@gmail.com](M.h.kh.khateeb.2002@gmail.com))
+- Nour El Din Khateeb ([Khatebnor29@gmail.com](mailto:Khatebnor29@gmail.com))
+- Mohammad Dukhi ([Mohamaddukhi6@gmail.com](mailto:Mohamaddukhi6@gmail.com))
 
 ## Contributions
 Contributions to the project are welcome! Feel free to fork this repository, make your changes, and submit a pull request.
