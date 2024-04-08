@@ -19,6 +19,10 @@ This Java application provides a comprehensive solution for managing a park, ena
 ## Development Context
 This project was developed during our 5th semester in Braude College of Engineering as part of a course called Engineering Methods for Software Systems Development.
 
+## Visitor Features Video
+Check out this [video](https://drive.google.com/file/d/1aag-rKe_1Si7F1CVLTHawQQnPjgagkjK/view?usp=drive_link) demonstrating some of the visitor features of the application. Please note that this video does not cover all features; it provides a glimpse of some of the functionalities available to visitors.
+
+
 ## How to Run
 1. Clone this repository to your local machine.
 2. Ensure JDK 17 is installed and properly configured.
